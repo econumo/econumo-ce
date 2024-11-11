@@ -23,7 +23,7 @@ COPY backend/build/docker/app/configs /
 COPY main/build/configs /
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-COPY composer.json composer.lock symfony.lock /var/www/
+COPY backend/composer.json backend/composer.lock backend/symfony.lock /var/www/
 RUN composer install --no-scripts --prefer-dist --no-autoloader
 
 COPY backend/ /var/www
