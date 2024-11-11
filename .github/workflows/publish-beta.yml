@@ -1,4 +1,4 @@
-name: Build manually
+name: Publish Beta
 
 on:
   workflow_dispatch:
@@ -8,7 +8,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  publish-latest:
+  publish-beta:
     uses: ./.github/workflows/embedded-build-package.yml
     with:
       REGISTRY: "ghcr.io"
