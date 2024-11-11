@@ -20,7 +20,7 @@ RUN apk add --no-cache --virtual .build-deps $PHPIZE_DEPS curl-dev && \
 RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
 
 COPY backend/build/docker/app/configs /
-COPY main/build/configs /
+COPY main/build/docker/app/configs /
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 COPY backend/composer.json backend/composer.lock backend/symfony.lock /var/www/
