@@ -62,5 +62,5 @@ jobs:
           context: .
           push: true
           pull: true
-          file: main/build/app/Dockerfile
+          file: main/build/docker/app/Dockerfile
           tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
