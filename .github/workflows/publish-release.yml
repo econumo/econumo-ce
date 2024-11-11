@@ -59,3 +59,7 @@ jobs:
       DOCKER_LOGIN: ${{ github.actor }}
       DOCKER_PASSWORD: ${{ secrets.BUILD_USER_TOKEN }}
       BUILD_USER_TOKEN: ${{ secrets.BUILD_USER_TOKEN }}
+
+  update-beta:
+    uses: ./.github/workflows/publish-beta.yml
+    secrets: inherit
