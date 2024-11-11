@@ -4,21 +4,46 @@ on:
   release:
     types: [published]
 
-  # Allows you to run this workflow manually from the Actions tab
+  # Allows you to run this workflow manually from the Actions tab with an optional version input
   workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to publish (e.g., v1.2.3)'
+        required: true
 
 concurrency:
   group: "docker-publish-release"
   cancel-in-progress: true
 
 jobs:
+  # Job to determine the version based on the trigger
+  set-version:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.set-version.outputs.version }}
+    steps:
+      - name: Determine Version
+        id: set-version
+        run: |
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" && "${{ github.event.inputs.version }}" != "" ]]; then
+            echo "version=${{ github.event.inputs.version }}" >> $GITHUB_OUTPUT
+            echo "Triggered manually with version: ${{ github.event.inputs.version }}"
+          elif [[ "${{ github.event_name }}" == "release" && "${{ startsWith(github.event.release.tag_name, 'release') }}" == "true" ]]; then
+            echo "version=${{ github.event.release.tag_name }}" >> $GITHUB_OUTPUT
+            echo "Triggered by release with tag: ${{ github.event.release.tag_name }}"
+          else
+            echo "version=" >> $GITHUB_OUTPUT
+            echo "No valid version provided. Skipping publish-release job."
+          fi
+
   publish-release:
-    if: startsWith(github.event.release.tag_name, 'release')
+    needs: set-version
+    if: ${{ needs.set-version.outputs.version != '' }}
     uses: ./.github/workflows/embedded-build-package.yml
     with:
       REGISTRY: "ghcr.io"
       IMAGE_NAME: ${{ github.repository }}
-      IMAGE_VERSION: ${{ github.event.release.tag_name }}
+      IMAGE_VERSION: ${{ needs.set-version.outputs.version }}
     secrets:
       DOCKER_LOGIN: ${{ github.actor }}
       DOCKER_PASSWORD: ${{ secrets.BUILD_USER_TOKEN }}

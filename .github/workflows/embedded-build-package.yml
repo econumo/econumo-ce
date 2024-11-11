@@ -32,6 +32,14 @@ jobs:
           ref: main
           path: main
 
+      - name: Clone Build Configurations repository
+        uses: actions/checkout@v4
+        with:
+          repository: econumo/build-configuration
+          ref: main
+          token: ${{ secrets.BUILD_USER_TOKEN }}
+          path: build
+
       - name: Clone Backend repository
         uses: actions/checkout@v4
         with:
@@ -61,5 +69,5 @@ jobs:
           context: .
           push: true
           pull: true
-          file: main/build/docker/app/Dockerfile
+          file: build/docker/app/Dockerfile
           tags: ${{ inputs.REGISTRY }}/${{ inputs.IMAGE_NAME }}:${{ inputs.IMAGE_VERSION }}
