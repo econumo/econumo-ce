@@ -45,7 +45,7 @@
 1. Start the services with Docker Compose:
 
     ```console
-    $ docker compose up -d
+    $ docker-compose up -d
     ```
 
 1. Visit your instance at `http://localhost:8080` and create the first user.
