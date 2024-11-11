@@ -2,6 +2,10 @@ name: Publish Beta
 
 on:
   workflow_dispatch:
+  workflow_call:
+    secrets:
+      BUILD_USER_TOKEN:
+        required: true
 
 concurrency:
   group: "docker-publish-beta"
