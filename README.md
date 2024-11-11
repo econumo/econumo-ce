@@ -51,7 +51,7 @@
 1. Visit your instance at `http://localhost:8080` and create the first user.
 
 > [!NOTE]
-> Econumo One is funded by our GitHub Sponsors and cloud subscribers.
+> Econumo One is funded by our `GitHub Sponsors` and `Econumo Cloud` subscribers.
 >
 > If you know someone who might [find Econumo useful](https://econumo.com/?utm_medium=Social&utm_source=GitHub&utm_campaign=readme), we'd appreciate if you'd let them know.
 
