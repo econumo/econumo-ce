@@ -27,7 +27,7 @@ jobs:
       packages: write
 
     steps:
-      - name: Checkout current repository
+      - name: Checkout Current repository
         uses: actions/checkout@v4
         with:
           ref: main
@@ -38,7 +38,7 @@ jobs:
         with:
           repository: econumo/econumo-backend
           ref: main
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.BUILD_USER_TOKEN }}
           path: backend
 
       - name: Clone Frontend repository
@@ -46,7 +46,7 @@ jobs:
         with:
           repository: econumo/econumo-one-frontend
           ref: main
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.BUILD_USER_TOKEN }}
           path: frontend
 
       - name: Log in to the Container registry
@@ -54,7 +54,7 @@ jobs:
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          password: ${{ secrets.BUILD_USER_TOKEN }}
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v2
