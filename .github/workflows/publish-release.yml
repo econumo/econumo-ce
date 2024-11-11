@@ -11,17 +11,13 @@ concurrency:
   group: "docker-publish-release"
   cancel-in-progress: true
 
-env:
-  REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}
-
 jobs:
   publish-release:
     if: startsWith(github.event.release.tag_name, 'release')
     uses: ./.github/workflows/embedded-build-package.yml
     with:
-      REGISTRY: ${{ env.REGISTRY }}
-      IMAGE_NAME: ${{ env.IMAGE_NAME }}
+      REGISTRY: "ghcr.io"
+      IMAGE_NAME: ${{ github.repository }}
       IMAGE_VERSION: ${{ github.event.release.tag_name }}
     secrets:
       DOCKER_LOGIN: ${{ github.actor }}
@@ -31,8 +27,8 @@ jobs:
   publish-latest:
     uses: ./.github/workflows/embedded-build-package.yml
     with:
-      REGISTRY: ${{ env.REGISTRY }}
-      IMAGE_NAME: ${{ env.IMAGE_NAME }}
+      REGISTRY: "ghcr.io"
+      IMAGE_NAME: ${{ github.repository }}
       IMAGE_VERSION: "latest"
     secrets:
       DOCKER_LOGIN: ${{ github.actor }}
