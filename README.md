@@ -20,15 +20,15 @@
 1. Clone this repository:
 
     ```console
-    $ git clone --single-branch https://github.com/econumo/econumo-one econumo-one
-    Cloning into 'econumo-one'...
+    $ git clone --single-branch https://github.com/econumo/econumo-one econumo
+    Cloning into 'econumo'...
     remote: Enumerating objects: 13, done.
     remote: Counting objects: 100% (10/10), done.
     remote: Compressing objects: 100% (9/9), done.
     remote: Total 13 (delta 0), reused 7 (delta 0), pack-reused 3 (from 1)
     Receiving objects: 100% (13/13), done.
 
-    $ cd econumo-one
+    $ cd econumo
 
     $ ls -1
     README.md
