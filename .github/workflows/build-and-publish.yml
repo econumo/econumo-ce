@@ -1,0 +1,66 @@
+name: Create and publish Docker image
+
+on:
+  push:
+    branches: ['main']
+    paths-ignore:
+      - LICENSE
+      - README.md
+      - .gitignore
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+concurrency:
+  group: "docker-publish"
+  cancel-in-progress: true
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  build-package:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout current repository
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          path: main
+
+      - name: Clone Backend repository
+        uses: actions/checkout@v4
+        with:
+          repository: econumo/econumo-backend
+          ref: main
+          token: ${{ secrets.GITHUB_TOKEN }}
+          path: backend
+
+      - name: Clone Frontend repository
+        uses: actions/checkout@v4
+        with:
+          repository: econumo/econumo-one-frontend
+          ref: main
+          token: ${{ secrets.GITHUB_TOKEN }}
+          path: frontend
+
+      - name: Log in to the Container registry
+        uses: docker/login-action@v2
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          push: true
+          pull: true
+          file: build/app/Dockerfile
+          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
