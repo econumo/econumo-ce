@@ -1,0 +1,25 @@
+name: Build manually
+
+on:
+  workflow_dispatch:
+
+concurrency:
+  group: "docker-publish"
+  cancel-in-progress: true
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+  IMAGE_VERSION: latest
+
+jobs:
+  publish-latest:
+    uses: ./.github/workflows/embedded-build-package.yml
+    with:
+      REGISTRY: ${{ env.REGISTRY }}
+      IMAGE_NAME: ${{ env.IMAGE_NAME }}
+      IMAGE_VERSION: ${{ env.IMAGE_VERSION }}
+    secrets:
+      DOCKER_LOGIN: ${{ github.actor }}
+      DOCKER_PASSWORD: ${{ secrets.BUILD_USER_TOKEN }}
+      BUILD_USER_TOKEN: ${{ secrets.BUILD_USER_TOKEN }}

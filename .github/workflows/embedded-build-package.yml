@@ -1,23 +1,22 @@
-name: Create and publish Docker image
-
 on:
-  push:
-    branches: ['main']
-    paths-ignore:
-      - LICENSE
-      - README.md
-      - .gitignore
-
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
-
-concurrency:
-  group: "docker-publish"
-  cancel-in-progress: true
-
-env:
-  REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}
+  workflow_call:
+    inputs:
+      REGISTRY:
+        required: true
+        type: string
+      IMAGE_NAME:
+        required: true
+        type: string
+      IMAGE_VERSION:
+        required: true
+        type: string
+    secrets:
+      DOCKER_LOGIN:
+        required: true
+      DOCKER_PASSWORD:
+        required: true
+      BUILD_USER_TOKEN:
+        required: true
 
 jobs:
   build-package:
@@ -52,9 +51,9 @@ jobs:
       - name: Log in to the Container registry
         uses: docker/login-action@v2
         with:
-          registry: ${{ env.REGISTRY }}
-          username: ${{ github.actor }}
-          password: ${{ secrets.BUILD_USER_TOKEN }}
+          registry: ${{ inputs.REGISTRY }}
+          username: ${{ secrets.DOCKER_LOGIN }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v2
@@ -63,4 +62,4 @@ jobs:
           push: true
           pull: true
           file: main/build/docker/app/Dockerfile
-          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+          tags: ${{ inputs.REGISTRY }}/${{ inputs.IMAGE_NAME }}:${{ inputs.IMAGE_VERSION }}
