@@ -1,0 +1,19 @@
+services:
+  econumo:
+    image: ghcr.io/econumo/econumo-one:latest
+    env_file:
+      - .env
+    working_dir: /var/www
+    entrypoint: [ "/bin/sh", "-c", "/entrypoint.sh" ]
+    ports:
+      - "8095:80"
+    volumes:
+      - db:/var/www/db
+      # To override LilTag config:
+      # - ./shared/liltag-config.json:/usr/share/nginx/html/liltag-config.json:ro,cached
+      # To override entrypoint.sh script
+      # - ./shared/entrypoint.sh:/entrypoint.sh:ro
+    restart: unless-stopped
+
+volumes:
+  db:
