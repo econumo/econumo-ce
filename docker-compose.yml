@@ -6,7 +6,7 @@ services:
     working_dir: /var/www
     entrypoint: [ "/bin/sh", "-c", "/entrypoint.sh" ]
     ports:
-      - "8095:80"
+      - "8080:80"
     volumes:
       - db:/var/www/db
       # To override LilTag config:
