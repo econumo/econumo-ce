@@ -5,7 +5,7 @@
 </p>
 
 <p align="center">
-    A getting started guide to self-hosting <a href="https://econumo.com/docs/edition/econumo-one" target="_blank">Econumo One</a>
+    A getting started guide to self-hosting <a href="https://econumo.com/docs/platform/econumo-one" target="_blank">Econumo One</a>
 </p>
 
 ---
