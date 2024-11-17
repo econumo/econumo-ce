@@ -4,7 +4,6 @@ on:
   release:
     types: [published]
 
-  # Allows you to run this workflow manually from the Actions tab with an optional version input
   workflow_dispatch:
     inputs:
       version:
@@ -16,7 +15,6 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  # Job to determine the version based on the trigger
   set-version:
     runs-on: ubuntu-latest
     outputs:
@@ -28,13 +26,19 @@ jobs:
           if [[ "${{ github.event_name }}" == "workflow_dispatch" && "${{ github.event.inputs.version }}" != "" ]]; then
             echo "version=${{ github.event.inputs.version }}" >> $GITHUB_OUTPUT
             echo "Triggered manually with version: ${{ github.event.inputs.version }}"
-          elif [[ "${{ github.event_name }}" == "release" && "${{ startsWith(github.event.release.tag_name, 'release') }}" == "true" ]]; then
+          elif [[ "${{ github.event_name }}" == "release" ]]; then
             echo "version=${{ github.event.release.tag_name }}" >> $GITHUB_OUTPUT
             echo "Triggered by release with tag: ${{ github.event.release.tag_name }}"
           else
             echo "version=" >> $GITHUB_OUTPUT
             echo "No valid version provided. Skipping publish-release job."
           fi
+
+      - name: Info
+        run: |
+          echo "Event name: ${{ github.event_name }}"
+          echo "Release tag: ${{ github.event.release.tag_name }}"
+          echo "Is release?: ${{ github.event_name == 'release' }}"
 
   publish-release:
     needs: set-version
