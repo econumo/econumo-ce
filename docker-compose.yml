@@ -1,6 +1,6 @@
 services:
   econumo:
-    image: ghcr.io/econumo/econumo-one:latest
+    image: econumo/econumo-ce:latest
     env_file:
       - .env
     working_dir: /var/www
