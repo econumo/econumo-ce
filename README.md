@@ -5,7 +5,7 @@
 </p>
 
 <p align="center">
-    A getting started guide to self-hosting <a href="https://econumo.com/docs/edition" target="_blank">Econumo One</a>
+    A getting started guide to self-hosting <a href="https://econumo.com/docs/edition" target="_blank">Econumo CE</a>
 </p>
 
 ---
@@ -20,7 +20,7 @@
 1. Clone this repository:
 
     ```console
-    $ git clone --single-branch https://github.com/econumo/econumo-one econumo
+    $ git clone --single-branch https://github.com/econumo/econumo-ce econumo
     Cloning into 'econumo'...
     remote: Enumerating objects: 13, done.
     remote: Counting objects: 100% (10/10), done.
@@ -51,7 +51,7 @@
 1. Visit your instance at `http://localhost:8080` and create the first user.
 
 > [!NOTE]
-> Econumo One is funded by our `GitHub Sponsors` and `Econumo` subscribers.
+> Econumo CE is funded by our `GitHub Sponsors` and `Econumo` (cloud) subscribers.
 >
 > If you know someone who might [find Econumo useful](https://econumo.com/?utm_medium=Social&utm_source=GitHub&utm_campaign=readme), we'd appreciate if you'd let them know.
 
@@ -61,5 +61,5 @@ For more information on installation, upgrades, configuration, and integrations 
 
 ### Contact
 
-- For release announcements please go to [GitHub releases.](https://github.com/econumo/econumo-one/releases)
+- For release announcements please go to [GitHub releases.](https://github.com/econumo/econumo-ce/releases)
 - For a question or advice please use [GitHub discussions](https://github.com/orgs/econumo/discussions)
