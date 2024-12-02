@@ -46,7 +46,7 @@ jobs:
     uses: ./.github/workflows/embedded-build-package.yml
     with:
       REGISTRY: 'docker.io'
-      IMAGE_NAME: 'econumo-ce'
+      IMAGE_NAME: 'econumo/econumo-ce'
       IMAGE_TAGS: "${{ needs.set-version.outputs.version }},latest,beta"
     secrets:
       DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
