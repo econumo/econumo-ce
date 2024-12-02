@@ -3,16 +3,11 @@ services:
     image: econumo/econumo-ce:latest
     env_file:
       - .env
-    working_dir: /var/www
     entrypoint: [ "/bin/sh", "-c", "/entrypoint.sh" ]
     ports:
       - "8080:80"
     volumes:
       - db:/var/www/db
-      # To override LilTag config:
-      # - ./shared/liltag-config.json:/usr/share/nginx/html/liltag-config.json:ro,cached
-      # To override entrypoint.sh script
-      # - ./shared/entrypoint.sh:/entrypoint.sh:ro
     restart: unless-stopped
 
 volumes:
