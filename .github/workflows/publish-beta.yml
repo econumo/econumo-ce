@@ -8,17 +8,17 @@ on:
         required: true
 
 concurrency:
-  group: "docker-publish-beta"
+  group: 'docker-publish-beta'
   cancel-in-progress: true
 
 jobs:
   publish-beta:
     uses: ./.github/workflows/embedded-build-package.yml
     with:
-      REGISTRY: "ghcr.io"
-      IMAGE_NAME: ${{ github.repository }}
-      IMAGE_TAGS: "beta"
+      REGISTRY: 'docker.io'
+      IMAGE_NAME: 'econumo-ce'
+      IMAGE_TAGS: 'beta'
     secrets:
-      DOCKER_LOGIN: ${{ github.actor }}
-      DOCKER_PASSWORD: ${{ secrets.BUILD_USER_TOKEN }}
+      DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+      DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
       BUILD_USER_TOKEN: ${{ secrets.BUILD_USER_TOKEN }}

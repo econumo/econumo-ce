@@ -11,7 +11,7 @@ on:
         required: true
 
 concurrency:
-  group: "docker-publish-release"
+  group: 'docker-publish-release'
   cancel-in-progress: true
 
 jobs:
@@ -45,10 +45,10 @@ jobs:
     if: ${{ needs.set-version.outputs.version != '' }}
     uses: ./.github/workflows/embedded-build-package.yml
     with:
-      REGISTRY: "ghcr.io"
-      IMAGE_NAME: ${{ github.repository }}
+      REGISTRY: 'docker.io'
+      IMAGE_NAME: 'econumo-ce'
       IMAGE_TAGS: "${{ needs.set-version.outputs.version }},latest,beta"
     secrets:
-      DOCKER_LOGIN: ${{ github.actor }}
-      DOCKER_PASSWORD: ${{ secrets.BUILD_USER_TOKEN }}
+      DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+      DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
       BUILD_USER_TOKEN: ${{ secrets.BUILD_USER_TOKEN }}

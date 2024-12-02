@@ -4,6 +4,7 @@ on:
       REGISTRY:
         required: true
         type: string
+        default: 'docker.io'
       IMAGE_NAME:
         required: true
         type: string
@@ -12,7 +13,7 @@ on:
         type: string
         description: 'Comma-separated list of tags (e.g., "latest,1.0.0,1.0")'
     secrets:
-      DOCKER_LOGIN:
+      DOCKER_USERNAME:
         required: true
       DOCKER_PASSWORD:
         required: true
@@ -49,7 +50,7 @@ jobs:
       - name: Clone Frontend repository
         uses: actions/checkout@v4
         with:
-          repository: econumo/econumo-one-frontend
+          repository: econumo/econumo-ce-frontend
           ref: main
           token: ${{ secrets.BUILD_USER_TOKEN }}
           path: frontend
@@ -60,11 +61,10 @@ jobs:
           rm -rf backend/.git
           rm -rf build/.git
 
-      - name: Log in to the Container registry
+      - name: Log in to Docker Hub
         uses: docker/login-action@v2
         with:
-          registry: ${{ inputs.REGISTRY }}
-          username: ${{ secrets.DOCKER_LOGIN }}
+          username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Set up Docker Buildx
@@ -79,7 +79,7 @@ jobs:
             if [ -n "$TAGS" ]; then
               TAGS="${TAGS},"
             fi
-            TAGS="${TAGS}${{ inputs.REGISTRY }}/${{ inputs.IMAGE_NAME }}:${tag}"
+            TAGS="${TAGS}${{ inputs.IMAGE_NAME }}:${tag}"
           done
           echo "tags=${TAGS}" >> $GITHUB_OUTPUT
 
@@ -91,6 +91,6 @@ jobs:
           pull: true
           file: build/docker/app/Dockerfile
           tags: ${{ steps.prep.outputs.tags }}
-          cache-from: type=registry,ref=${{ inputs.REGISTRY }}/${{ inputs.IMAGE_NAME }}:latest
+          cache-from: type=registry,ref=${{ inputs.IMAGE_NAME }}:latest
           cache-to: type=inline
           platforms: ${{ matrix.platform }}
