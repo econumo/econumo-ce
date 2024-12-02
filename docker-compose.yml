@@ -3,7 +3,6 @@ services:
     image: econumo/econumo-ce:latest
     env_file:
       - .env
-    entrypoint: [ "/bin/sh", "-c", "/entrypoint.sh" ]
     ports:
       - "8181:80"
     volumes:
