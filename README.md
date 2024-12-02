@@ -48,7 +48,7 @@
     $ docker-compose up -d
     ```
 
-1. Visit your instance at `http://localhost:8080` and create the first user.
+1. Visit your instance at `http://localhost:8181` and create the first user.
 
 > [!NOTE]
 > Econumo CE is funded by our `GitHub Sponsors` and `Econumo` (cloud) subscribers.

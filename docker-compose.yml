@@ -5,7 +5,7 @@ services:
       - .env
     entrypoint: [ "/bin/sh", "-c", "/entrypoint.sh" ]
     ports:
-      - "8080:80"
+      - "8181:80"
     volumes:
       - db:/var/www/db
     restart: unless-stopped
