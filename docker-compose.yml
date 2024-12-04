@@ -7,6 +7,7 @@ services:
       - "8181:80"
     volumes:
       - db:/var/www/db
+      #- ./jwt:/var/www/config/jwt
     restart: unless-stopped
 
 volumes:
