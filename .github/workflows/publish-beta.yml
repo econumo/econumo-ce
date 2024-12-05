@@ -6,6 +6,8 @@ on:
     secrets:
       BUILD_USER_TOKEN:
         required: true
+  repository_dispatch:
+    types: [distribute-beta]
 
 concurrency:
   group: 'docker-publish-beta'
