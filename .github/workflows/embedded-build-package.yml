@@ -97,6 +97,6 @@ jobs:
           pull: true
           file: build/docker/app/Dockerfile
           tags: ${{ steps.prep.outputs.tags }}
-          cache-from: type=registry,ref=${{ inputs.REGISTRY }}/${{ inputs.IMAGE_NAME }}:latest
+          cache-from: type=registry,ref=${{ inputs.REGISTRY }}/${{ inputs.IMAGE_NAME }}:beta
           cache-to: type=inline
           platforms: linux/amd64,linux/arm64
