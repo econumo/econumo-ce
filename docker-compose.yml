@@ -10,5 +10,14 @@ services:
       #- ./jwt:/var/www/config/jwt
     restart: unless-stopped
 
+    # Example of the healthcheck
+#    healthcheck:
+#      test: ["CMD", "curl", "-f", "http://localhost/_/health-check"]
+#      interval: 1m30s
+#      timeout: 10s
+#      retries: 12
+#      start_period: 60s
+#      start_interval: 5s
+
 volumes:
   db:

@@ -48,16 +48,24 @@
     $ docker-compose up -d
     ```
 
+> [!NOTE]
+> Please note that it may take up to 90 seconds for the initial run. When you see `nginx entered RUNNING` state in the logs, it means Econumo is ready.
+> 
+> If you're interested, you can find the `Dockerfile` and `entrypoint.sh` script in the [repository](https://github.com/econumo/build-configuration).
+
+
 1. Visit your instance at `http://localhost:8181` and create the first user.
 
-> [!NOTE]
-> Econumo CE is funded by our `GitHub Sponsors` and `Econumo` (cloud) subscribers.
->
-> If you know someone who might [find Econumo useful](https://econumo.com/?utm_medium=Social&utm_source=GitHub&utm_campaign=readme), we'd appreciate if you'd let them know.
 
 ### Documentation
 
 For more information on installation, upgrades, configuration, and integrations please see our [documentation.](https://econumo.com/docs/)
+
+
+> [!NOTE]
+> Econumo CE is funded by our `GitHub Sponsors` and `Econumo` (cloud) subscribers.
+>
+> If you know someone who might [find Econumo useful](https://econumo.com/), we'd appreciate if you'd let them know.
 
 ### Contact
 
