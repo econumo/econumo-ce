@@ -56,6 +56,14 @@
 > If you're interested, you can find the `Dockerfile` and `entrypoint.sh` script in the [repository](https://github.com/econumo/build-configuration).
 
 
+### How to debug
+
+Use the following command to check the application's logs. It’s useful for understanding why you are encountering a 500 error:
+
+```
+docker-compose exec -u www-data econumo tail -f /var/www/var/log/prod.log
+```
+
 
 ### Documentation
 
