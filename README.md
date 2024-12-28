@@ -36,25 +36,25 @@
     .env.example
     ```
 
-1. Create and configure your [environment](https://docs.docker.com/compose/environment-variables/) file:
+2. Create and configure your [environment](https://docs.docker.com/compose/environment-variables/) file:
 
     ```console
     $ cp .env.example .env
     ```
 
-1. Start the services with Docker Compose:
+3. Start the services with Docker Compose:
 
     ```console
     $ docker-compose up -d
     ```
+
+4. Visit your instance at `http://localhost:8181` and create the first user.
 
 > [!NOTE]
 > Please note that it may take up to 90 seconds for the initial run. When you see `nginx entered RUNNING` state in the logs, it means Econumo is ready.
 > 
 > If you're interested, you can find the `Dockerfile` and `entrypoint.sh` script in the [repository](https://github.com/econumo/build-configuration).
 
-
-1. Visit your instance at `http://localhost:8181` and create the first user.
 
 
 ### Documentation
