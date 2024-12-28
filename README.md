@@ -62,12 +62,14 @@
 For more information on installation, upgrades, configuration, and integrations please see our [documentation.](https://econumo.com/docs/)
 
 
-> [!NOTE]
-> Econumo CE is funded by our `GitHub Sponsors` and `Econumo` (cloud) subscribers.
->
-> If you know someone who might [find Econumo useful](https://econumo.com/), we'd appreciate if you'd let them know.
-
 ### Contact
 
 - For release announcements please go to [GitHub releases.](https://github.com/econumo/econumo-ce/releases)
 - For a question or advice please use [GitHub discussions](https://github.com/orgs/econumo/discussions)
+
+
+---
+> [!NOTE]
+> Econumo CE is funded by our `GitHub Sponsors` and `Econumo` (cloud) subscribers.
+>
+> If you know someone who might [find Econumo useful](https://econumo.com/), we'd appreciate if you'd let them know.
