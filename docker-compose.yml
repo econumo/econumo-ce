@@ -6,7 +6,7 @@ services:
     ports:
       - "8181:80"
     volumes:
-      - db:/var/www/db
+      - db:/var/www/var/db
       #- ./jwt:/var/www/config/jwt
     restart: unless-stopped
 
