@@ -51,7 +51,7 @@
 4. Visit your instance at `http://localhost:8181` and create the first user.
 
 > [!NOTE]
-> Please note that it may take up to 90 seconds for the initial run. When you see `nginx entered RUNNING` state in the logs, it means Econumo is ready.
+> Please note that **it may take up to 90 seconds for the initial run**. When you see `nginx entered RUNNING` state in the logs, it means Econumo is ready.
 > 
 > If you're interested, you can find the `Dockerfile` and `entrypoint.sh` script in the [repository](https://github.com/econumo/build-configuration).
 
