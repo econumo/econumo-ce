@@ -60,7 +60,7 @@
 
 After installation, you may need to complete additional configuration. Please refer to the following guides:
 
-- [How to configure multi-currency support](https://econumo.com/docs/self-hosting/multi-currency/) (Econumo comes preloaded with USD only).
+- [How to configure multi-currency support](https://econumo.com/docs/self-hosting/multi-currency/) (Econumo comes preloaded with **USD** only).
 - [How to configure backups](https://econumo.com/docs/self-hosting/backups/).
 - [Useful CLI commands](https://econumo.com/docs/self-hosting/cli-commands/).
 - [How to debug Econumo](https://econumo.com/docs/self-hosting/debug/).
