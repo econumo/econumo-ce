@@ -65,8 +65,9 @@ After installation, you may need to complete additional configuration. Please re
 - [Useful CLI commands](https://econumo.com/docs/self-hosting/cli-commands/).
 - [How to debug Econumo](https://econumo.com/docs/self-hosting/debug/).
 - [Econumo API](https://econumo.com/docs/api/).
+- [User Guide](https://econumo.com/docs/user-guide/).
 
-For more information please see our [documentation.](https://econumo.com/docs/)
+For more information please see our [documentation](https://econumo.com/docs/).
 
 ### Contact
 
