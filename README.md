@@ -56,24 +56,22 @@
 > If you're interested, you can find the `Dockerfile` and `entrypoint.sh` script in the [repository](https://github.com/econumo/build-configuration).
 
 
-### How to debug
+### Next steps
 
-Use the following command to check the application's logs. It’s useful for understanding why you are encountering a 500 error:
+After installation, you may need to complete additional configuration. Please refer to the following guides:
 
-```
-docker-compose exec -u www-data econumo tail -f /var/www/var/log/prod.log
-```
+- [How to configure multi-currency support](https://econumo.com/docs/self-hosting/multi-currency/) (Econumo comes preloaded with USD only).
+- [How to configure backups](https://econumo.com/docs/self-hosting/backups/).
+- [Useful CLI commands](https://econumo.com/docs/self-hosting/cli-commands/).
+- [How to debug Econumo](https://econumo.com/docs/self-hosting/debug/).
+- [Econumo API](https://econumo.com/docs/api/).
 
-
-### Documentation
-
-For more information on installation, upgrades, configuration, and integrations please see our [documentation.](https://econumo.com/docs/)
-
+For more information please see our [documentation.](https://econumo.com/docs/)
 
 ### Contact
 
-- For release announcements please go to [GitHub releases.](https://github.com/econumo/econumo-ce/releases)
-- For a question or advice please use [GitHub discussions](https://github.com/orgs/econumo/discussions)
+- For release announcements, please check [GitHub Releases](https://github.com/econumo/econumo-ce/releases) or [Econumo Website](https://econumo.com/tags/release/).
+- For questions, issue reporting, or advice, please use [GitHub Discussions](https://github.com/orgs/econumo/discussions).
 
 
 ---
