@@ -1,0 +1,13 @@
+---
+actor: IntegrationalTester
+modules:
+  enabled:
+    - \App\Tests\Helper\Integrational
+    - Symfony:
+        app_path: 'src'
+        var_path: 'var'
+        environment: 'test'
+    - Doctrine2:
+        depends: Symfony
+        cleanup: true
+    - Asserts:
