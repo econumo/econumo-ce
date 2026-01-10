@@ -28,10 +28,9 @@
     remote: Total 13 (delta 0), reused 7 (delta 0), pack-reused 3 (from 1)
     Receiving objects: 100% (13/13), done.
 
-    $ cd econumo
+    $ cd econumo/deployment/docker-compose
 
     $ ls -1
-    README.md
     docker-compose.yml
     .env.example
     ```
