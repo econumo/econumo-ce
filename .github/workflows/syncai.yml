@@ -66,8 +66,19 @@ jobs:
           restore-keys: |
             syncai-binary-${{ steps.platform.outputs.os }}-${{ steps.platform.outputs.arch }}-
 
+      - name: Validate cached binary
+        id: cache_validate
+        shell: bash
+        run: |
+          BINARY_PATH="${{ runner.temp }}/syncai-cache/syncai"
+          if [ -x "$BINARY_PATH" ]; then
+            echo "cache_valid=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "cache_valid=false" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Download syncai binary
-        if: steps.cache.outputs.cache-hit != 'true'
+        if: steps.cache.outputs.cache-hit != 'true' || steps.cache_validate.outputs.cache_valid != 'true'
         run: |
           mkdir -p ${{ runner.temp }}/syncai-cache
           NAME="${{ steps.platform.outputs.asset_name }}"
