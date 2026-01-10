@@ -1,4 +1,4 @@
-.PHONY: help up down sh run test install dev bundle lint
+.PHONY: help up down sh run test install dev bundle lint build
 
 # Default target
 .DEFAULT_GOAL := help
@@ -16,6 +16,9 @@ help:
 	@echo "  make dev          - Start web development server"
 	@echo "  make bundle       - Bundle web for production"
 	@echo "  make lint         - Run web linter"
+	@echo ""
+	@echo "Production:"
+	@echo "  make build        - Build frontend and Docker images for production"
 
 # Start application
 up:
@@ -62,3 +65,16 @@ bundle:
 lint:
 	@echo "Running web linter..."
 	cd web && npm run lint
+
+# Build for production
+build:
+	@echo "Setting up frontend environment..."
+	rm -f web/.env
+	cp web/.env.ce web/.env
+	@echo "Building production Docker image..."
+	docker buildx build \
+		--file deployment/docker/app/Dockerfile \
+		--target prod \
+		--tag econumo/econumo-ce:local \
+		--load \
+		.

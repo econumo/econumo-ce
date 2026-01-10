@@ -43,7 +43,7 @@ RUN chown www-data:www-data /var/www/ -R
 
 
 # Frontend build stage (only for production)
-FROM node:lts-alpine AS frontend-builder
+FROM node:20-alpine AS frontend-builder
 
 WORKDIR /build/web
 
@@ -52,7 +52,7 @@ RUN corepack enable && corepack prepare pnpm@9.0.4 --activate
 
 # Copy frontend files
 COPY web/package.json web/pnpm-lock.yaml* ./
-RUN pnpm install --frozen-lockfile
+RUN pnpm install --shamefully-hoist
 
 COPY web/ ./
 RUN pnpm run build
@@ -65,7 +65,7 @@ EXPOSE 80
 RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
 
 # Remove dev dependencies from vendor
-RUN composer install --no-dev --optimize-autoloader --classmap-authoritative && \
+RUN composer install --no-dev --no-scripts --optimize-autoloader --classmap-authoritative && \
     composer clear-cache
 
 # Warmup cache
