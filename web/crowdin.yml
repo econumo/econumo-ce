@@ -1,0 +1,3 @@
+files:
+  - source: /apps/app-frontend/src/i18n/en-US/index.ts
+    translation: /apps/app-frontend/src/i18n/%locale%/%original_file_name%
