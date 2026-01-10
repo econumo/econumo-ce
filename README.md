@@ -71,7 +71,7 @@ For more information please see our [documentation](https://econumo.com/docs/).
 ### Contact
 
 - For release announcements, please check [GitHub Releases](https://github.com/econumo/econumo-ce/releases) or [Econumo Website](https://econumo.com/tags/release/).
-- For questions, issue reporting, or advice, please use [GitHub Discussions](https://github.com/orgs/econumo/discussions).
+- For questions, issue reporting, or advice, please use [GitHub Issues](https://github.com/econumo/econumo-ce/issues).
 
 
 ---
