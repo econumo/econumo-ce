@@ -1,25 +1,22 @@
-FROM php:8.2-fpm-alpine as dev
+# Backend development stage
+FROM php:8.2-fpm-alpine AS dev
 
 EXPOSE 80 9000
 
-ENV PHP_DISPLAY_ERRORS 0
-ENV PHP_ERROR_REPORTING 22527
-ENV COMPOSER_ALLOW_SUPERUSER 1
+ENV PHP_DISPLAY_ERRORS=0
+ENV PHP_ERROR_REPORTING=22527
+ENV COMPOSER_ALLOW_SUPERUSER=1
 
 WORKDIR /var/www/
 RUN apk add --update nginx supervisor git busybox-suid postgresql-dev
 
 RUN apk add --no-cache --virtual .build-deps $PHPIZE_DEPS curl-dev && \
-#    apk add libzip-dev libonig-dev && \
     docker-php-ext-configure bcmath --enable-bcmath && \
     docker-php-ext-configure opcache --enable-opcache && \
     docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql && \
-#    docker-php-ext-configure mbstring --enable-mbstring && \
-#    pecl install xdebug && \
-#    docker-php-ext-enable xdebug && \
     docker-php-ext-install -j$(nproc) bcmath opcache curl pdo_pgsql pgsql && \
     apk del -f .build-deps && \
-    rm -rf /tmp/* /var/cache/apk/* \
+    rm -rf /tmp/* /var/cache/apk/*
 
 RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
 
@@ -32,7 +29,7 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 CMD ["/usr/bin/supervisord", "-n", "-c", "/etc/supervisord.conf"]
 
 
-FROM dev as test
+FROM dev AS test
 
 COPY composer.json composer.lock symfony.lock /var/www/
 RUN composer install --no-scripts --prefer-dist --no-autoloader
@@ -45,19 +42,50 @@ RUN bin/console assets:install public && \
 RUN chown www-data:www-data /var/www/ -R
 
 
-FROM test as prod
+# Frontend build stage (only for production)
+FROM node:lts-alpine AS frontend-builder
+
+WORKDIR /build/web
+
+# Install pnpm
+RUN corepack enable && corepack prepare pnpm@9.0.4 --activate
+
+# Copy frontend files
+COPY web/package.json web/pnpm-lock.yaml* ./
+RUN pnpm install --frozen-lockfile
+
+COPY web/ ./
+RUN pnpm run build
+
+
+FROM test AS prod
+
+EXPOSE 80
 
 RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
+
+# Remove dev dependencies from vendor
+RUN composer install --no-dev --optimize-autoloader --classmap-authoritative && \
+    composer clear-cache
 
 # Warmup cache
 RUN rm -rf /var/www/var/cache/* && bin/console cache:warmup --env=prod
 RUN chown www-data:www-data /var/www/var/ -R
 
-# cleanup
-RUN composer clear-cache && \
-    rm /var/www/.env.* && \
-#    rm /usr/local/bin/composer && \
-    apk del git
-#    pecl uninstall xdebug && \
-#    rm /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini && \
-#    rm /usr/local/etc/php-fpm.d/xdebug.ini
+# Copy frontend dist from frontend-builder stage
+COPY --from=frontend-builder /build/web/dist/spa /usr/share/nginx/html
+
+# Cleanup dev/test dependencies
+RUN rm -rf /var/www/.env.* && \
+    rm -rf /var/www/tests && \
+    rm -rf /var/www/web && \
+    rm -rf /var/www/codeception.yml && \
+    rm -rf /var/www/rector.php && \
+    rm -rf /var/www/psalm.xml && \
+    rm -rf /var/www/.github && \
+    rm -f /usr/local/bin/composer && \
+    apk del git busybox-suid && \
+    rm -rf /var/cache/apk/* /tmp/*
+
+RUN chmod +x /entrypoint.sh
+ENTRYPOINT ["/entrypoint.sh"]

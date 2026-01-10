@@ -20,6 +20,7 @@ jobs:
       REGISTRY: 'docker.io'
       IMAGE_NAME: 'econumo/econumo-ce'
       IMAGE_TAGS: 'beta'
+      ECONUMO_EDITION: 'ce'
     secrets:
       DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
       DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
