@@ -78,7 +78,7 @@ jobs:
           context: .
           push: true
           pull: true
-          file: build/docker/app/Dockerfile
+          file: deployment/docker/app/Dockerfile
           target: prod
           tags: ${{ steps.prep.outputs.tags }}
           cache-from: type=registry,ref=${{ inputs.REGISTRY }}/${{ inputs.IMAGE_NAME }}:beta

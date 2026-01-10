@@ -21,7 +21,7 @@ RUN apk add --no-cache --virtual .build-deps $PHPIZE_DEPS curl-dev && \
 RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
 
 # Copy custom configs
-COPY build/docker/app/configs /
+COPY deployment/docker/app/configs /
 
 # composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer

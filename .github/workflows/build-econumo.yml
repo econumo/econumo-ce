@@ -28,7 +28,7 @@ jobs:
       - name: Build Econumo image for testing
         if: success()
         run: |
-          docker build --tag ${DOCKER_IMAGE} --target test -f build/docker/app/Dockerfile .
+          docker build --tag ${DOCKER_IMAGE} --target test -f deployment/docker/app/Dockerfile .
 
       - name: Test Econumo CE
         if: success()

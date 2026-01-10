@@ -3,7 +3,7 @@ services:
   app:
     build:
       context: .
-      dockerfile: ./build/docker/app/Dockerfile
+      dockerfile: ./deployment/docker/app/Dockerfile
       target: dev
     working_dir: /var/www
     volumes:
