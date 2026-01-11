@@ -125,9 +125,9 @@ export const useConnectionsStore = defineStore('connections', () => {
   async function setBudgetAccess(params: { userId: Id, budgetId: Id, role: AccessRole }) {
     trackEvent(METRICS.CONNECTION_UPDATE_BUDGET_ACCESS);
     const budgetsStore = useBudgetsStore();
-    return BudgetAPIv1.grantAccess(params, (response: any) => {
+    return BudgetAPIv1.grantAccess(params, async (response: any) => {
       // Fetch budget list to update the access information
-      budgetsStore.fetchBudgets();
+      await budgetsStore.fetchBudgets();
       return !!response.data;
     }, (error = {}) => {
       return error
@@ -137,9 +137,9 @@ export const useConnectionsStore = defineStore('connections', () => {
   async function revokeBudgetAccess(params: { userId: Id, budgetId: Id }) {
     trackEvent(METRICS.CONNECTION_REVOKE_BUDGET_ACCESS);
     const budgetsStore = useBudgetsStore();
-    return BudgetAPIv1.revokeAccess(params, (response: any) => {
+    return BudgetAPIv1.revokeAccess(params, async (response: any) => {
       // Fetch budget list to update the access information
-      budgetsStore.fetchBudgets();
+      await budgetsStore.fetchBudgets();
       return !!response.data;
     }, (error = {}) => {
       return error

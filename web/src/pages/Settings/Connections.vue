@@ -255,42 +255,62 @@ const deleteConnection = (userId?: string) => {
   }
 };
 
+const refreshPreviewModalData = (userId: Id) => {
+  const connection = connections.value.find(c => c.user.id === userId);
+  if (connection && previewConnectionModal.data.value) {
+    const connectionData: Connection = {
+      user: {
+        id: connection.user.id,
+        name: connection.user.name,
+        avatar: connection.user.avatar
+      },
+      sharedAccounts: connectionsStore.getSharedAccounts(userId),
+      sharedBudgets: connectionsStore.getSharedBudgets(userId)
+    };
+    previewConnectionModal.data.value = connectionData;
+  }
+};
+
 const declineAccountAccess = (accountId: Id) => {
   closeModal();
   accountsStore.deleteAccount(accountId);
 };
 
 const allowAccountAccess = (userId: Id, accountId: Id, role: string) => {
-  closeModal();
   connectionsStore.setAccountAccess({
     userId: userId,
     accountId: accountId,
     role: role
+  }).then(() => {
+    refreshPreviewModalData(userId);
   });
 };
 
 const revokeAccountAccess = (userId: Id, accountId: Id) => {
-  closeModal();
   connectionsStore.revokeAccountAccess({
     userId: userId,
     accountId: accountId
+  }).then(() => {
+    refreshPreviewModalData(userId);
   });
 };
 
 const shareBudgetAccess = (userId: Id, budgetId: Id, role: any) => {
-  closeModal();
   connectionsStore.setBudgetAccess({
     userId: userId,
     budgetId: budgetId,
     role: role
+  }).then(() => {
+    refreshPreviewModalData(userId);
   });
 };
 
 const revokeBudgetAccess = (userId: Id, budgetId: Id) => {
-  closeModal();
   connectionsStore.revokeBudgetAccess({
     userId: userId,
     budgetId: budgetId
+  }).then(() => {
+    refreshPreviewModalData(userId);
   });
 };
 
