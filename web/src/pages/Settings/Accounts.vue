@@ -272,7 +272,7 @@
                     <div class="preview-modal-account-info-item-label -access">{{ $t('pages.settings.accounts.preview_account_modal.access.label') }}</div>
                   </div>
                   <div v-if="previewAccountModal.account.owner.id !== userId" class="q-mb-sm">
-                    <div class="preview-modal-account-info-access-item">
+                    <div class="preview-modal-account-info-access-item cursor-pointer" @click="openAccountAccessLevelModal(previewAccountModal.account.id, previewAccountModal.account.owner.id, 'owner')">
                       <q-avatar class="preview-modal-account-info-access-item-avatar">
                         <img :src="avatarUrl(previewAccountModal.account.owner.avatar, 100)" width="100" height="100"/>
                       </q-avatar>
@@ -291,7 +291,7 @@
                   </div>
                   <div v-else v-for="sharedAccess in previewAccountModal.account.sharedAccess"
                        v-bind:key="sharedAccess.user.id" class="q-mb-sm">
-                    <div class="preview-modal-account-info-access-item">
+                    <div class="preview-modal-account-info-access-item cursor-pointer" @click="openAccountAccessLevelModal(previewAccountModal.account.id, sharedAccess.user.id, sharedAccess.role)">
                       <q-avatar class="preview-modal-account-info-access-item-avatar">
                         <img :src="avatarUrl(sharedAccess.user.avatar, 100)" class="preview-modal-account-info-access-item-avatar-img" width="100" height="100"/>
                       </q-avatar>
