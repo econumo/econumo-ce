@@ -35,10 +35,10 @@
                   {{ accessItem.user.name }}
                 </div>
                 <div class="preview-modal-account-info-access-item-user-role" v-if="!accessItem.role">
-                  {{ $t('modules.connections.elements.roles.no_access') }}
+                  {{ $t('modules.connections.accounts.roles.no_access') }}
                 </div>
                 <div class="preview-modal-account-info-access-item-user-role" v-else>
-                  {{ $t('modules.connections.modals.share_access.level.' + accessItem.role) }}
+                  {{ $t('modules.connections.accounts.roles.' + accessItem.role) }}
                 </div>
               </div>
               <q-icon name="chevron_right" size="32px" color="grey-6" style="margin-left: auto; align-self: center;"/>

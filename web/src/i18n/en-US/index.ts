@@ -772,11 +772,20 @@ export default {
           }
         }
       },
-      'elements': {
+      'accounts': {
         'roles': {
           'owner': 'Owner',
           'admin': 'Full control',
           'user': 'Manage transactions',
+          'guest': 'View only',
+          'no_access': 'No access'
+        }
+      },
+      'budgets': {
+        'roles': {
+          'owner': 'Owner',
+          'admin': 'Full control',
+          'user': 'Manage budget',
           'guest': 'View only',
           'no_access': 'No access'
         }

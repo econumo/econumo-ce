@@ -20,7 +20,7 @@
             />
           </div>
           <div>
-            <h4 
+            <h4
               id="budget-access-title"
               class="settings-toolbar-mobile-title"
             >
@@ -34,50 +34,50 @@
       <q-card-section class="access-modal-section">
         <div class="access-modal-list">
           <div class="access-modal-title">{{ budgetName }}</div>
-          <div 
+          <div class="access-modal-note access-modal-hint">
+            {{ $t('modules.connections.modals.share_access.tap_to_share') }}
+          </div>
+          <div
             v-if="!users.length"
             class="access-modal-note"
-            role="status"
           >
             {{ $t('modules.connections.modals.share_access.list_empty') }}
           </div>
-          <ul 
-            v-else 
-            class="access-modal-users-list"
-            role="list"
-          >
-            <li
-              v-for="item in users" 
-              :key="item.userId"
-              class="preview-modal-account-info-access-item"
-              role="listitem"
-            >
-              <button
-                class="preview-modal-account-info-access-button"
-                @click="handleUserSelect(item)"
-                :aria-label="$t('modules.connections.modals.share_access.select_user', { name: item.userName })"
-              >
-                <q-avatar class="preview-modal-account-info-access-item-avatar">
-                  <img 
-                    :src="getUserAvatarUrl(item.userAvatar)"
-                    class="preview-modal-account-info-access-item-avatar-img" 
-                    :alt="item.userName"
-                    :aria-hidden="true"
-                  />
-                </q-avatar>
-                <div class="preview-modal-account-info-access-item-user">
-                  <div class="preview-modal-account-info-access-item-user-name">
-                    {{ item.userName }}
-                  </div>
-                  <div class="preview-modal-account-info-access-item-user-role">
-                    {{ getUserRoleText(item) }}
-                  </div>
+          <div v-else v-for="item in users" v-bind:key="item.userId">
+            <div class="preview-modal-account-info-access-item access-item-clickable"
+                 @click="handleUserSelect(item)">
+              <q-avatar class="preview-modal-account-info-access-item-avatar">
+                <img
+                  :src="getUserAvatarUrl(item.userAvatar)"
+                  class="preview-modal-account-info-access-item-avatar-img"
+                  width="100"
+                  height="100"
+                  :alt="item.userName"
+                  :title="item.userName"
+                />
+              </q-avatar>
+              <div class="preview-modal-account-info-access-item-user">
+                <div class="preview-modal-account-info-access-item-user-name">
+                  {{ item.userName }}
                 </div>
-              </button>
-            </li>
-          </ul>
+                <div class="preview-modal-account-info-access-item-user-role">
+                  {{ getUserRoleText(item) }}
+                </div>
+              </div>
+              <q-icon name="chevron_right" size="32px" color="grey-6" class="access-item-chevron"/>
+            </div>
+          </div>
         </div>
       </q-card-section>
+      <q-card-actions class="responsive-modal-actions">
+        <q-space />
+        <q-btn
+          class="econumo-btn -medium -grey responsive-modal-actions-button"
+          :label="$t('elements.button.ok.label')"
+          flat
+          v-close-popup
+        />
+      </q-card-actions>
     </q-card>
   </q-dialog>
 </template>
@@ -123,7 +123,7 @@ const { avatarUrl } = useAvatar();
 const users = computed((): UserAccessItem[] => {
   const result: UserAccessItem[] = [];
   const map: Record<string, number> = {};
-  
+
   // First, add all connections
   props.connections.forEach((item: ConnectionDto, index: number) => {
     if (item.user.id === currentUserId.value) return;
@@ -166,12 +166,12 @@ const getUserAvatarUrl = (avatar: string): string => {
 
 const getUserRoleText = (user: UserAccessItem): string => {
   if (!user.role) {
-    return t('modules.connections.elements.roles.no_access');
+    return t('modules.connections.budgets.roles.no_access');
   }
-  
-  const roleText = t(`modules.connections.modals.share_access.level.${user.role}`);
-  return user.isAccepted 
-    ? roleText 
+
+  const roleText = t(`modules.connections.budgets.roles.${user.role}`);
+  return user.isAccepted
+    ? roleText
     : `${roleText} – ${t('modules.connections.modals.share_access.not_accepted')}`;
 };
 
@@ -179,31 +179,20 @@ const handleUserSelect = (user: UserAccessItem): void => {
   emit('user-selected', props.budgetId, user.userId, user.role);
 };
 </script>
+
 <style lang="scss" scoped>
-.access-modal-users-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
+.access-modal-hint {
+  margin-bottom: 16px;
 }
 
-.preview-modal-account-info-access-button {
-  display: flex;
-  align-items: center;
-  width: 100%;
-  padding: 0.5rem;
-  border: none;
-  background: none;
+.access-item-clickable {
   cursor: pointer;
-  text-align: left;
+  margin-bottom: 12px;
+}
 
-  &:hover {
-    background-color: var(--q-primary-fade);
-  }
-
-  &:focus-visible {
-    outline: 2px solid var(--q-primary);
-    outline-offset: -2px;
-  }
+.access-item-chevron {
+  margin-left: auto;
+  align-self: center;
 }
 </style>
 

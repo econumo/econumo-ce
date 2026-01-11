@@ -21,13 +21,13 @@
       <q-card-section class="account-access-dialog-modal-section">
         <q-list class="account-access-dialog-modal-list">
           <q-item class="account-access-dialog-modal-item" clickable @click="$emit('allow', user.id, itemId, 'guest')" :class="'control_point ' + (role === 'guest' ? 'active' : '')">
-            <q-item-section>{{ $t('modules.connections.elements.roles.guest') }}</q-item-section>
+            <q-item-section>{{ $t('modules.connections.accounts.roles.guest') }}</q-item-section>
           </q-item>
           <q-item class="account-access-dialog-modal-item" clickable @click="$emit('allow', user.id, itemId, 'user')" :class="'control_point ' + (role === 'user' ? 'active' : '')">
-            <q-item-section>{{ $t('modules.connections.elements.roles.user') }}</q-item-section>
+            <q-item-section>{{ $t('modules.connections.accounts.roles.user') }}</q-item-section>
           </q-item>
           <q-item class="account-access-dialog-modal-item" clickable @click="$emit('allow', user.id, itemId, 'admin')" :class="'control_point ' + (role === 'admin' ? 'active' : '')">
-            <q-item-section>{{ $t('modules.connections.elements.roles.admin') }}</q-item-section>
+            <q-item-section>{{ $t('modules.connections.accounts.roles.admin') }}</q-item-section>
           </q-item>
           <q-item class="account-access-dialog-modal-item -delete" v-if="role" clickable @click="$emit('revoke', user.id, itemId)">
             <q-item-section>{{ $t('modules.connections.modals.share_access.revoke_access') }}</q-item-section>

@@ -281,7 +281,7 @@
                           {{ previewAccountModal.account.owner.name }}
                         </div>
                         <div class="preview-modal-account-info-access-item-user-role">
-                          {{ $t('modules.connections.elements.roles.owner') }}
+                          {{ $t('modules.connections.accounts.roles.owner') }}
                         </div>
                       </div>
                     </div>
@@ -300,7 +300,7 @@
                           {{ sharedAccess.user.name }}
                         </div>
                         <div class="preview-modal-account-info-access-item-user-role">
-                          {{ $t('modules.connections.elements.roles.' + sharedAccess.role) }}
+                          {{ $t('modules.connections.accounts.roles.' + sharedAccess.role) }}
                         </div>
                       </div>
                     </div>

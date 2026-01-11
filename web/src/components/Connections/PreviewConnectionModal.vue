@@ -15,7 +15,7 @@
         </div>
 
         <div class="settings-connections-modal-card-item" v-if="connection.sharedBudgets.length === 0">
-            <div class="settings-connections-modal-card-item-label">{{ $t('modules.connections.modals.preview_connection.budgets_empty') }}</div>  
+            <div class="settings-connections-modal-card-item-label">{{ $t('modules.connections.modals.preview_connection.budgets_empty') }}</div>
             <q-list class="settings-connections-modal-card-item-list">
                 <q-item v-ripple class="settings-connections-modal-card-item-item">
                     <q-item-section class="settings-connections-modal-card-item-item-name-block">
@@ -38,7 +38,7 @@
                   <span v-if="isBudgetOwnedByCurrentUser(budget)" class="settings-connections-modal-card-item-item-owner-hint">{{ $t('modules.connections.modals.preview_connection.your_budget') }}</span>
                   <span v-if="!isBudgetOwnedByCurrentUser(budget)" class="settings-connections-modal-card-item-item-shared-hint">{{ $t('modules.connections.modals.preview_connection.shared_with_you') }}</span>
                 </div>
-                <span class="settings-connections-modal-card-item-item-role">{{ $t('modules.connections.elements.roles.' + budget.role) }}</span>
+                <span class="settings-connections-modal-card-item-item-role">{{ $t('modules.connections.budgets.roles.' + budget.role) }}</span>
               </q-item-section>
 
               <q-item-section side class="settings-connections-modal-card-item-item-shared">
@@ -57,7 +57,7 @@
         </div>
 
         <div class="settings-connections-modal-card-item settings-connections-modal-card-item-last" v-if="connection.sharedAccounts.length === 0">
-            <div class="settings-connections-modal-card-item-label">{{ $t('modules.connections.modals.preview_connection.accounts_empty') }}</div>  
+            <div class="settings-connections-modal-card-item-label">{{ $t('modules.connections.modals.preview_connection.accounts_empty') }}</div>
             <q-list class="settings-connections-modal-card-item-list">
                 <q-item v-ripple class="settings-connections-modal-card-item-item">
                     <q-item-section class="settings-connections-modal-card-item-item-name-block">
@@ -80,7 +80,7 @@
                   <span v-if="isAccountOwnedByCurrentUser(account)" class="settings-connections-modal-card-item-item-owner-hint">{{ $t('modules.connections.modals.preview_connection.your_account') }}</span>
                   <span v-if="!isAccountOwnedByCurrentUser(account)" class="settings-connections-modal-card-item-item-shared-hint">{{ $t('modules.connections.modals.preview_connection.shared_with_you') }}</span>
                 </div>
-                <span class="settings-connections-modal-card-item-item-role">{{ $t('modules.connections.elements.roles.' + account.role) }}</span>
+                <span class="settings-connections-modal-card-item-item-role">{{ $t('modules.connections.accounts.roles.' + account.role) }}</span>
               </q-item-section>
 
               <q-item-section side class="settings-connections-modal-card-item-item-shared">
@@ -273,4 +273,4 @@ const onCancelAccessLevel = () => {
   selectedAccount.value = null;
   selectedAccountOwner.value = null;
 };
-</script> 
+</script>
