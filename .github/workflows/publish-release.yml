@@ -57,6 +57,8 @@ jobs:
       REGISTRY: 'docker.io'
       IMAGE_NAME: 'econumo/econumo-ce'
       IMAGE_TAGS: "${{ needs.create-tag.outputs.version }},latest,beta"
+      RUNS_ON: 'blacksmith-4vcpu-ubuntu-2404'
+      PLATFORMS: 'linux/amd64,linux/arm64'
     secrets:
       DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
       DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
@@ -71,6 +73,8 @@ jobs:
       IMAGE_NAME: 'econumo/econumo-cloud'
       IMAGE_TAGS: "${{ needs.create-tag.outputs.version }},latest,beta"
       ECONUMO_EDITION: 'cloud'
+      RUNS_ON: 'blacksmith-4vcpu-ubuntu-2404'
+      PLATFORMS: 'linux/arm64'
     secrets:
       DOCKER_USERNAME: ${{ github.actor }}
       DOCKER_PASSWORD: ${{ secrets.BUILD_USER_TOKEN }}

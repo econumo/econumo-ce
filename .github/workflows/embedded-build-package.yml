@@ -17,6 +17,16 @@ on:
         type: string
         default: 'ce'
         description: 'Econumo edition (ce or cloud)'
+      RUNS_ON:
+        required: false
+        type: string
+        default: 'ubuntu-latest'
+        description: 'Runner to use for the build'
+      PLATFORMS:
+        required: false
+        type: string
+        default: 'linux/amd64,linux/arm64'
+        description: 'Comma-separated list of platforms to build for'
     secrets:
       DOCKER_USERNAME:
         required: true
@@ -27,7 +37,7 @@ on:
 
 jobs:
   build-package:
-    runs-on: blacksmith-4vcpu-ubuntu-2404
+    runs-on: ${{ inputs.RUNS_ON }}
     permissions:
       contents: read
       packages: write
@@ -92,4 +102,4 @@ jobs:
           tags: ${{ steps.prep.outputs.tags }}
           cache-from: type=registry,ref=${{ inputs.REGISTRY }}/${{ inputs.IMAGE_NAME }}:beta
           cache-to: type=inline
-          platforms: linux/amd64,linux/arm64
+          platforms: ${{ inputs.PLATFORMS }}
