@@ -369,6 +369,12 @@
             font-size: 14px;
             line-height: 16px;
             color: $color-text-black;
+
+            & > div {
+              display: flex;
+              align-items: center;
+              flex-wrap: wrap;
+            }
           }
 
           &-role {
@@ -378,6 +384,19 @@
             font-size: 14px;
             line-height: 16px;
             color: $color-label-grey;
+          }
+
+          &-shared-hint {
+            display: inline-block;
+            margin-left: 6px;
+            padding: 1px 4px;
+            font-style: normal;
+            font-weight: 500;
+            font-size: 10px;
+            line-height: 12px;
+            color: $color-white;
+            background: $color-magenta;
+            border-radius: 3px;
           }
 
           &-shared {

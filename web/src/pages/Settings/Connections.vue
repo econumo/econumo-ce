@@ -108,6 +108,9 @@
           :allow-changes="econumoPackage.includesConnections"
           @hide="closeModal"
           @delete="openDeleteConnectionModal"
+          @decline-account="declineAccountAccess"
+          @allow-account="allowAccountAccess"
+          @revoke-account="revokeAccountAccess"
         />
       </teleport>
     </div>
@@ -127,6 +130,7 @@ import AcceptInviteModal from '../../components/Connections/AcceptInviteModal.vu
 import PreviewConnectionModal from '../../components/Connections/PreviewConnectionModal.vue';
 
 import { useConnectionsStore, type Connection } from 'stores/connections';
+import { useAccountsStore } from 'stores/accounts';
 import { useActiveAreaStore } from 'stores/active-area';
 
 import { useGenerateInviteModalState } from '../../composables/connections/useGenerateInviteModalState';
@@ -146,6 +150,7 @@ const router = useRouter();
 const $q = useQuasar();
 
 const connectionsStore = useConnectionsStore();
+const accountsStore = useAccountsStore();
 const activeAreaStore = useActiveAreaStore();
 
 const { isConnectionsLoaded, connections } = storeToRefs(connectionsStore);
@@ -246,6 +251,28 @@ const deleteConnection = (userId?: string) => {
   if (userId) {
     connectionsStore.deleteConnection(userId);
   }
+};
+
+const declineAccountAccess = (accountId: Id) => {
+  closeModal();
+  accountsStore.deleteAccount(accountId);
+};
+
+const allowAccountAccess = (userId: Id, accountId: Id, role: string) => {
+  closeModal();
+  connectionsStore.setAccountAccess({
+    userId: userId,
+    accountId: accountId,
+    role: role
+  });
+};
+
+const revokeAccountAccess = (userId: Id, accountId: Id) => {
+  closeModal();
+  connectionsStore.revokeAccountAccess({
+    userId: userId,
+    accountId: accountId
+  });
 };
 
 onMounted(() => {

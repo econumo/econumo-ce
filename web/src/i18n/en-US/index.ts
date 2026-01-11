@@ -797,6 +797,10 @@ export default {
           'budgets': 'Shared budgets',
           'budgets_empty': 'No shared budgets',
           'accounts_empty': 'No shared accounts',
+          'shared_with_you': 'Shared with you',
+        },
+        'decline_access': {
+          'decline_access': 'Decline access',
         },
         'share_access': {
           'level': {

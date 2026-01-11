@@ -64,12 +64,15 @@
         <div class="settings-connections-modal-card-item  settings-connections-modal-card-item-last" v-else>
           <div class="settings-connections-modal-card-item-label">{{ $t('modules.connections.modals.preview_connection.accounts') }}</div>
           <q-list class="settings-connections-modal-card-item-list">
-            <q-item v-for="account in connection.sharedAccounts" v-bind:key="account.id" clickable v-ripple class="settings-connections-modal-card-item-item">
+            <q-item v-for="account in connection.sharedAccounts" v-bind:key="account.id" clickable v-ripple class="settings-connections-modal-card-item-item" @click="onAccountClick(account)">
               <q-item-section class="settings-connections-modal-card-item-item-avatar" avatar>
                 <q-icon :name="account.icon" />
               </q-item-section>
               <q-item-section class="settings-connections-modal-card-item-item-name-block">
-                {{ account.name }}
+                <div>
+                  {{ account.name }}
+                  <span v-if="!isAccountOwnedByCurrentUser(account)" class="settings-connections-modal-card-item-item-shared-hint">{{ $t('modules.connections.modals.preview_connection.shared_with_you') }}</span>
+                </div>
                 <span class="settings-connections-modal-card-item-item-role">{{ $t('modules.connections.elements.roles.' + account.role) }}</span>
               </q-item-section>
 
@@ -99,13 +102,38 @@
       </q-card-actions>
     </q-card>
   </q-dialog>
+
+  <DeclineSharedAccessModal
+    v-if="selectedAccount && selectedAccountOwner && !isAccountOwnedByCurrentUser(selectedAccount)"
+    :is-opened="isDeclineModalOpened"
+    @update:is-opened="isDeclineModalOpened = $event"
+    :owner="selectedAccountOwner"
+    :account-id="selectedAccount.id"
+    :account-name="selectedAccount.name"
+    @decline="onDeclineAccess"
+    @cancel="onCancelDecline"
+  />
+
+  <AccessLevelDialogModal
+    v-if="selectedAccount && isAccountOwnedByCurrentUser(selectedAccount)"
+    :user="connection.user"
+    :item-id="selectedAccount.id"
+    :role="selectedAccount.role"
+    @allow="onAllowAccess"
+    @revoke="onRevokeAccess"
+    @cancel="onCancelAccessLevel"
+  />
 </template>
 
 <script setup lang="ts">
+import { ref, computed } from 'vue';
 import { useQuasar } from 'quasar';
-import { type SharedBudget, type SharedAccount } from '../../stores/connections';
-import _ from 'lodash';
+import type { SharedBudget, SharedAccount } from '../../stores/connections';
 import { useAvatar } from '../../composables/useAvatar';
+import { useUsersStore } from '../../stores/users';
+import { useAccountsStore } from '../../stores/accounts';
+import DeclineSharedAccessModal from './DeclineSharedAccessModal.vue';
+import AccessLevelDialogModal from '../AccessLevelDialogModal.vue';
 
 defineOptions({
   name: 'PreviewConnectionModal'
@@ -134,11 +162,44 @@ const emit = defineEmits<{
   'update:isOpened': [value: boolean];
   'hide': [];
   'delete': [userId: string];
+  'decline-account': [accountId: string];
+  'allow-account': [userId: string, accountId: string, role: string];
+  'revoke-account': [userId: string, accountId: string];
 }>();
 
 const $q = useQuasar();
+const usersStore = useUsersStore();
+const accountsStore = useAccountsStore();
 
 const { avatarUrl } = useAvatar();
+
+const isDeclineModalOpened = ref(false);
+const isAccessLevelModalOpened = ref(false);
+const selectedAccount = ref<SharedAccount | null>(null);
+const selectedAccountOwner = ref<User | null>(null);
+
+const currentUserId = computed(() => usersStore.userId);
+
+const isAccountOwnedByCurrentUser = (account: SharedAccount) => {
+  // Look up the full account to check ownership
+  const fullAccount = accountsStore.accounts.find(a => a.id === account.id);
+  if (!fullAccount) {
+    return false;
+  }
+  return fullAccount.owner.id === currentUserId.value;
+};
+
+const getAccountOwner = (account: SharedAccount): User => {
+  const fullAccount = accountsStore.accounts.find(a => a.id === account.id);
+  if (!fullAccount) {
+    return props.connection.user; // Fallback
+  }
+  return {
+    id: fullAccount.owner.id,
+    name: fullAccount.owner.name,
+    avatar: fullAccount.owner.avatar
+  };
+};
 
 const onHide = () => {
   emit('hide');
@@ -147,5 +208,51 @@ const onHide = () => {
 
 const onDelete = () => {
   emit('delete', props.connection.user.id);
+};
+
+const onAccountClick = (account: SharedAccount) => {
+  selectedAccount.value = account;
+  selectedAccountOwner.value = getAccountOwner(account);
+
+  if (isAccountOwnedByCurrentUser(account)) {
+    // Account I own and share with the connected user - show access level dialog
+    isAccessLevelModalOpened.value = true;
+  } else {
+    // Account shared with me - show decline dialog
+    isDeclineModalOpened.value = true;
+  }
+};
+
+const onDeclineAccess = (accountId: string) => {
+  isDeclineModalOpened.value = false;
+  selectedAccount.value = null;
+  selectedAccountOwner.value = null;
+  emit('decline-account', accountId);
+};
+
+const onCancelDecline = () => {
+  isDeclineModalOpened.value = false;
+  selectedAccount.value = null;
+  selectedAccountOwner.value = null;
+};
+
+const onAllowAccess = (userId: string, accountId: string, role: string) => {
+  isAccessLevelModalOpened.value = false;
+  selectedAccount.value = null;
+  selectedAccountOwner.value = null;
+  emit('allow-account', userId, accountId, role);
+};
+
+const onRevokeAccess = (userId: string, accountId: string) => {
+  isAccessLevelModalOpened.value = false;
+  selectedAccount.value = null;
+  selectedAccountOwner.value = null;
+  emit('revoke-account', userId, accountId);
+};
+
+const onCancelAccessLevel = () => {
+  isAccessLevelModalOpened.value = false;
+  selectedAccount.value = null;
+  selectedAccountOwner.value = null;
 };
 </script> 
