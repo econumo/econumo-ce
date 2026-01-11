@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia';
 import ConnectionAPIv1 from '../modules/api/v1/connection';
+import BudgetAPIv1 from '../modules/api/v1/budget';
 import { METRICS, trackEvent } from '../modules/metrics';
 import _ from 'lodash';
 import { date } from 'quasar';
@@ -16,6 +17,7 @@ import { useSyncStore } from './sync';
 import { BudgetMetaDto } from 'modules/api/v1/dto/budget.dto';
 import { AccountDto } from 'modules/api/v1/dto/account.dto';
 import { useUsersStore } from './users';
+import { AccessRole } from '@shared/dto/access.dto';
 
 export interface User {
   id: Id;
@@ -114,6 +116,30 @@ export const useConnectionsStore = defineStore('connections', () => {
     const accountsStore = useAccountsStore();
     return ConnectionAPIv1.revokeAccountAccess(params, (response: any) => {
       accountsStore.accessDelete(params);
+      return !!response.data;
+    }, (error = {}) => {
+      return error
+    })
+  }
+
+  async function setBudgetAccess(params: { userId: Id, budgetId: Id, role: AccessRole }) {
+    trackEvent(METRICS.CONNECTION_UPDATE_BUDGET_ACCESS);
+    const budgetsStore = useBudgetsStore();
+    return BudgetAPIv1.grantAccess(params, (response: any) => {
+      // Fetch budget list to update the access information
+      budgetsStore.fetchBudgets();
+      return !!response.data;
+    }, (error = {}) => {
+      return error
+    })
+  }
+
+  async function revokeBudgetAccess(params: { userId: Id, budgetId: Id }) {
+    trackEvent(METRICS.CONNECTION_REVOKE_BUDGET_ACCESS);
+    const budgetsStore = useBudgetsStore();
+    return BudgetAPIv1.revokeAccess(params, (response: any) => {
+      // Fetch budget list to update the access information
+      budgetsStore.fetchBudgets();
       return !!response.data;
     }, (error = {}) => {
       return error
@@ -247,6 +273,8 @@ export const useConnectionsStore = defineStore('connections', () => {
     deleteConnection,
     setAccountAccess,
     revokeAccountAccess,
+    setBudgetAccess,
+    revokeBudgetAccess,
     getSharedBudgets,
     getSharedAccounts
   }

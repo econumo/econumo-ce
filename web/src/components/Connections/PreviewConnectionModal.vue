@@ -28,7 +28,7 @@
           <div class="settings-connections-modal-card-item-label">{{ $t('modules.connections.modals.preview_connection.budgets') }}</div>
           <div class="settings-connections-modal-card-item-hint">{{ $t('modules.connections.modals.preview_connection.tap_to_manage') }}</div>
           <q-list class="settings-connections-modal-card-item-list">
-            <q-item v-for="budget in connection.sharedBudgets" v-bind:key="budget.id" clickable v-ripple class="settings-connections-modal-card-item-item">
+            <q-item v-for="budget in connection.sharedBudgets" v-bind:key="budget.id" clickable v-ripple class="settings-connections-modal-card-item-item" @click="onBudgetClick(budget)">
               <q-item-section class="settings-connections-modal-card-item-item-avatar" avatar>
                 <q-icon name="menu_book" />
               </q-item-section>
@@ -130,6 +130,16 @@
     @revoke="onRevokeAccess"
     @cancel="onCancelAccessLevel"
   />
+
+  <BudgetAccessLevelModal
+    v-if="selectedBudget && isBudgetOwnedByCurrentUser(selectedBudget)"
+    :budget-id="selectedBudget.id"
+    :user="connection.user"
+    :role="selectedBudget.role"
+    @share="onShareBudgetAccess"
+    @revoke="onRevokeBudgetAccess"
+    @cancel="onCancelBudgetAccessLevel"
+  />
 </template>
 
 <script setup lang="ts">
@@ -142,6 +152,7 @@ import { useAccountsStore } from '../../stores/accounts';
 import { useBudgetsStore } from '../../stores/budgets';
 import DeclineSharedAccessModal from './DeclineSharedAccessModal.vue';
 import AccessLevelDialogModal from '../AccessLevelDialogModal.vue';
+import BudgetAccessLevelModal from '../Budget/BudgetAccessLevelModal.vue';
 
 defineOptions({
   name: 'PreviewConnectionModal'
@@ -173,6 +184,8 @@ const emit = defineEmits<{
   'decline-account': [accountId: string];
   'allow-account': [userId: string, accountId: string, role: string];
   'revoke-account': [userId: string, accountId: string];
+  'share-budget': [userId: string, budgetId: string, role: string];
+  'revoke-budget': [userId: string, budgetId: string];
 }>();
 
 const $q = useQuasar();
@@ -186,6 +199,7 @@ const isDeclineModalOpened = ref(false);
 const isAccessLevelModalOpened = ref(false);
 const selectedAccount = ref<SharedAccount | null>(null);
 const selectedAccountOwner = ref<User | null>(null);
+const selectedBudget = ref<SharedBudget | null>(null);
 
 const currentUserId = computed(() => usersStore.userId);
 
@@ -272,5 +286,31 @@ const onCancelAccessLevel = () => {
   isAccessLevelModalOpened.value = false;
   selectedAccount.value = null;
   selectedAccountOwner.value = null;
+};
+
+const onBudgetClick = (budget: SharedBudget) => {
+  selectedBudget.value = budget;
+
+  if (isBudgetOwnedByCurrentUser(budget)) {
+    // Budget I own and share with the connected user - show access level dialog
+    // The modal will appear via the v-if condition in the template
+  } else {
+    // Budget shared with me - for now, do nothing
+    // Could add a decline dialog here in the future if needed
+  }
+};
+
+const onShareBudgetAccess = (budgetId: string, userId: string, role: string) => {
+  selectedBudget.value = null;
+  emit('share-budget', userId, budgetId, role);
+};
+
+const onRevokeBudgetAccess = (budgetId: string, userId: string) => {
+  selectedBudget.value = null;
+  emit('revoke-budget', userId, budgetId);
+};
+
+const onCancelBudgetAccessLevel = () => {
+  selectedBudget.value = null;
 };
 </script>

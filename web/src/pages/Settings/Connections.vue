@@ -111,6 +111,8 @@
           @decline-account="declineAccountAccess"
           @allow-account="allowAccountAccess"
           @revoke-account="revokeAccountAccess"
+          @share-budget="shareBudgetAccess"
+          @revoke-budget="revokeBudgetAccess"
         />
       </teleport>
     </div>
@@ -272,6 +274,23 @@ const revokeAccountAccess = (userId: Id, accountId: Id) => {
   connectionsStore.revokeAccountAccess({
     userId: userId,
     accountId: accountId
+  });
+};
+
+const shareBudgetAccess = (userId: Id, budgetId: Id, role: any) => {
+  closeModal();
+  connectionsStore.setBudgetAccess({
+    userId: userId,
+    budgetId: budgetId,
+    role: role
+  });
+};
+
+const revokeBudgetAccess = (userId: Id, budgetId: Id) => {
+  closeModal();
+  connectionsStore.revokeBudgetAccess({
+    userId: userId,
+    budgetId: budgetId
   });
 };
 
