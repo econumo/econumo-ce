@@ -16,13 +16,17 @@
       <q-card-section class="access-modal-section">
         <div class="access-modal-list">
           <div class="access-modal-title">{{ item.name }}</div>
+          <div class="access-modal-note" style="margin-bottom: 16px;">
+            {{ $t('modules.connections.modals.share_access.tap_to_share') }}
+          </div>
           <div class="access-modal-note" v-if="!access.length">
             {{ $t('modules.connections.modals.share_access.list_empty') }}
           </div>
           <div v-else v-for="accessItem in access" v-bind:key="accessItem.user.id">
             <div class="preview-modal-account-info-access-item"
                  @click="$emit('open-access-level-dialog', item.id, accessItem.user.id, accessItem.role)"
-                 v-if="accessItem.user.id !== userId">
+                 v-if="accessItem.user.id !== userId"
+                 style="cursor: pointer; margin-bottom: 12px;">
               <q-avatar class="preview-modal-account-info-access-item-avatar">
                 <img :src="avatarUrl(accessItem.user.avatar, 100)" class="preview-modal-account-info-access-item-avatar-img" width="100" height="100" :alt="accessItem.user.name" :title="accessItem.user.name"/>
               </q-avatar>
@@ -37,6 +41,7 @@
                   {{ $t('modules.connections.modals.share_access.level.' + accessItem.role) }}
                 </div>
               </div>
+              <q-icon name="chevron_right" size="32px" color="grey-6" style="margin-left: auto; align-self: center;"/>
             </div>
           </div>
         </div>

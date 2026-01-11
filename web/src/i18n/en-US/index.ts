@@ -809,6 +809,7 @@ export default {
           'not_accepted': 'not accepted',
           'revoke_access': 'Revoke access',
           'list_empty': 'No connections found',
+          'tap_to_share': 'Click on a user to share access',
           'select_user': 'Select user {name}'
         },
       },
