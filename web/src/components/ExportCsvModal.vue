@@ -1,5 +1,5 @@
 <template>
-  <q-dialog class="responsive-modal" :model-value="true" @hide="cancel" no-backdrop-dismiss>
+  <q-dialog class="responsive-modal" v-model="isModalOpened" @hide="cancel" no-backdrop-dismiss>
     <q-card class="responsive-modal-card">
       <q-form
         ref="exportForm"
@@ -30,9 +30,11 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import { Id } from '../modules/types';
 import ExportCsvForm from './ExportCsvForm.vue';
+
+const isModalOpened = ref(true);
 
 const props = defineProps<{
   selectedIds: Id[]
@@ -64,6 +66,7 @@ function handleSubmit() {
 }
 
 function cancel() {
+  isModalOpened.value = false;
   emit('close');
 }
 </script>
