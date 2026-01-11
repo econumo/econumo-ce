@@ -1,5 +1,5 @@
 <template>
-  <q-dialog :model-value="true" @close="$emit('cancel')" class="sort-modal">
+  <q-dialog :model-value="true" @close="$emit('cancel')" class="sort-modal" no-backdrop-dismiss>
     <q-card class="econumo-modal sort-modal-card">
       <div class="sort-modal-card-title">{{ $t('modals.sort.header') }}</div>
       <ul class="sort-modal-card-list">

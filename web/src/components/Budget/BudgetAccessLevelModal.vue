@@ -1,5 +1,5 @@
 <template>
-  <q-dialog class="account-access-dialog-modal" :model-value="true" @hide="$emit('cancel')">
+  <q-dialog class="account-access-dialog-modal" :model-value="true" @hide="$emit('cancel')" no-backdrop-dismiss>
     <q-card class="account-access-dialog-modal-card" v-if="user">
       <q-card-section class="account-access-dialog-modal-section -padding">
         <div class="account-access-dialog-modal-user">

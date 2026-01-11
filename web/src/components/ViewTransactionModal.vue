@@ -1,5 +1,5 @@
 <template>
-  <q-dialog class="account-preview-modal" :model-value="true" :position="position" @hide="cancel">
+  <q-dialog class="account-preview-modal" :model-value="true" :position="position" @hide="cancel" no-backdrop-dismiss>
     <q-card class="account-preview-modal-card">
       <q-card-section class="account-preview-modal-section">
         <div class="account-preview-modal-head">

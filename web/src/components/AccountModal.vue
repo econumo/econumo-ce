@@ -1,6 +1,6 @@
 <template>
   <teleport to="body">
-    <q-dialog class="responsive-modal" v-model="isModalOpened">
+    <q-dialog class="responsive-modal" v-model="isModalOpened" no-backdrop-dismiss>
       <q-card class="responsive-modal-card">
         <q-form
           ref="accountForm"

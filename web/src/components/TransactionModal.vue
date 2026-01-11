@@ -1,6 +1,6 @@
 <template>
   <teleport to="body">
-    <q-dialog class="transaction-modal" v-model="isModalOpened">
+    <q-dialog class="transaction-modal" v-model="isModalOpened" no-backdrop-dismiss>
       <q-card class="transaction-modal-card">
         <q-form
           ref="transactionForm"

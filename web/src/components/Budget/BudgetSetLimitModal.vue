@@ -1,5 +1,5 @@
 <template>
-  <q-dialog class="prompt-modal" :model-value="true" @hide="cancel">
+  <q-dialog class="prompt-modal" :model-value="true" @hide="cancel" no-backdrop-dismiss>
     <q-card class="prompt-modal-card econumo-modal">
       <q-form
         ref="budgetForm"

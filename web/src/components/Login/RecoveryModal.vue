@@ -1,5 +1,5 @@
 <template>
-  <q-dialog :model-value="modelValue" @hide="$emit('close')">
+  <q-dialog :model-value="modelValue" @hide="$emit('close')" no-backdrop-dismiss>
     <div class="econumo-modal recovery-modal">
       <div class="recovery-modal-title">
         {{ $t('modules.user.modal.access_recovery.header') }}

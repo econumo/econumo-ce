@@ -1,10 +1,11 @@
 <template>
-  <q-dialog 
-    class="access-modal" 
-    :model-value="true" 
+  <q-dialog
+    class="access-modal"
+    :model-value="true"
     @hide="$emit('cancel')"
     role="dialog"
     aria-labelledby="budget-access-title"
+    no-backdrop-dismiss
   >
     <q-card class="access-modal-card">
       <q-card-section class="access-modal-section -toolbar">
