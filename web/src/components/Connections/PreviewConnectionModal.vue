@@ -82,22 +82,20 @@
           </q-list>
         </div>
       </q-card-section>
-      <q-card-actions class="settings-connections-modal-action">
+      <q-card-actions class="responsive-modal-actions">
         <q-btn
-          class="econumo-btn -large -grey settings-connections-modal-action-btn"
+          class="econumo-btn -medium -grey responsive-modal-actions-button"
           flat
-          :title="$t('elements.button.delete.label')"
+          :label="$t('elements.button.delete.label')"
           icon="delete"
           @click="onDelete"
           v-if="allowChanges" />
 
         <q-btn
-          class="econumo-btn -large -grey settings-connections-modal-action-btn -wide"
-          :title="$t('elements.button.cancel.label')"
+          class="econumo-btn -medium -grey responsive-modal-actions-button"
+          :label="$t('elements.button.cancel.label')"
           flat
-          icon="expand_more"
-          v-close-popup
-          @click="onHide" />
+          v-close-popup />
       </q-card-actions>
     </q-card>
   </q-dialog>

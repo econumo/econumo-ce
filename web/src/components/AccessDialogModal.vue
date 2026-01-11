@@ -46,6 +46,14 @@
           </div>
         </div>
       </q-card-section>
+      <q-card-actions class="responsive-modal-actions">
+        <q-space />
+        <q-btn
+          class="econumo-btn -medium -grey responsive-modal-actions-button"
+          :label="$t('elements.button.ok.label')"
+          flat
+          v-close-popup />
+      </q-card-actions>
     </q-card>
   </q-dialog>
 </template>
