@@ -271,7 +271,7 @@
                   <div class="preview-modal-account-info-item">
                     <div class="preview-modal-account-info-item-label -access">{{ $t('pages.settings.accounts.preview_account_modal.access.label') }}</div>
                   </div>
-                  <div v-if="previewAccountModal.account.owner.id !== userId">
+                  <div v-if="previewAccountModal.account.owner.id !== userId" class="q-mb-sm">
                     <div class="preview-modal-account-info-access-item">
                       <q-avatar class="preview-modal-account-info-access-item-avatar">
                         <img :src="avatarUrl(previewAccountModal.account.owner.avatar, 100)" width="100" height="100"/>
@@ -290,7 +290,7 @@
                     {{ $t('pages.settings.accounts.preview_account_modal.access.no_shared_access') }}
                   </div>
                   <div v-else v-for="sharedAccess in previewAccountModal.account.sharedAccess"
-                       v-bind:key="sharedAccess.user.id">
+                       v-bind:key="sharedAccess.user.id" class="q-mb-sm">
                     <div class="preview-modal-account-info-access-item">
                       <q-avatar class="preview-modal-account-info-access-item-avatar">
                         <img :src="avatarUrl(sharedAccess.user.avatar, 100)" class="preview-modal-account-info-access-item-avatar-img" width="100" height="100"/>
@@ -317,6 +317,7 @@
                      @click="openDeleteAccountModal(previewAccountModal.account.id)"/>
               <q-btn class="econumo-btn -large -grey preview-modal-account-info-access-actions-btn -wide" flat :label="$t('elements.button.edit.label')"
                      @click="openUpdateAccountModal(previewAccountModal.account.id)" v-if="hasAdminAccess(previewAccountModal.account)"/>
+              <q-space v-if="!hasAdminAccess(previewAccountModal.account)" />
               <q-btn class="econumo-btn -large -grey preview-modal-account-info-access-actions-btn" flat icon="expand_more" :title="$t('elements.button.cancel.label')"
                      v-close-popup/>
             </q-card-actions>
@@ -377,8 +378,8 @@ export default defineComponent({
     const { moneyFormat } = useMoney();
     const { accountName } = useAccount();
 
-    return { 
-      avatarUrl, 
+    return {
+      avatarUrl,
       ...validation,
       moneyFormat,
       accountName
