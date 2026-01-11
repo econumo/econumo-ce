@@ -16,7 +16,7 @@
 <!--          <q-btn class="sort-modal-card-list-item-btn" flat :label="$t('modals.sort.mode.count.asc')" @click="$emit('proceed', 'count', 'asc')"></q-btn>-->
 <!--        </li>-->
         <li class="sort-modal-card-list-item">
-          <q-btn class="sort-modal-card-list-item-btn" flat :label="$t('elements.button.cancel.label')" @click="$emit('cancel')" style="color: #666;"></q-btn>
+          <q-btn class="sort-modal-card-list-item-btn sort-modal-card-list-item-btn-cancel" flat :label="$t('elements.button.cancel.label')" @click="$emit('cancel')"></q-btn>
         </li>
       </ul>
     </q-card>
@@ -30,3 +30,9 @@ export default defineComponent({
   props: [],
 })
 </script>
+
+<style scoped>
+.sort-modal-card-list-item-btn-cancel {
+  color: #666;
+}
+</style>

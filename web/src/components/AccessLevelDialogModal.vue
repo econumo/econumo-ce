@@ -13,8 +13,8 @@
           </div>
         </div>
       </q-card-section>
-      <q-card-section class="account-access-dialog-modal-section" style="padding-top: 0; padding-bottom: 8px;">
-        <div style="color: #666; font-size: 14px; padding-left: 16px;">
+      <q-card-section class="account-access-dialog-modal-section account-access-dialog-hint-section">
+        <div class="account-access-dialog-hint">
           {{ $t('modules.connections.modals.share_access.choose_access_level') }}
         </div>
       </q-card-section>
@@ -32,7 +32,7 @@
           <q-item class="account-access-dialog-modal-item -delete" v-if="role" clickable @click="$emit('revoke', user.id, itemId)">
             <q-item-section>{{ $t('modules.connections.modals.share_access.revoke_access') }}</q-item-section>
           </q-item>
-          <q-item class="account-access-dialog-modal-item" clickable @click="$emit('cancel')" style="color: #666;">
+          <q-item class="account-access-dialog-modal-item account-access-dialog-modal-item-cancel" clickable @click="$emit('cancel')">
             <q-item-section>{{ $t('elements.button.cancel.label') }}</q-item-section>
           </q-item>
         </q-list>
@@ -53,3 +53,20 @@ export default defineComponent({
   }
 })
 </script>
+
+<style scoped>
+.account-access-dialog-hint-section {
+  padding-top: 0;
+  padding-bottom: 8px;
+}
+
+.account-access-dialog-hint {
+  color: #666;
+  font-size: 14px;
+  padding-left: 16px;
+}
+
+.account-access-dialog-modal-item-cancel {
+  color: #666;
+}
+</style>
