@@ -47,21 +47,21 @@
           <q-list class="settings-classification-list">
             <draggable v-model="payees" @start="drag=true" @end="drag=false" v-bind="options" item-key="id">
               <template #item="{element}">
-                <q-item class="settings-classification-list-item"  :clickable="$q.screen.lt.lg" @click="openContextMenuModal(element.id)">
-                  <q-item-section side class="settings-classification-list-item-sortable sortable-control cursor-pointer">
+                <q-item class="settings-classification-list-item" clickable @click="handleItemClick(element)">
+                  <q-item-section side class="settings-classification-list-item-sortable sortable-control cursor-pointer" @click.stop>
                     <q-icon name="drag_indicator"/>
                   </q-item-section>
                   <q-item-section :class="!!element.isArchived ? 'settings-classification-list-item-text -archived' : 'settings-classification-list-item-text'">
                     {{ element.name }}
                     <div class="settings-classification-list-item-description-archived" v-if="element.isArchived">{{ $t('modules.classifications.payees.pages.settings.archived_item') }}</div>
                   </q-item-section>
-                  <q-item-section side>
+                  <q-item-section side @click.stop>
                     <q-toggle :model-value="!element.isArchived"
                               @click="updateArchivePayee(element.id, !!element.isArchived)"/>
                   </q-item-section>
                   <q-item-section side v-if="$q.screen.gt.md" class="cursor-pointer settings-classification-list-item-check-section">
-                    <q-btn square flat icon="more_vert" class="account-transactions-item-check-button">
-                      <q-menu cover auto-close class="account-transactions-item-check-button-menu">
+                    <q-btn square flat icon="more_vert" class="account-transactions-item-check-button" @click.stop>
+                      <q-menu cover auto-close class="account-transactions-item-check-button-menu" :ref="(el) => setMenuRef(el, element.id)">
                         <q-list class="account-transactions-item-check-button-list">
                           <q-item clickable @click="openEditModal(element.id)" class="account-transactions-item-check-button-item">
                             <q-item-section class="account-transactions-item-check-button-section">{{ $t('elements.button.edit.label') }}</q-item-section>
@@ -85,7 +85,8 @@
                             :header-label="contextMenuModal.payee.name"
                             :actions="[
                               {label: $t('elements.button.edit.label'), value: 'edit', context: contextMenuModal.payee.id},
-                              {label: $t('elements.button.delete.label'), value: 'delete', context: contextMenuModal.payee.id}
+                              {label: $t('elements.button.delete.label'), value: 'delete', context: contextMenuModal.payee.id},
+                              {label: $t('elements.button.cancel.label'), value: 'cancel', context: contextMenuModal.payee.id}
                               ]"
                             v-on:cancel="closeContextMenuModal()"
                             v-on:proceed="openNextModal"
@@ -160,6 +161,7 @@ export default defineComponent({
   data() {
     return {
       payeesCopy: null,
+      menuRefs: new Map(),
       contextMenuModal: {
         isOpened: false,
         payee: null
@@ -221,6 +223,21 @@ export default defineComponent({
     }
   },
   methods: {
+    setMenuRef: function(el, payeeId) {
+      if (el) {
+        this.menuRefs.set(payeeId, el);
+      }
+    },
+    handleItemClick: function(payee) {
+      if (this.$q.screen.gt.md) {
+        const menu = this.menuRefs.get(payee.id);
+        if (menu) {
+          menu.show();
+        }
+      } else {
+        this.openContextMenuModal(payee.id);
+      }
+    },
     openContextMenuModal: function(payeeId) {
       this.contextMenuModal.payee = _.find(this.ownPayees, {id: payeeId});
       this.contextMenuModal.isOpened = true;
@@ -231,7 +248,9 @@ export default defineComponent({
     },
     openNextModal: function(value, payeeId) {
       this.closeContextMenuModal();
-      if (value === 'edit') {
+      if (value === 'cancel') {
+        return;
+      } else if (value === 'edit') {
         this.openEditModal(payeeId);
       } else if (value === 'delete') {
         this.openDeleteModal(payeeId);
@@ -307,4 +326,3 @@ export default defineComponent({
   }
 })
 </script>
-
