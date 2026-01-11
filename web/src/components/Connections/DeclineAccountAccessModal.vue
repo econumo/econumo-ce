@@ -36,7 +36,7 @@
 import { useAvatar } from '../../composables/useAvatar';
 
 defineOptions({
-  name: 'DeclineSharedAccessModal'
+  name: 'DeclineAccountAccessModal'
 });
 
 interface User {

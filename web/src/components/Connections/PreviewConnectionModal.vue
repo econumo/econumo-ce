@@ -110,7 +110,7 @@
     </q-card>
   </q-dialog>
 
-  <DeclineSharedAccessModal
+  <DeclineAccountAccessModal
     v-if="selectedAccount && selectedAccountOwner && !isAccountOwnedByCurrentUser(selectedAccount)"
     :is-opened="isDeclineModalOpened"
     @update:is-opened="isDeclineModalOpened = $event"
@@ -140,6 +140,17 @@
     @revoke="onRevokeBudgetAccess"
     @cancel="onCancelBudgetAccessLevel"
   />
+
+  <DeclineBudgetAccessModal
+    v-if="selectedBudget && selectedBudgetOwner && !isBudgetOwnedByCurrentUser(selectedBudget)"
+    :is-opened="isDeclineBudgetModalOpened"
+    @update:is-opened="isDeclineBudgetModalOpened = $event"
+    :owner="selectedBudgetOwner"
+    :budget-id="selectedBudget.id"
+    :budget-name="selectedBudget.name"
+    @decline="onDeclineBudgetAccess"
+    @cancel="onCancelDeclineBudget"
+  />
 </template>
 
 <script setup lang="ts">
@@ -150,7 +161,8 @@ import { useAvatar } from '../../composables/useAvatar';
 import { useUsersStore } from '../../stores/users';
 import { useAccountsStore } from '../../stores/accounts';
 import { useBudgetsStore } from '../../stores/budgets';
-import DeclineSharedAccessModal from './DeclineSharedAccessModal.vue';
+import DeclineAccountAccessModal from './DeclineAccountAccessModal.vue';
+import DeclineBudgetAccessModal from './DeclineBudgetAccessModal.vue';
 import AccessLevelDialogModal from '../AccessLevelDialogModal.vue';
 import BudgetAccessLevelModal from '../Budget/BudgetAccessLevelModal.vue';
 
@@ -182,6 +194,7 @@ const emit = defineEmits<{
   'hide': [];
   'delete': [userId: string];
   'decline-account': [accountId: string];
+  'decline-budget': [budgetId: string];
   'allow-account': [userId: string, accountId: string, role: string];
   'revoke-account': [userId: string, accountId: string];
   'share-budget': [userId: string, budgetId: string, role: string];
@@ -199,7 +212,9 @@ const isDeclineModalOpened = ref(false);
 const isAccessLevelModalOpened = ref(false);
 const selectedAccount = ref<SharedAccount | null>(null);
 const selectedAccountOwner = ref<User | null>(null);
+const isDeclineBudgetModalOpened = ref(false);
 const selectedBudget = ref<SharedBudget | null>(null);
+const selectedBudgetOwner = ref<User | null>(null);
 
 const currentUserId = computed(() => usersStore.userId);
 const currentUserAvatar = computed(() => usersStore.userAvatar);
@@ -240,6 +255,24 @@ const isBudgetOwnedByCurrentUser = (budget: SharedBudget) => {
     return false;
   }
   return fullBudget.ownerUserId === currentUserId.value;
+};
+
+const getBudgetOwner = (budget: SharedBudget): User => {
+  const fullBudget = budgetsStore.budgets.find(b => b.id === budget.id);
+  if (!fullBudget) {
+    return props.connection.user; // Fallback
+  }
+  // For budgets, we need to construct the owner from the ownerUserId
+  // If it's the current user, use current user info
+  if (fullBudget.ownerUserId === currentUserId.value) {
+    return {
+      id: currentUserId.value,
+      name: currentUserName.value,
+      avatar: currentUserAvatar.value || ''
+    };
+  }
+  // Otherwise, it's the connected user
+  return props.connection.user;
 };
 
 const getBudgetOwnerAvatar = (budget: SharedBudget): string => {
@@ -306,13 +339,14 @@ const onCancelAccessLevel = () => {
 
 const onBudgetClick = (budget: SharedBudget) => {
   selectedBudget.value = budget;
+  selectedBudgetOwner.value = getBudgetOwner(budget);
 
   if (isBudgetOwnedByCurrentUser(budget)) {
     // Budget I own and share with the connected user - show access level dialog
     // The modal will appear via the v-if condition in the template
   } else {
-    // Budget shared with me - for now, do nothing
-    // Could add a decline dialog here in the future if needed
+    // Budget shared with me - show decline dialog
+    isDeclineBudgetModalOpened.value = true;
   }
 };
 
@@ -328,5 +362,18 @@ const onRevokeBudgetAccess = (budgetId: string, userId: string) => {
 
 const onCancelBudgetAccessLevel = () => {
   selectedBudget.value = null;
+};
+
+const onDeclineBudgetAccess = (budgetId: string) => {
+  isDeclineBudgetModalOpened.value = false;
+  selectedBudget.value = null;
+  selectedBudgetOwner.value = null;
+  emit('decline-budget', budgetId);
+};
+
+const onCancelDeclineBudget = () => {
+  isDeclineBudgetModalOpened.value = false;
+  selectedBudget.value = null;
+  selectedBudgetOwner.value = null;
 };
 </script>

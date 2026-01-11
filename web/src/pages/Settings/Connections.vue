@@ -109,6 +109,7 @@
           @hide="closeModal"
           @delete="openDeleteConnectionModal"
           @decline-account="declineAccountAccess"
+          @decline-budget="declineBudgetAccess"
           @allow-account="allowAccountAccess"
           @revoke-account="revokeAccountAccess"
           @share-budget="shareBudgetAccess"
@@ -133,6 +134,7 @@ import PreviewConnectionModal from '../../components/Connections/PreviewConnecti
 
 import { useConnectionsStore, type Connection } from 'stores/connections';
 import { useAccountsStore } from 'stores/accounts';
+import { useBudgetsStore } from 'stores/budgets';
 import { useActiveAreaStore } from 'stores/active-area';
 
 import { useGenerateInviteModalState } from '../../composables/connections/useGenerateInviteModalState';
@@ -153,6 +155,7 @@ const $q = useQuasar();
 
 const connectionsStore = useConnectionsStore();
 const accountsStore = useAccountsStore();
+const budgetsStore = useBudgetsStore();
 const activeAreaStore = useActiveAreaStore();
 
 const { isConnectionsLoaded, connections } = storeToRefs(connectionsStore);
@@ -272,8 +275,25 @@ const refreshPreviewModalData = (userId: Id) => {
 };
 
 const declineAccountAccess = (accountId: Id) => {
-  closeModal();
-  accountsStore.deleteAccount(accountId);
+  const userId = previewConnectionModal.data.value?.user.id;
+  if (!userId) {
+    return;
+  }
+  accountsStore.deleteAccount(accountId).then(() => {
+    refreshPreviewModalData(userId);
+  });
+};
+
+const declineBudgetAccess = (budgetId: Id) => {
+  const userId = previewConnectionModal.data.value?.user.id;
+  if (!userId) {
+    return;
+  }
+  budgetsStore.declineAccess({ budgetId }).then(() => {
+    connectionsStore.fetchConnections().then(() => {
+      refreshPreviewModalData(userId);
+    });
+  });
 };
 
 const allowAccountAccess = (userId: Id, accountId: Id, role: string) => {
