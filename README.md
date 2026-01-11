@@ -28,10 +28,9 @@
     remote: Total 13 (delta 0), reused 7 (delta 0), pack-reused 3 (from 1)
     Receiving objects: 100% (13/13), done.
 
-    $ cd econumo
+    $ cd econumo/deployment/docker-compose
 
     $ ls -1
-    README.md
     docker-compose.yml
     .env.example
     ```
@@ -72,7 +71,7 @@ For more information please see our [documentation](https://econumo.com/docs/).
 ### Contact
 
 - For release announcements, please check [GitHub Releases](https://github.com/econumo/econumo-ce/releases) or [Econumo Website](https://econumo.com/tags/release/).
-- For questions, issue reporting, or advice, please use [GitHub Discussions](https://github.com/orgs/econumo/discussions).
+- For questions, issue reporting, or advice, please use [GitHub Issues](https://github.com/econumo/econumo-ce/issues).
 
 
 ---

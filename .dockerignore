@@ -1,0 +1,8 @@
+var/cache
+var/session
+var/log
+.git
+.github
+web/node_modules
+web/.quasar
+web/dist-dev

@@ -12,51 +12,43 @@ on:
         required: true
         type: string
         description: 'Comma-separated list of tags (e.g., "latest,1.0.0,1.0")'
+      ECONUMO_EDITION:
+        required: false
+        type: string
+        default: 'ce'
+        description: 'Econumo edition (ce or cloud)'
     secrets:
       DOCKER_USERNAME:
         required: true
       DOCKER_PASSWORD:
         required: true
       BUILD_USER_TOKEN:
-        required: true
+        required: false
 
 jobs:
   build-package:
-    runs-on: ubuntu-latest
+    runs-on: blacksmith-4vcpu-ubuntu-2404
     permissions:
       contents: read
       packages: write
 
     steps:
-      - name: Checkout Build Configurations Repository
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Clone EconumoCloudBundle repository
+        if: inputs.ECONUMO_EDITION == 'cloud'
         uses: actions/checkout@v4
         with:
-          repository: econumo/build-configuration
+          repository: econumo/econumo-cloud-bundle
           ref: main
           token: ${{ secrets.BUILD_USER_TOKEN }}
-          path: build
+          path: src/EconumoCloudBundle
 
-      - name: Checkout Backend Repository
-        uses: actions/checkout@v4
-        with:
-          repository: econumo/econumo-backend
-          ref: main
-          token: ${{ secrets.BUILD_USER_TOKEN }}
-          path: backend
-
-      - name: Checkout Frontend Repository
-        uses: actions/checkout@v4
-        with:
-          repository: econumo/econumo-ce-frontend
-          ref: main
-          token: ${{ secrets.BUILD_USER_TOKEN }}
-          path: frontend
-
-      - name: Clean Unnecessary Folders
+      - name: Set Frontend Environment
         run: |
-          rm -rf frontend/.git
-          rm -rf backend/.git
-          rm -rf build/.git
+          rm -f web/.env
+          cp "web/.env.${{ inputs.ECONUMO_EDITION }}" web/.env
 
       - name: Set Up QEMU
         uses: docker/setup-qemu-action@v2
@@ -95,7 +87,8 @@ jobs:
           context: .
           push: true
           pull: true
-          file: build/docker/app/Dockerfile
+          file: deployment/docker/app/Dockerfile
+          target: prod
           tags: ${{ steps.prep.outputs.tags }}
           cache-from: type=registry,ref=${{ inputs.REGISTRY }}/${{ inputs.IMAGE_NAME }}:beta
           cache-to: type=inline
