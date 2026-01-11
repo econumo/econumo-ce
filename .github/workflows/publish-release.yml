@@ -1,9 +1,6 @@
 name: Publish Release
 
 on:
-  release:
-    types: [published]
-
   workflow_dispatch:
     inputs:
       version:
@@ -15,40 +12,74 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  set-version:
+  create-tag:
+    name: Create Git Tag
     runs-on: ubuntu-latest
     outputs:
       version: ${{ steps.set-version.outputs.version }}
     steps:
-      - name: Determine Version
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set version
         id: set-version
         run: |
-          if [[ "${{ github.event_name }}" == "workflow_dispatch" && "${{ github.event.inputs.version }}" != "" ]]; then
-            echo "version=${{ github.event.inputs.version }}" >> $GITHUB_OUTPUT
-            echo "Triggered manually with version: ${{ github.event.inputs.version }}"
-          elif [[ "${{ github.event_name }}" == "release" ]]; then
-            echo "version=${{ github.event.release.tag_name }}" >> $GITHUB_OUTPUT
-            echo "Triggered by release with tag: ${{ github.event.release.tag_name }}"
-          else
-            echo "version=" >> $GITHUB_OUTPUT
-            echo "No valid version provided. Skipping publish-release job."
+          echo "version=${{ github.event.inputs.version }}" >> $GITHUB_OUTPUT
+          echo "Creating tag: ${{ github.event.inputs.version }}"
+
+      - name: Configure git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Create and push tag
+        run: |
+          TAG="${{ github.event.inputs.version }}"
+
+          # Check if tag already exists
+          if git rev-parse "$TAG" >/dev/null 2>&1; then
+            echo "Tag $TAG already exists"
+            exit 1
           fi
 
-      - name: Info
-        run: |
-          echo "Event name: ${{ github.event_name }}"
-          echo "Release tag: ${{ github.event.release.tag_name }}"
-          echo "Is release?: ${{ github.event_name == 'release' }}"
+          # Create and push the tag
+          git tag -a "$TAG" -m "Release $TAG"
+          git push origin "$TAG"
+          echo "Tag $TAG created and pushed successfully"
 
   publish-release:
-    needs: set-version
-    if: ${{ needs.set-version.outputs.version != '' }}
+    name: Build and Publish Docker Image
+    needs: create-tag
     uses: ./.github/workflows/embedded-build-package.yml
     with:
       REGISTRY: 'docker.io'
       IMAGE_NAME: 'econumo/econumo-ce'
-      IMAGE_TAGS: "${{ needs.set-version.outputs.version }},latest,beta"
+      IMAGE_TAGS: "${{ needs.create-tag.outputs.version }},latest,beta"
     secrets:
       DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
       DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
       BUILD_USER_TOKEN: ${{ secrets.BUILD_USER_TOKEN }}
+
+  create-github-release:
+    name: Create GitHub Release
+    needs: create-tag
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout tagged ref
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ needs.create-tag.outputs.version }}
+
+      - name: Set node
+        uses: actions/setup-node@v4
+        with:
+          registry-url: https://registry.npmjs.org/
+          node-version: lts/*
+
+      - name: Generate release notes and create release
+        run: npx changelogithub
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
