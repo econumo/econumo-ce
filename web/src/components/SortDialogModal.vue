@@ -15,6 +15,9 @@
 <!--        <li class="sort-modal-card-list-item">-->
 <!--          <q-btn class="sort-modal-card-list-item-btn" flat :label="$t('modals.sort.mode.count.asc')" @click="$emit('proceed', 'count', 'asc')"></q-btn>-->
 <!--        </li>-->
+        <li class="sort-modal-card-list-item">
+          <q-btn class="sort-modal-card-list-item-btn" flat :label="$t('elements.button.cancel.label')" @click="$emit('cancel')" style="color: #666;"></q-btn>
+        </li>
       </ul>
     </q-card>
   </q-dialog>
