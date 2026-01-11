@@ -1,5 +1,5 @@
 <template>
-  <q-dialog :model-value="true" class="prompt-modal" no-backdrop-dismiss>
+  <q-dialog :model-value="true" class="prompt-modal" no-backdrop-dismiss @hide="onHide">
     <q-card class="prompt-modal-card econumo-modal">
       <q-form
         ref="folderForm"
@@ -51,6 +51,9 @@ export default defineComponent({
       if (this.$refs.folderForm) {
         this.$refs.folderForm.resetValidation();
       }
+      this.$emit('close')
+    },
+    onHide: function() {
       this.$emit('close')
     }
   }

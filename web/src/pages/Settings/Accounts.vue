@@ -180,6 +180,7 @@
                                val => isValidFolderName(val) || $t('elements.form.account.folder.validation.error_name_length'),
                              ]"
                              v-on:cancel="closeModals"
+                             v-on:close="closeModals"
                              v-on:submit="createFolder"
         />
 
