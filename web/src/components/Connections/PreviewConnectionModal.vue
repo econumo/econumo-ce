@@ -43,7 +43,7 @@
 
               <q-item-section side class="settings-connections-modal-card-item-item-shared">
                 <q-avatar class="settings-connections-modal-card-item-item-shared-avatar">
-                    <img class="settings-connections-modal-card-user-avatar-img" :src="budget.user.avatar" :title="budget.user.name">
+                    <img :src="getBudgetOwnerAvatar(budget)" width="30" height="30" :alt="isBudgetOwnedByCurrentUser(budget) ? currentUserName : connection.user.name" :title="isBudgetOwnedByCurrentUser(budget) ? currentUserName : connection.user.name">
                 </q-avatar>
               </q-item-section>
             </q-item>
@@ -85,7 +85,7 @@
 
               <q-item-section side class="settings-connections-modal-card-item-item-shared">
                 <q-avatar class="settings-connections-modal-card-item-item-shared-avatar">
-                  <img :src="avatarUrl(account.user.avatar, 30)" :title="account.user.name" width="30" height="30" />
+                  <img :src="getAccountOwnerAvatar(account)" width="30" height="30" :alt="isAccountOwnedByCurrentUser(account) ? currentUserName : connection.user.name" :title="isAccountOwnedByCurrentUser(account) ? currentUserName : connection.user.name" />
                 </q-avatar>
               </q-item-section>
             </q-item>
@@ -202,6 +202,8 @@ const selectedAccountOwner = ref<User | null>(null);
 const selectedBudget = ref<SharedBudget | null>(null);
 
 const currentUserId = computed(() => usersStore.userId);
+const currentUserAvatar = computed(() => usersStore.userAvatar);
+const currentUserName = computed(() => usersStore.userName);
 
 const isAccountOwnedByCurrentUser = (account: SharedAccount) => {
   // Look up the full account to check ownership
@@ -224,6 +226,13 @@ const getAccountOwner = (account: SharedAccount): User => {
   };
 };
 
+const getAccountOwnerAvatar = (account: SharedAccount): string => {
+  if (isAccountOwnedByCurrentUser(account)) {
+    return avatarUrl(currentUserAvatar.value || '', 30);
+  }
+  return avatarUrl(props.connection.user.avatar, 30);
+};
+
 const isBudgetOwnedByCurrentUser = (budget: SharedBudget) => {
   // Look up the full budget to check ownership
   const fullBudget = budgetsStore.budgets.find(b => b.id === budget.id);
@@ -231,6 +240,13 @@ const isBudgetOwnedByCurrentUser = (budget: SharedBudget) => {
     return false;
   }
   return fullBudget.ownerUserId === currentUserId.value;
+};
+
+const getBudgetOwnerAvatar = (budget: SharedBudget): string => {
+  if (isBudgetOwnedByCurrentUser(budget)) {
+    return avatarUrl(currentUserAvatar.value || '', 30);
+  }
+  return avatarUrl(props.connection.user.avatar, 30);
 };
 
 const onHide = () => {
