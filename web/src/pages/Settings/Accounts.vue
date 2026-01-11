@@ -595,7 +595,7 @@ export default defineComponent({
       console.log(this.accountAccessLevelModal, accountId, userId)
     },
     updateAccountAccess: function(userId, accountId, role) {
-      this.closeAccessLevelModal();
+      this.closeModals();
       useConnectionsStore().setAccountAccess({
         userId: userId,
         accountId: accountId,
@@ -605,7 +605,7 @@ export default defineComponent({
       });
     },
     revokeAccountAccess: function(userId, accountId) {
-      this.closeAccessLevelModal();
+      this.closeModals();
       useConnectionsStore().revokeAccountAccess({
         userId: userId,
         accountId: accountId
