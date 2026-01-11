@@ -20,7 +20,7 @@
 1. Clone this repository:
 
     ```console
-    $ git clone --single-branch https://github.com/econumo/econumo-ce econumo
+    $ git clone --single-branch https://github.com/econumo/econumo
     Cloning into 'econumo'...
     remote: Enumerating objects: 13, done.
     remote: Counting objects: 100% (10/10), done.
@@ -70,8 +70,8 @@ For more information please see our [documentation](https://econumo.com/docs/).
 
 ### Contact
 
-- For release announcements, please check [GitHub Releases](https://github.com/econumo/econumo-ce/releases) or [Econumo Website](https://econumo.com/tags/release/).
-- For questions, issue reporting, or advice, please use [GitHub Issues](https://github.com/econumo/econumo-ce/issues).
+- For release announcements, please check [GitHub Releases](https://github.com/econumo/econumo/releases) or [Econumo Website](https://econumo.com/tags/release/).
+- For questions, issue reporting, or advice, please use [GitHub Issues](https://github.com/econumo/econumo/issues).
 
 
 ---
