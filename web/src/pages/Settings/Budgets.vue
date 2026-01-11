@@ -37,11 +37,11 @@
         <div v-if="budgets.length > 0">
           <q-list class="settings-classification-list">
             <q-item v-for="element in budgets" :key="element.id"
-                    class="settings-classification-list-item" :clickable="$q.screen.lt.lg"
-                    @click="openContextMenuModal(element.id)">
+                    class="settings-classification-list-item" clickable
+                    @click="handleItemClick(element.id)">
               <q-item-section side class="settings-classification-list-item-avatar" avatar>
                 <q-btn square flat disable icon="turned_in" v-if="userDefaultBudgetId === element.id" />
-                <q-btn square flat icon="turned_in_not" v-else-if="isAccepted(element)" @click="setAsDefault(element.id)" />
+                <q-btn square flat icon="turned_in_not" v-else-if="isAccepted(element)" @click.stop="setAsDefault(element.id)" />
                 <q-btn square flat disable icon="turned_in_not" v-else />
               </q-item-section>
               <q-item-section
@@ -61,8 +61,8 @@
               </q-item-section>
               <q-item-section side v-if="$q.screen.gt.md"
                               class="cursor-pointer settings-classification-list-item-check-section">
-                <q-btn square flat icon="more_vert" class="account-transactions-item-check-button">
-                  <q-menu cover auto-close class="account-transactions-item-check-button-menu">
+                <q-btn square flat icon="more_vert" class="account-transactions-item-check-button" @click.stop>
+                  <q-menu cover auto-close class="account-transactions-item-check-button-menu" :ref="(el) => setMenuRef(el, element.id)">
                     <q-list class="account-transactions-item-check-button-list">
                       <q-item clickable @click="acceptAccess(element.id)" v-if="!isAccepted(element) && econumoPackage.includesSharedAccess"
                               class="account-transactions-item-check-button-item">
@@ -172,7 +172,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, defineComponent, onMounted, reactive, watch } from 'vue';
+import { computed, defineComponent, onMounted, reactive, ref, watch } from 'vue';
 import _ from 'lodash';
 import ConfirmationDialogModal from '../../components/ConfirmationDialogModal.vue';
 import { useUsersStore } from 'stores/users';
@@ -243,6 +243,27 @@ const budgets = computed(() => _.orderBy(budgetStore.budgets, 'name'));
 const userId = computed(() => userStore.userId);
 const userDefaultBudgetId = computed(() => userStore.userDefaultBudgetId);
 const userCurrencyId = computed(() => userStore.userCurrencyId);
+
+const menuRefs = ref<Map<Id, any>>(new Map());
+
+function setMenuRef(el: any, budgetId: Id) {
+  if (el) {
+    menuRefs.value.set(budgetId, el);
+  }
+}
+
+function handleItemClick(budgetId: Id) {
+  if ($q.screen.gt.md) {
+    // Desktop: open menu
+    const menu = menuRefs.value.get(budgetId);
+    if (menu) {
+      menu.show();
+    }
+  } else {
+    // Mobile: open context menu modal
+    openContextMenuModal(budgetId);
+  }
+}
 
 function navigateToSettings(isSidebarActive = false) {
   if (isSidebarActive) {
