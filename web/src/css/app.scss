@@ -15,6 +15,16 @@
 @import "account-access-dialog-modal";
 @import "context-menu-button";
 
+// Disable dialog closing transitions globally (keep opening animation)
+.q-transition--scale-leave-active,
+.q-transition--fade-leave-active {
+  transition: none !important;
+}
+
+.q-dialog__backdrop-leave-active {
+  transition: none !important;
+}
+
 .application {
   background-color: $color-grey;
   margin: 0;
