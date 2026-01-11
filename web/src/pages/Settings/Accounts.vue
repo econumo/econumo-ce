@@ -90,8 +90,8 @@
               <draggable :list="tree.accounts" v-bind="draggableAccountOptions" item-key="id"
                          :component-data="{'id': tree.id}" @end="orderAccounts">
                 <template #item="{element}">
-                  <q-item class="settings-accounts-account-list-item" :clickable="$q.screen.lt.lg" :id="element.id" @click="openPreviewAccountModal(element.id)">
-                    <q-item-section side class="settings-accounts-account-list-item-draggable sortable-control">
+                  <q-item class="settings-accounts-account-list-item" clickable :id="element.id" @click="handleItemClick(element.id)">
+                    <q-item-section side class="settings-accounts-account-list-item-draggable sortable-control" @click.stop>
                       <q-icon class="settings-accounts-account-list-item-draggable-icon" name="drag_indicator"/>
                     </q-item-section>
                       <div class="settings-accounts-account-list-item-wrapper">
@@ -117,8 +117,8 @@
                           </q-avatar>
                         </q-item-section>
                         <q-item-section class="settings-accounts-account-list-item-more" side v-if="$q.screen.gt.md">
-                          <q-btn color="grey-7" round flat icon="more_vert" class="gt-md settings-accounts-account-list-item-more-btn">
-                            <q-menu cover auto-close>
+                          <q-btn color="grey-7" round flat icon="more_vert" class="gt-md settings-accounts-account-list-item-more-btn" @click.stop>
+                            <q-menu cover auto-close :ref="(el) => setMenuRef(el, element.id)">
                               <q-list>
                                 <q-item clickable @click="openPreviewAccountModal(element.id)" class="account-transactions-item-check-button-item">
                                   <q-item-section class="account-transactions-item-check-button-section">{{ $t('elements.button.view.label') }}</q-item-section>
@@ -389,6 +389,7 @@ export default defineComponent({
     return {
       accountsCopy: null,
       accountFoldersCopy: null,
+      menuRefs: new Map(),
       deleteFolderModal: {
         isOpened: false,
         folder: null,
@@ -471,6 +472,23 @@ export default defineComponent({
     }
   },
   methods: {
+    setMenuRef: function(el, accountId) {
+      if (el) {
+        this.menuRefs.set(accountId, el);
+      }
+    },
+    handleItemClick: function(accountId) {
+      if (this.$q.screen.gt.md) {
+        // Desktop: open menu
+        const menu = this.menuRefs.get(accountId);
+        if (menu) {
+          menu.show();
+        }
+      } else {
+        // Mobile: open preview modal
+        this.openPreviewAccountModal(accountId);
+      }
+    },
     hasAdminAccess: function (account) {
       if (account.owner.id === this.userId) {
         return true;

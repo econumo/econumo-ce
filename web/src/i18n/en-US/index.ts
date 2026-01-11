@@ -170,7 +170,7 @@ export default {
         'delete_account_modal': { 'question': 'Are you sure you want to remove the account «{account}»?' },
         'preview_account_modal': {
           'header': 'Account details',
-          'shared_access': 'Share',
+          'shared_access': 'Shared',
           'access': {
             'label': 'Access',
             'no_shared_access': 'No access to this account'
