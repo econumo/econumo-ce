@@ -39,7 +39,7 @@
       </div>
       <div v-if="connections.length > 0">
         <q-list class="settings-connections-list">
-          <q-item class="settings-connections-list-item" :clickable="$q.screen.lt.lg" v-for="connection in connections" v-bind:key="connection.user.id" @click="openPreviewConnectionModal(connection.user.id)">
+          <q-item class="settings-connections-list-item" clickable v-for="connection in connections" v-bind:key="connection.user.id" @click="handleItemClick(connection.user.id)">
             <div class="settings-connections-list-item-section">
               <q-item-section class="settings-connections-list-item-avatar" avatar>
                 <img class="settings-connections-list-item-avatar-img" :src="connection.user.avatar">
@@ -49,8 +49,8 @@
               </div>
             </div>
             <q-item-section class="settings-connections-list-item-more" side>
-              <q-btn square flat icon="more_vert" class="account-transactions-item-check-button settings-connections-list-item-more-btn">
-                <q-menu cover auto-close class="account-transactions-item-check-button-menu">
+              <q-btn square flat icon="more_vert" class="account-transactions-item-check-button settings-connections-list-item-more-btn" @click.stop>
+                <q-menu cover auto-close class="account-transactions-item-check-button-menu" :ref="(el) => setMenuRef(el, connection.user.id)">
                   <q-list class="account-transactions-item-check-button-list">
                     <q-item clickable @click="openPreviewConnectionModal(connection.user.id)" class="account-transactions-item-check-button-item">
                       <q-item-section class="account-transactions-item-check-button-section">{{ $t('elements.button.view.label') }}</q-item-section>
@@ -167,6 +167,7 @@ const previewConnectionModal = usePreviewConnectionModalState();
 const deleteConnectionModal = useDeleteConnectionModalState();
 
 const reloadInterval = ref<number | null>(null);
+const menuRefs = ref<Map<Id, any>>(new Map());
 
 const startAutoReload = () => {
   reloadInterval.value = window.setInterval(() => {
@@ -186,6 +187,25 @@ const navigateTo = (name: string, replace = false) => {
     router.replace({ name });
   } else {
     router.push({ name });
+  }
+};
+
+const setMenuRef = (el: any, userId: Id) => {
+  if (el) {
+    menuRefs.value.set(userId, el);
+  }
+};
+
+const handleItemClick = (userId: Id) => {
+  if ($q.screen.gt.md) {
+    // Desktop: open menu
+    const menu = menuRefs.value.get(userId);
+    if (menu) {
+      menu.show();
+    }
+  } else {
+    // Mobile: open preview modal
+    openPreviewConnectionModal(userId);
   }
 };
 
