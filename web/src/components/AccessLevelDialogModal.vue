@@ -13,6 +13,11 @@
           </div>
         </div>
       </q-card-section>
+      <q-card-section class="account-access-dialog-modal-section" style="padding-top: 0; padding-bottom: 8px;">
+        <div style="color: #666; font-size: 14px; padding-left: 16px;">
+          {{ $t('modules.connections.modals.share_access.choose_access_level') }}
+        </div>
+      </q-card-section>
       <q-card-section class="account-access-dialog-modal-section">
         <q-list class="account-access-dialog-modal-list">
           <q-item class="account-access-dialog-modal-item" clickable @click="$emit('allow', user.id, itemId, 'guest')" :class="'control_point ' + (role === 'guest' ? 'active' : '')">
@@ -26,6 +31,9 @@
           </q-item>
           <q-item class="account-access-dialog-modal-item -delete" v-if="role" clickable @click="$emit('revoke', user.id, itemId)">
             <q-item-section>{{ $t('modules.connections.modals.share_access.revoke_access') }}</q-item-section>
+          </q-item>
+          <q-item class="account-access-dialog-modal-item" clickable @click="$emit('cancel')" style="color: #666;">
+            <q-item-section>{{ $t('elements.button.cancel.label') }}</q-item-section>
           </q-item>
         </q-list>
       </q-card-section>

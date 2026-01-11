@@ -776,7 +776,7 @@ export default {
         'roles': {
           'owner': 'Owner',
           'admin': 'Full control',
-          'user': 'Add transactions',
+          'user': 'Manage transactions',
           'guest': 'View only',
           'no_access': 'No access'
         }
@@ -810,6 +810,7 @@ export default {
           'revoke_access': 'Revoke access',
           'list_empty': 'No connections found',
           'tap_to_share': 'Click on a user to share access',
+          'choose_access_level': 'Choose what access level to grant',
           'select_user': 'Select user {name}'
         },
       },

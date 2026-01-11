@@ -335,7 +335,7 @@
                                      :user="accountAccessLevelModal.user"
                                      :item-id="accountAccessLevelModal.accountId"
                                      :role="accountAccessLevelModal.role"
-                                     v-on:cancel="closeModals"
+                                     v-on:cancel="closeAccessLevelModal"
                                      v-on:allow="updateAccountAccess"
                                      v-on:revoke="revokeAccountAccess"
         />
@@ -595,7 +595,7 @@ export default defineComponent({
       console.log(this.accountAccessLevelModal, accountId, userId)
     },
     updateAccountAccess: function(userId, accountId, role) {
-      this.closeModals();
+      this.closeAccessLevelModal();
       useConnectionsStore().setAccountAccess({
         userId: userId,
         accountId: accountId,
@@ -605,7 +605,7 @@ export default defineComponent({
       });
     },
     revokeAccountAccess: function(userId, accountId) {
-      this.closeModals();
+      this.closeAccessLevelModal();
       useConnectionsStore().revokeAccountAccess({
         userId: userId,
         accountId: accountId
@@ -629,6 +629,12 @@ export default defineComponent({
       useAccountsStore().deleteAccount(accountId).finally(() => {
         this.closeModals();
       });
+    },
+    closeAccessLevelModal: function () {
+      this.accountAccessLevelModal.isOpened = false;
+      this.accountAccessLevelModal.accountId = null;
+      this.accountAccessLevelModal.user = null;
+      this.accountAccessLevelModal.role = null;
     },
     closeModals: function () {
       this.previewAccountModal.isOpened = false;
