@@ -798,6 +798,9 @@ export default {
           'budgets_empty': 'No shared budgets',
           'accounts_empty': 'No shared accounts',
           'shared_with_you': 'Shared with you',
+          'your_account': 'Your account',
+          'your_budget': 'Your budget',
+          'tap_to_manage': 'Click to manage access',
         },
         'decline_access': {
           'decline_access': 'Decline access',

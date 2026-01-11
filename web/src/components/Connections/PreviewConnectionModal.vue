@@ -26,13 +26,18 @@
         </div>
         <div class="settings-connections-modal-card-item" v-else>
           <div class="settings-connections-modal-card-item-label">{{ $t('modules.connections.modals.preview_connection.budgets') }}</div>
+          <div class="settings-connections-modal-card-item-hint">{{ $t('modules.connections.modals.preview_connection.tap_to_manage') }}</div>
           <q-list class="settings-connections-modal-card-item-list">
             <q-item v-for="budget in connection.sharedBudgets" v-bind:key="budget.id" clickable v-ripple class="settings-connections-modal-card-item-item">
               <q-item-section class="settings-connections-modal-card-item-item-avatar" avatar>
                 <q-icon name="menu_book" />
               </q-item-section>
               <q-item-section class="settings-connections-modal-card-item-item-name-block">
-                {{ budget.name }}
+                <div>
+                  {{ budget.name }}
+                  <span v-if="isBudgetOwnedByCurrentUser(budget)" class="settings-connections-modal-card-item-item-owner-hint">{{ $t('modules.connections.modals.preview_connection.your_budget') }}</span>
+                  <span v-if="!isBudgetOwnedByCurrentUser(budget)" class="settings-connections-modal-card-item-item-shared-hint">{{ $t('modules.connections.modals.preview_connection.shared_with_you') }}</span>
+                </div>
                 <span class="settings-connections-modal-card-item-item-role">{{ $t('modules.connections.elements.roles.' + budget.role) }}</span>
               </q-item-section>
 
@@ -63,6 +68,7 @@
         </div>
         <div class="settings-connections-modal-card-item  settings-connections-modal-card-item-last" v-else>
           <div class="settings-connections-modal-card-item-label">{{ $t('modules.connections.modals.preview_connection.accounts') }}</div>
+          <div class="settings-connections-modal-card-item-hint">{{ $t('modules.connections.modals.preview_connection.tap_to_manage') }}</div>
           <q-list class="settings-connections-modal-card-item-list">
             <q-item v-for="account in connection.sharedAccounts" v-bind:key="account.id" clickable v-ripple class="settings-connections-modal-card-item-item" @click="onAccountClick(account)">
               <q-item-section class="settings-connections-modal-card-item-item-avatar" avatar>
@@ -71,6 +77,7 @@
               <q-item-section class="settings-connections-modal-card-item-item-name-block">
                 <div>
                   {{ account.name }}
+                  <span v-if="isAccountOwnedByCurrentUser(account)" class="settings-connections-modal-card-item-item-owner-hint">{{ $t('modules.connections.modals.preview_connection.your_account') }}</span>
                   <span v-if="!isAccountOwnedByCurrentUser(account)" class="settings-connections-modal-card-item-item-shared-hint">{{ $t('modules.connections.modals.preview_connection.shared_with_you') }}</span>
                 </div>
                 <span class="settings-connections-modal-card-item-item-role">{{ $t('modules.connections.elements.roles.' + account.role) }}</span>
@@ -132,6 +139,7 @@ import type { SharedBudget, SharedAccount } from '../../stores/connections';
 import { useAvatar } from '../../composables/useAvatar';
 import { useUsersStore } from '../../stores/users';
 import { useAccountsStore } from '../../stores/accounts';
+import { useBudgetsStore } from '../../stores/budgets';
 import DeclineSharedAccessModal from './DeclineSharedAccessModal.vue';
 import AccessLevelDialogModal from '../AccessLevelDialogModal.vue';
 
@@ -170,6 +178,7 @@ const emit = defineEmits<{
 const $q = useQuasar();
 const usersStore = useUsersStore();
 const accountsStore = useAccountsStore();
+const budgetsStore = useBudgetsStore();
 
 const { avatarUrl } = useAvatar();
 
@@ -199,6 +208,15 @@ const getAccountOwner = (account: SharedAccount): User => {
     name: fullAccount.owner.name,
     avatar: fullAccount.owner.avatar
   };
+};
+
+const isBudgetOwnedByCurrentUser = (budget: SharedBudget) => {
+  // Look up the full budget to check ownership
+  const fullBudget = budgetsStore.budgets.find(b => b.id === budget.id);
+  if (!fullBudget) {
+    return false;
+  }
+  return fullBudget.ownerUserId === currentUserId.value;
 };
 
 const onHide = () => {
