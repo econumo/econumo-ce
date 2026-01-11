@@ -68,7 +68,7 @@ jobs:
     uses: ./.github/workflows/embedded-build-package.yml
     with:
       REGISTRY: 'ghcr.io'
-      IMAGE_NAME: ${{ github.repository }}
+      IMAGE_NAME: 'econumo/econumo-cloud'
       IMAGE_TAGS: "${{ needs.create-tag.outputs.version }},latest,beta"
       ECONUMO_EDITION: 'cloud'
     secrets:
