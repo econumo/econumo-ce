@@ -36,6 +36,15 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
+      - name: Clone EconumoCloudBundle repository
+        if: inputs.ECONUMO_EDITION == 'cloud'
+        uses: actions/checkout@v4
+        with:
+          repository: econumo/econumo-cloud-bundle
+          ref: main
+          token: ${{ secrets.BUILD_USER_TOKEN }}
+          path: src/EconumoCloudBundle
+
       - name: Set Frontend Environment
         run: |
           rm -f web/.env

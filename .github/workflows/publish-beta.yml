@@ -14,7 +14,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  publish-beta:
+  publish-beta-ce:
     uses: ./.github/workflows/embedded-build-package.yml
     with:
       REGISTRY: 'docker.io'
@@ -24,4 +24,16 @@ jobs:
     secrets:
       DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
       DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+      BUILD_USER_TOKEN: ${{ secrets.BUILD_USER_TOKEN }}
+
+  publish-beta-cloud:
+    uses: ./.github/workflows/embedded-build-package.yml
+    with:
+      REGISTRY: 'ghcr.io'
+      IMAGE_NAME: ${{ github.repository }}
+      IMAGE_TAGS: 'beta'
+      ECONUMO_EDITION: 'cloud'
+    secrets:
+      DOCKER_USERNAME: ${{ github.actor }}
+      DOCKER_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
       BUILD_USER_TOKEN: ${{ secrets.BUILD_USER_TOKEN }}
