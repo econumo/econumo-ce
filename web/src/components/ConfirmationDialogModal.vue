@@ -1,5 +1,5 @@
 <template>
-  <q-dialog :model-value="true" persistent>
+  <q-dialog :model-value="true" no-backdrop-dismiss>
     <q-card class="confirmation-dialog">
       <q-card-section class="confirmation-dialog-section">
         <q-avatar v-if="icon" :icon="icon" color="primary" text-color="white" />

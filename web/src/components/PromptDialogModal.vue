@@ -1,5 +1,5 @@
 <template>
-  <q-dialog :model-value="true" persistent class="prompt-modal">
+  <q-dialog :model-value="true" class="prompt-modal" no-backdrop-dismiss>
     <q-card class="prompt-modal-card econumo-modal">
       <q-form
         ref="folderForm"

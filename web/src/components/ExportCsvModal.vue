@@ -1,5 +1,5 @@
 <template>
-  <q-dialog class="responsive-modal" :model-value="true" @hide="cancel" persistent>
+  <q-dialog class="responsive-modal" :model-value="true" @hide="cancel" no-backdrop-dismiss>
     <q-card class="responsive-modal-card">
       <q-form
         ref="exportForm"

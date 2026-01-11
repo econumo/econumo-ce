@@ -1,6 +1,6 @@
 <template>
   <teleport to="body">
-    <q-dialog class="responsive-modal" v-model="isModalOpened" persistent>
+    <q-dialog class="responsive-modal" v-model="isModalOpened" no-backdrop-dismiss>
       <q-card class="responsive-modal-card import-csv-modal">
         <q-form
           ref="importForm"

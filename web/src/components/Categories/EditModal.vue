@@ -1,5 +1,5 @@
 <template>
-  <q-dialog class="settings-classification-modal" v-model="isEditModalOpened" @hide="closeEditModal" persistent>
+  <q-dialog class="settings-classification-modal" v-model="isEditModalOpened" @hide="closeEditModal" no-backdrop-dismiss>
     <q-card class="settings-classification-modal-card">
       <q-form
         ref="categoryEditForm"
