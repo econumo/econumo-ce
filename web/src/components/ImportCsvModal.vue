@@ -1,6 +1,6 @@
 <template>
   <teleport to="body">
-    <q-dialog class="responsive-modal" v-model="isModalOpened" no-backdrop-dismiss>
+    <q-dialog class="responsive-modal" v-model="isModalOpened" no-backdrop-dismiss @hide="handleDialogHide">
       <q-card class="responsive-modal-card import-csv-modal">
         <q-form
           ref="importForm"
@@ -725,6 +725,11 @@ watch(targetUserId, () => {
 
 function closeModal() {
   isModalOpened.value = false
+  // Don't emit here - let @hide event handle it
+}
+
+function handleDialogHide() {
+  // Called when dialog is hidden by any means (cancel button, escape key, etc.)
   emit('cancel')
 }
 
