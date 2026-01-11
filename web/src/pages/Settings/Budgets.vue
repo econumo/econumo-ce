@@ -111,7 +111,8 @@
                               {label: $t('modules.budget.page.settings.list_actions.go_to'), value: 'go_to', context: contextMenuModal.budget?.id, isHidden: !hasAccess(contextMenuModal.budget) || !isAccepted(contextMenuModal.budget)},
                               {label: $t('elements.button.set_as_default.label'), value: 'set_as_default', context: contextMenuModal.budget?.id, isHidden: !hasAccess(contextMenuModal.budget) || userDefaultBudgetId === contextMenuModal.budget.id},
                               {label: $t('pages.settings.accounts.list_actions.access'), value: 'access', context: contextMenuModal.budget?.id, isHidden: !hasAdminAccess(contextMenuModal.budget)},
-                              {label: $t('elements.button.delete.label'), value: 'delete', context: contextMenuModal.budget?.id}
+                              {label: $t('elements.button.delete.label'), value: 'delete', context: contextMenuModal.budget?.id},
+                              {label: $t('elements.button.cancel.label'), value: 'cancel', context: contextMenuModal.budget?.id}
                               ]"
                             v-on:cancel="closeContextMenuModal"
                             v-on:proceed="openNextModal"
@@ -309,7 +310,10 @@ function closeContextMenuModal() {
 
 function openNextModal(value: string, budgetId: Id) {
   closeContextMenuModal();
-  if (value === 'access') {
+  if (value === 'cancel') {
+    // Just close the modal, which is already done above
+    return;
+  } else if (value === 'access') {
     openSharedAccessModal(budgetId);
   } else if (value === 'go_to') {
     goToBudget(budgetId);
