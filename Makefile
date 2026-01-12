@@ -44,7 +44,7 @@ test:
 	docker-compose exec -uwww-data app bin/console doctrine:database:create --env=test -vvv
 	docker-compose exec -uwww-data app bin/console doctrine:migration:migrate -n --env=test -vvv
 	docker-compose exec -uwww-data app bin/console doctrine:fixtures:load --purge-with-truncate -n --env=test -vvv
-	-docker-compose exec -uwww-data app vendor/bin/codecept run $(ARGS) --steps -v
+	-docker-compose exec -uwww-data app php -d register_argc_argv=1 vendor/bin/codecept run $(ARGS) --steps -v
 
 # Install web dependencies
 install:
