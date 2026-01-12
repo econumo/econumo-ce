@@ -147,14 +147,14 @@
                       </q-btn>
                     </div>
                   </div>
-                  <div class="account-transactions-item-info-description-note">{{ item.description }}</div>
+                  <div class="account-transactions-item-info-description-note" v-if="item.description">{{ item.description }}</div>
                   <div class="account-transactions-item-tags">
-                    <div class="account-transactions-item-tags-tag-wrapper">
-                      <q-badge class="account-transactions-item-tags-tag econumo-truncate" v-if="item.tag" :title="item.tag?.name || ''">{{ item.tag?.name || '' }}
+                    <div class="account-transactions-item-tags-tag-wrapper" v-if="item.tag">
+                      <q-badge class="account-transactions-item-tags-tag econumo-truncate" :title="item.tag?.name || ''">{{ item.tag?.name || '' }}
                       </q-badge>
                     </div>
-                    <div class="account-transactions-item-tags-block">
-                      <div class="account-transactions-item-tags-payee econumo-truncate" v-if="item.payee" :title="item.payee?.name || ''">{{ item.payee?.name || '' }}</div>
+                    <div class="account-transactions-item-tags-block" v-if="item.payee">
+                      <div class="account-transactions-item-tags-payee econumo-truncate" :title="item.payee?.name || ''">{{ item.payee?.name || '' }}</div>
                     </div>
                   </div>
                 </div>
