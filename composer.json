@@ -2,7 +2,7 @@
     "type": "project",
     "license": "MIT",
     "name": "econumo/econumo",
-    "description": "Econumo",
+    "description": "Econumo - A personal and family budgeting app with multi-currency support, shared accounts, and flexible budgets",
     "require": {
         "php": "^8.5.0",
         "ext-bcmath": "*",
