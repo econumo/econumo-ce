@@ -136,10 +136,10 @@
           color: $color-text-black;
           margin: 0;
           align-self: center;
-          max-width: 70vw;
-          overflow: hidden;
-          text-overflow: ellipsis;
-          white-space: nowrap;
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          min-width: 0;
 
           & .q-field__native span {
             font-style: normal;
@@ -157,6 +157,11 @@
           color: $color-input-grey;
           margin-left: 16px;
           margin-bottom: 7px;
+          flex: 0 0 auto;
+        }
+
+        &-name {
+          max-width: clamp(200px, 40vw, 520px);
         }
       }
 

@@ -42,7 +42,8 @@
       <!-- toolbar for desktop -->
       <div class="account-toolbar-desktop">
         <div class="account-toolbar-desktop-head">
-          <h4 class="account-toolbar-desktop-head-title econumo-truncate" :title="account.name">{{ account.name }}
+          <h4 class="account-toolbar-desktop-head-title">
+            <span class="account-toolbar-desktop-head-name econumo-truncate" :title="account.name">{{ account.name }}</span>
             <q-icon class="account-toolbar-desktop-head-icon" :name="account.icon" />
           </h4>
         </div>
