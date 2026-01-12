@@ -1,10 +1,4 @@
 {
-    "amphp/amp": {
-        "version": "v2.6.2"
-    },
-    "amphp/byte-stream": {
-        "version": "v1.8.1"
-    },
     "behat/gherkin": {
         "version": "v4.6.2"
     },
@@ -58,18 +52,6 @@
     },
     "codeception/stub": {
         "version": "3.6.1"
-    },
-    "composer/pcre": {
-        "version": "1.0.1"
-    },
-    "composer/semver": {
-        "version": "3.3.2"
-    },
-    "composer/xdebug-handler": {
-        "version": "2.0.5"
-    },
-    "dnoegel/php-xdg-base-dir": {
-        "version": "v0.1.1"
     },
     "doctrine/annotations": {
         "version": "1.0",
@@ -184,12 +166,6 @@
             "config/packages/prod/ekino_new_relic.yaml"
         ]
     },
-    "felixfbecker/advanced-json-rpc": {
-        "version": "v3.2.1"
-    },
-    "felixfbecker/language-server-protocol": {
-        "version": "v1.5.2"
-    },
     "flow/jsonpath": {
         "version": "0.5.0"
     },
@@ -260,9 +236,6 @@
             "config/packages/nelmio_cors.yaml"
         ]
     },
-    "netresearch/jsonmapper": {
-        "version": "v4.1.0"
-    },
     "nikic/php-parser": {
         "version": "v4.4.0"
     },
@@ -271,9 +244,6 @@
     },
     "ocramius/proxy-manager": {
         "version": "2.8.0"
-    },
-    "openlss/lib-array2xml": {
-        "version": "1.0.0"
     },
     "phar-io/manifest": {
         "version": "1.0.3"
@@ -758,17 +728,11 @@
     "twig/twig": {
         "version": "v3.3.3"
     },
-    "vimeo/psalm": {
-        "version": "4.10.0"
-    },
     "webimpress/safe-writer": {
         "version": "2.0.1"
     },
     "webmozart/assert": {
         "version": "1.8.0"
-    },
-    "webmozart/path-util": {
-        "version": "2.3.0"
     },
     "zendframework/zend-code": {
         "version": "3.4.1"
