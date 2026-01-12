@@ -227,11 +227,11 @@ export default defineComponent({
   name: 'AccountPage',
   components: { AccountModal, ConfirmationDialogModal, LoadingModal, ViewTransactionModal },
   mixins: [transactionMixin, navigationMixin, viewTransactionModalMixin],
-  
+
   setup() {
     const { moneyFormat } = useMoney();
     const { accountName } = useAccount();
-    
+
     const transactionFormat = (type, amount, currencyId) => {
       switch (type) {
         case 'expense':
