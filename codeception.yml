@@ -10,12 +10,6 @@ actor_suffix: Tester
 extensions:
     enabled:
         - Codeception\Extension\RunFailed
-        - Skyeng\Codeception\Qase\QaseExtension
-    config:
-        Skyeng\Codeception\Qase\QaseExtension:
-            enabled: "%QASE_ENABLE%"
-            token: "%QASE_TOKEN%"
-            project: "%QASE_PROJECT%"
 params:
     - .env
     - .env.test
@@ -33,4 +27,3 @@ coverage:
         - src/Application/Exception/*
         - src/DataFixtures/*
         - src/Command/*
-
