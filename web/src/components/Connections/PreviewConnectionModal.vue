@@ -103,7 +103,7 @@
 
         <q-btn
           class="econumo-btn -medium -grey responsive-modal-actions-button"
-          :label="$t('elements.button.cancel.label')"
+          :label="$t('elements.button.ok.label')"
           flat
           v-close-popup />
       </q-card-actions>
