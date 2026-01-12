@@ -507,6 +507,9 @@
         gap: 4px;
         max-width: 100%;
         min-width: 0;
+        @media (max-width: $breakpoint-sm) {
+          max-width: clamp(160px, 60vw, 240px);
+        }
 
         &-tag-wrapper {
           display: inline-flex;
