@@ -2,8 +2,6 @@ name: "Build Econumo"
 
 on:
   push:
-    branches-ignore:
-      - main
 
 concurrency:
   group: 'build-econumo'

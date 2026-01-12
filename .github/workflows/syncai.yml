@@ -2,8 +2,10 @@ name: SyncAI
 
 on:
   push:
-    branches-ignore:
-      - main
+    paths:
+      - AGENTS.md
+      - CLAUDE.md
+      - .github/copilot-instructions.md
 
 permissions:
   contents: write  # needed for pushing changes back
