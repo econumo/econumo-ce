@@ -52,7 +52,7 @@
         "codeception/module-rest": "^1.2",
         "codeception/module-symfony": "^1.1",
         "doctrine/doctrine-fixtures-bundle": "^3.4",
-        "rector/rector": "^0.15.8",
+        "rector/rector": "^2.3.0",
         "skyeng/codeception-qase-integation": "^1.0.0",
         "symfony/maker-bundle": "^1.15",
         "vimeo/psalm": "^4.10"
