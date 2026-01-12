@@ -47,6 +47,10 @@
           color: $color-text-black;
           text-transform: uppercase;
           margin: 0;
+          max-width: 60vw;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
 
           & .q-field__native span {
             font-style: normal;
@@ -132,6 +136,10 @@
           color: $color-text-black;
           margin: 0;
           align-self: center;
+          max-width: 70vw;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
 
           & .q-field__native span {
             font-style: normal;

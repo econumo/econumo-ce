@@ -9,7 +9,7 @@
                    @click="navigateTo('home', true)" />
           </div>
           <div>
-            <h4 class="account-toolbar-mobile-head-title">{{ account.name }}</h4>
+            <h4 class="account-toolbar-mobile-head-title econumo-truncate" :title="account.name">{{ account.name }}</h4>
           </div>
           <div>
             <q-btn class="account-toolbar-mobile-head-button" flat icon="settings" @click="openAccountSettingsModal()"
@@ -42,7 +42,7 @@
       <!-- toolbar for desktop -->
       <div class="account-toolbar-desktop">
         <div class="account-toolbar-desktop-head">
-          <h4 class="account-toolbar-desktop-head-title">{{ account.name }}
+          <h4 class="account-toolbar-desktop-head-title econumo-truncate" :title="account.name">{{ account.name }}
             <q-icon class="account-toolbar-desktop-head-icon" :name="account.icon" />
           </h4>
         </div>
