@@ -94,6 +94,8 @@ export enum METRICS {
   CONNECTION_DELETE= 'appConnectionDelete',
   CONNECTION_UPDATE_ACCOUNT_ACCESS= 'appConnectionUpdateAccountAccess',
   CONNECTION_REVOKE_ACCOUNT_ACCESS= 'appConnectionRevokeAccountAccess',
+  CONNECTION_UPDATE_BUDGET_ACCESS= 'appConnectionUpdateBudgetAccess',
+  CONNECTION_REVOKE_BUDGET_ACCESS= 'appConnectionRevokeBudgetAccess',
 
   UI_MODAL_ACCOUNT_OPEN= 'appUIModalAccountOpen',
   UI_MODAL_ACCOUNT_CLOSE= 'appUIModalAccountClose',

@@ -1,5 +1,5 @@
 <template>
-  <q-dialog class="access-modal" :model-value="true" @hide="$emit('cancel')">
+  <q-dialog class="access-modal" :model-value="true" @hide="$emit('cancel')" no-backdrop-dismiss>
     <q-card class="access-modal-card">
       <q-card-section class="access-modal-section -toolbar">
         <div class="settings-toolbar-mobile access-modal-toolbar">
@@ -16,13 +16,17 @@
       <q-card-section class="access-modal-section">
         <div class="access-modal-list">
           <div class="access-modal-title">{{ item.name }}</div>
+          <div class="access-modal-note" style="margin-bottom: 16px;">
+            {{ $t('modules.connections.modals.share_access.tap_to_share') }}
+          </div>
           <div class="access-modal-note" v-if="!access.length">
             {{ $t('modules.connections.modals.share_access.list_empty') }}
           </div>
           <div v-else v-for="accessItem in access" v-bind:key="accessItem.user.id">
             <div class="preview-modal-account-info-access-item"
                  @click="$emit('open-access-level-dialog', item.id, accessItem.user.id, accessItem.role)"
-                 v-if="accessItem.user.id !== userId">
+                 v-if="accessItem.user.id !== userId"
+                 style="cursor: pointer; margin-bottom: 12px;">
               <q-avatar class="preview-modal-account-info-access-item-avatar">
                 <img :src="avatarUrl(accessItem.user.avatar, 100)" class="preview-modal-account-info-access-item-avatar-img" width="100" height="100" :alt="accessItem.user.name" :title="accessItem.user.name"/>
               </q-avatar>
@@ -31,16 +35,25 @@
                   {{ accessItem.user.name }}
                 </div>
                 <div class="preview-modal-account-info-access-item-user-role" v-if="!accessItem.role">
-                  {{ $t('modules.connections.elements.roles.no_access') }}
+                  {{ $t('modules.connections.accounts.roles.no_access') }}
                 </div>
                 <div class="preview-modal-account-info-access-item-user-role" v-else>
-                  {{ $t('modules.connections.modals.share_access.level.' + accessItem.role) }}
+                  {{ $t('modules.connections.accounts.roles.' + accessItem.role) }}
                 </div>
               </div>
+              <q-icon name="chevron_right" size="32px" color="grey-6" style="margin-left: auto; align-self: center;"/>
             </div>
           </div>
         </div>
       </q-card-section>
+      <q-card-actions class="responsive-modal-actions">
+        <q-space />
+        <q-btn
+          class="econumo-btn -medium -grey responsive-modal-actions-button"
+          :label="$t('elements.button.ok.label')"
+          flat
+          v-close-popup />
+      </q-card-actions>
     </q-card>
   </q-dialog>
 </template>

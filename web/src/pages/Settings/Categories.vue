@@ -48,8 +48,8 @@
           <q-list class="settings-classification-list">
             <draggable v-model="categories" @start="drag=true" @end="drag=false" v-bind="options" item-key="id">
               <template #item="{element}">
-                <q-item class="settings-classification-list-item" :clickable="$q.screen.lt.lg" @click="openContextMenu(element)">
-                  <q-item-section side class="settings-classification-list-item-sortable sortable-control cursor-pointer">
+                <q-item class="settings-classification-list-item" clickable @click="handleItemClick(element)">
+                  <q-item-section side class="settings-classification-list-item-sortable sortable-control cursor-pointer" @click.stop>
                     <q-icon name="drag_indicator" />
                   </q-item-section>
                   <q-item-section avatar class="settings-classification-list-item-avatar">
@@ -59,12 +59,12 @@
                     {{ element.name }}
                     <div class="settings-classification-list-item-description-archived" v-if="element.isArchived">{{ $t('modules.classifications.categories.pages.settings.archived_item') }}</div>
                   </q-item-section>
-                  <q-item-section side>
+                  <q-item-section side @click.stop>
                     <q-toggle :model-value="!element.isArchived" @click="updateArchiveCategory(element.id, !!element.isArchived)"/>
                   </q-item-section>
                   <q-item-section side v-if="$q.screen.gt.md" class="cursor-pointer settings-classification-list-item-check-section">
-                    <q-btn square flat icon="more_vert" class="account-transactions-item-check-button">
-                      <q-menu cover auto-close class="account-transactions-item-check-button-menu">
+                    <q-btn square flat icon="more_vert" class="account-transactions-item-check-button" @click.stop>
+                      <q-menu cover auto-close class="account-transactions-item-check-button-menu" :ref="(el) => setMenuRef(el, element.id)">
                         <q-list class="account-transactions-item-check-button-list">
                           <q-item clickable @click="openEditModal(element)" class="account-transactions-item-check-button-item">
                             <q-item-section class="account-transactions-item-check-button-section">{{ $t('elements.button.edit.label') }}</q-item-section>
@@ -197,7 +197,8 @@ export default defineComponent({
     return {
       categoriesCopy: null as Category[] | null,
       selectedCategoryId: null as string | null,
-      drag: false
+      drag: false,
+      menuRefs: new Map()
     }
   },
   created() {
@@ -254,14 +255,35 @@ export default defineComponent({
       return [
         {label: (this.$t as any)('elements.button.edit.label'), value: 'edit', context: this.contextMenuCategory.id, isHidden: false},
         // {label: (this.$t as any)('elements.button.replace.label'), value: 'replace', context: this.contextMenuCategory.id},
-        {label: (this.$t as any)('elements.button.delete.label'), value: 'delete', context: this.contextMenuCategory.id, isHidden: false}
+        {label: (this.$t as any)('elements.button.delete.label'), value: 'delete', context: this.contextMenuCategory.id, isHidden: false},
+        {label: (this.$t as any)('elements.button.cancel.label'), value: 'cancel', context: this.contextMenuCategory.id, isHidden: false}
       ];
     }
   },
   methods: {
+    setMenuRef(el: any, categoryId: string): void {
+      if (el) {
+        this.menuRefs.set(categoryId, el);
+      }
+    },
+    handleItemClick(category: Category): void {
+      if (this.$q.screen.gt.md) {
+        // Desktop: open menu
+        const menu = this.menuRefs.get(category.id);
+        if (menu) {
+          menu.show();
+        }
+      } else {
+        // Mobile: open context menu modal
+        this.openContextMenu(category);
+      }
+    },
     openNextModal(value: string, categoryId: string): void {
       this.closeContextMenu();
-      if (value === 'edit') {
+      if (value === 'cancel') {
+        // Just close the modal, which is already done above
+        return;
+      } else if (value === 'edit') {
         const category = _.find(this.categories, {id: categoryId});
         if (category) this.openEditModal(category);
       } else if (value === 'replace') {

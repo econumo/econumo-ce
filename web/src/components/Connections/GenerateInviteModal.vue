@@ -1,5 +1,5 @@
 <template>
-  <q-dialog class="settings-connections-generate-modal" :model-value="isOpened" @update:model-value="$emit('update:isOpened', $event)" @hide="onHide">
+  <q-dialog class="settings-connections-generate-modal" :model-value="isOpened" @update:model-value="$emit('update:isOpened', $event)" @hide="onHide" no-backdrop-dismiss>
     <div class="econumo-modal">
       <div>
         <div class="settings-connections-generate-modal-label">{{ $t('modules.connections.modals.generate_invite.code.label', {code}) }}</div>

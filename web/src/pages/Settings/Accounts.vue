@@ -90,8 +90,8 @@
               <draggable :list="tree.accounts" v-bind="draggableAccountOptions" item-key="id"
                          :component-data="{'id': tree.id}" @end="orderAccounts">
                 <template #item="{element}">
-                  <q-item class="settings-accounts-account-list-item" :clickable="$q.screen.lt.lg" :id="element.id" @click="openPreviewAccountModal(element.id)">
-                    <q-item-section side class="settings-accounts-account-list-item-draggable sortable-control">
+                  <q-item class="settings-accounts-account-list-item" clickable :id="element.id" @click="handleItemClick(element.id)">
+                    <q-item-section side class="settings-accounts-account-list-item-draggable sortable-control" @click.stop>
                       <q-icon class="settings-accounts-account-list-item-draggable-icon" name="drag_indicator"/>
                     </q-item-section>
                       <div class="settings-accounts-account-list-item-wrapper">
@@ -117,8 +117,8 @@
                           </q-avatar>
                         </q-item-section>
                         <q-item-section class="settings-accounts-account-list-item-more" side v-if="$q.screen.gt.md">
-                          <q-btn color="grey-7" round flat icon="more_vert" class="gt-md settings-accounts-account-list-item-more-btn">
-                            <q-menu cover auto-close>
+                          <q-btn color="grey-7" round flat icon="more_vert" class="gt-md settings-accounts-account-list-item-more-btn" @click.stop>
+                            <q-menu cover auto-close :ref="(el) => setMenuRef(el, element.id)">
                               <q-list>
                                 <q-item clickable @click="openPreviewAccountModal(element.id)" class="account-transactions-item-check-button-item">
                                   <q-item-section class="account-transactions-item-check-button-section">{{ $t('elements.button.view.label') }}</q-item-section>
@@ -180,6 +180,7 @@
                                val => isValidFolderName(val) || $t('elements.form.account.folder.validation.error_name_length'),
                              ]"
                              v-on:cancel="closeModals"
+                             v-on:close="closeModals"
                              v-on:submit="createFolder"
         />
 
@@ -197,7 +198,7 @@
                              v-on:submit="renameFolder"
         />
 
-        <q-dialog class="preview-modal" v-model="previewAccountModal.isOpened" :position="$q.screen.gt.md ? 'standard' : 'bottom'">
+        <q-dialog class="preview-modal" v-model="previewAccountModal.isOpened" :position="$q.screen.gt.md ? 'standard' : 'bottom'" no-backdrop-dismiss>
           <q-card class="preview-modal-card">
 
 <!--            Плашка "Доступ"-->
@@ -270,8 +271,8 @@
                   <div class="preview-modal-account-info-item">
                     <div class="preview-modal-account-info-item-label -access">{{ $t('pages.settings.accounts.preview_account_modal.access.label') }}</div>
                   </div>
-                  <div v-if="previewAccountModal.account.owner.id !== userId">
-                    <div class="preview-modal-account-info-access-item">
+                  <div v-if="previewAccountModal.account.owner.id !== userId" class="q-mb-sm">
+                    <div class="preview-modal-account-info-access-item cursor-pointer" @click="openAccountAccessLevelModal(previewAccountModal.account.id, previewAccountModal.account.owner.id, 'owner')">
                       <q-avatar class="preview-modal-account-info-access-item-avatar">
                         <img :src="avatarUrl(previewAccountModal.account.owner.avatar, 100)" width="100" height="100"/>
                       </q-avatar>
@@ -280,7 +281,7 @@
                           {{ previewAccountModal.account.owner.name }}
                         </div>
                         <div class="preview-modal-account-info-access-item-user-role">
-                          {{ $t('modules.connections.elements.roles.owner') }}
+                          {{ $t('modules.connections.accounts.roles.owner') }}
                         </div>
                       </div>
                     </div>
@@ -289,8 +290,8 @@
                     {{ $t('pages.settings.accounts.preview_account_modal.access.no_shared_access') }}
                   </div>
                   <div v-else v-for="sharedAccess in previewAccountModal.account.sharedAccess"
-                       v-bind:key="sharedAccess.user.id">
-                    <div class="preview-modal-account-info-access-item">
+                       v-bind:key="sharedAccess.user.id" class="q-mb-sm">
+                    <div class="preview-modal-account-info-access-item cursor-pointer" @click="openAccountAccessLevelModal(previewAccountModal.account.id, sharedAccess.user.id, sharedAccess.role)">
                       <q-avatar class="preview-modal-account-info-access-item-avatar">
                         <img :src="avatarUrl(sharedAccess.user.avatar, 100)" class="preview-modal-account-info-access-item-avatar-img" width="100" height="100"/>
                       </q-avatar>
@@ -299,7 +300,7 @@
                           {{ sharedAccess.user.name }}
                         </div>
                         <div class="preview-modal-account-info-access-item-user-role">
-                          {{ $t('modules.connections.elements.roles.' + sharedAccess.role) }}
+                          {{ $t('modules.connections.accounts.roles.' + sharedAccess.role) }}
                         </div>
                       </div>
                     </div>
@@ -316,6 +317,7 @@
                      @click="openDeleteAccountModal(previewAccountModal.account.id)"/>
               <q-btn class="econumo-btn -large -grey preview-modal-account-info-access-actions-btn -wide" flat :label="$t('elements.button.edit.label')"
                      @click="openUpdateAccountModal(previewAccountModal.account.id)" v-if="hasAdminAccess(previewAccountModal.account)"/>
+              <q-space v-if="!hasAdminAccess(previewAccountModal.account)" />
               <q-btn class="econumo-btn -large -grey preview-modal-account-info-access-actions-btn" flat icon="expand_more" :title="$t('elements.button.cancel.label')"
                      v-close-popup/>
             </q-card-actions>
@@ -334,7 +336,7 @@
                                      :user="accountAccessLevelModal.user"
                                      :item-id="accountAccessLevelModal.accountId"
                                      :role="accountAccessLevelModal.role"
-                                     v-on:cancel="closeModals"
+                                     v-on:cancel="closeAccessLevelModal"
                                      v-on:allow="updateAccountAccess"
                                      v-on:revoke="revokeAccountAccess"
         />
@@ -376,8 +378,8 @@ export default defineComponent({
     const { moneyFormat } = useMoney();
     const { accountName } = useAccount();
 
-    return { 
-      avatarUrl, 
+    return {
+      avatarUrl,
       ...validation,
       moneyFormat,
       accountName
@@ -387,6 +389,7 @@ export default defineComponent({
     return {
       accountsCopy: null,
       accountFoldersCopy: null,
+      menuRefs: new Map(),
       deleteFolderModal: {
         isOpened: false,
         folder: null,
@@ -469,6 +472,23 @@ export default defineComponent({
     }
   },
   methods: {
+    setMenuRef: function(el, accountId) {
+      if (el) {
+        this.menuRefs.set(accountId, el);
+      }
+    },
+    handleItemClick: function(accountId) {
+      if (this.$q.screen.gt.md) {
+        // Desktop: open menu
+        const menu = this.menuRefs.get(accountId);
+        if (menu) {
+          menu.show();
+        }
+      } else {
+        // Mobile: open preview modal
+        this.openPreviewAccountModal(accountId);
+      }
+    },
     hasAdminAccess: function (account) {
       if (account.owner.id === this.userId) {
         return true;
@@ -628,6 +648,12 @@ export default defineComponent({
       useAccountsStore().deleteAccount(accountId).finally(() => {
         this.closeModals();
       });
+    },
+    closeAccessLevelModal: function () {
+      this.accountAccessLevelModal.isOpened = false;
+      this.accountAccessLevelModal.accountId = null;
+      this.accountAccessLevelModal.user = null;
+      this.accountAccessLevelModal.role = null;
     },
     closeModals: function () {
       this.previewAccountModal.isOpened = false;

@@ -1,5 +1,5 @@
 <template>
-  <q-dialog persistent minimized>
+  <q-dialog minimized no-backdrop-dismiss>
     <div class="econumo-modal spinner-modal">
       <q-spinner class="econumo-spinner"/>
       <div class="spinner-modal-title">

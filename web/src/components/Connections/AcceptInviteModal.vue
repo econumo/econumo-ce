@@ -1,5 +1,5 @@
 <template>
-  <q-dialog class="settings-connections-accept-modal" :model-value="isOpened" @update:model-value="$emit('update:isOpened', $event)" @hide="onHide" persistent>
+  <q-dialog class="settings-connections-accept-modal" :model-value="isOpened" @update:model-value="$emit('update:isOpened', $event)" @hide="onHide" no-backdrop-dismiss>
     <div class="econumo-modal">
       <q-form ref="inviteForm" @submit.prevent="onSubmit">
         <div class="settings-connections-accept-modal-label">{{ $t('modules.connections.modals.accept_invite.label') }}</div>

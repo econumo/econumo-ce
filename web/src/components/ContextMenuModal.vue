@@ -1,5 +1,5 @@
 <template>
-  <q-dialog :model-value="true" @hide="$emit('cancel')" class="context-menu-modal">
+  <q-dialog :model-value="true" @hide="$emit('cancel')" class="context-menu-modal" no-backdrop-dismiss>
     <q-card class="context-menu-modal-card">
       <div class="context-menu-modal-card-label">{{ headerLabel }}</div>
       <ul class="context-menu-modal-card-list">

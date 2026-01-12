@@ -1,5 +1,5 @@
 <template>
-  <q-dialog :model-value="true" persistent>
+  <q-dialog :model-value="true" no-backdrop-dismiss>
     <div class="econumo-modal import-result-modal">
       <div class="import-result-modal-icon">
         <q-icon

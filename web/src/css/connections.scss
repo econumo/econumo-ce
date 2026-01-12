@@ -345,6 +345,14 @@
           }
         }
 
+        &-hint {
+          padding: 0 8px 8px 8px;
+          font-weight: 400;
+          font-size: 14px;
+          line-height: 16px;
+          color: $color-label-grey;
+        }
+
         &-item {
           margin-top: 8px;
           padding: 8px 12px;
@@ -369,6 +377,12 @@
             font-size: 14px;
             line-height: 16px;
             color: $color-text-black;
+
+            & > div {
+              display: flex;
+              align-items: center;
+              flex-wrap: wrap;
+            }
           }
 
           &-role {
@@ -378,6 +392,32 @@
             font-size: 14px;
             line-height: 16px;
             color: $color-label-grey;
+          }
+
+          &-owner-hint {
+            display: inline-block;
+            margin-left: 6px;
+            padding: 1px 4px;
+            font-style: normal;
+            font-weight: 500;
+            font-size: 10px;
+            line-height: 12px;
+            color: $color-white;
+            background: $color-input-grey;
+            border-radius: 3px;
+          }
+
+          &-shared-hint {
+            display: inline-block;
+            margin-left: 6px;
+            padding: 1px 4px;
+            font-style: normal;
+            font-weight: 500;
+            font-size: 10px;
+            line-height: 12px;
+            color: $color-white;
+            background: $color-magenta;
+            border-radius: 3px;
           }
 
           &-shared {

@@ -96,8 +96,8 @@
             <span class="account-transactions-date-content" v-show="item.alias === 'none'" :key="'date-' + item.id">{{ item.date }}</span>
           </q-item-label>
 
-          <q-item :class="'account-transactions-item ' + (item.isInFuture ? 'account-transactions-item-future' : '')" v-else :key="item.id" :clickable="$q.screen.lt.lg"
-                  @click="openPreviewTransactionModal(item.id)">
+          <q-item :class="'account-transactions-item ' + (item.isInFuture ? 'account-transactions-item-future' : '')" v-else :key="item.id" clickable
+                  @click="handleTransactionClick(item)">
             <q-item-section class="account-transactions-item-section">
               <div class="account-transactions-item-container">
                 <div class="account-transactions-item-info">
@@ -137,9 +137,9 @@
                       :class="'account-transactions-item-check-income ' + (isIncome(item) ? 'income-color' : 'expense-color')">{{ transactionDisplayAmount(item)
                       }}</span>
                     <span class="account-transactions-item-check-currency">{{ account.currency.symbol }}</span>
-                    <q-btn square flat icon="more_vert" class="account-transactions-item-check-button"
+                    <q-btn square flat icon="more_vert" class="account-transactions-item-check-button" @click.stop
                            v-if="canChangeTransaction && (item.type !== 'transfer' || (item.type === 'transfer' && item.account && item.accountRecipient))">
-                      <q-menu cover auto-close class="account-transactions-item-check-button-menu">
+                      <q-menu cover auto-close class="account-transactions-item-check-button-menu" :ref="(el) => setMenuRef(el, item.id)">
                         <q-list class="account-transactions-item-check-button-list">
                           <q-item clickable @click="openUpdateTransactionModal(item.id)"
                                   class="account-transactions-item-check-button-item">
@@ -261,6 +261,7 @@ export default defineComponent({
   data() {
     return {
       search: '',
+      menuRefs: new Map(),
       deleteTransactionModal: {
         isOpened: false,
         transaction: null
@@ -361,6 +362,21 @@ export default defineComponent({
     }
   },
   methods: {
+    setMenuRef: function(el, transactionId) {
+      if (el) {
+        this.menuRefs.set(transactionId, el);
+      }
+    },
+    handleTransactionClick: function(transaction) {
+      if (this.$q.screen.gt.md) {
+        const menu = this.menuRefs.get(transaction.id);
+        if (menu) {
+          menu.show();
+        }
+        return;
+      }
+      this.openPreviewTransactionModal(transaction.id);
+    },
     openAccountSettingsModal: function() {
       useAccountModalStore().openAccountModal(this.account);
     },

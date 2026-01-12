@@ -170,7 +170,7 @@ export default {
         'delete_account_modal': { 'question': 'Are you sure you want to remove the account «{account}»?' },
         'preview_account_modal': {
           'header': 'Account details',
-          'shared_access': 'Share',
+          'shared_access': 'Shared',
           'access': {
             'label': 'Access',
             'no_shared_access': 'No access to this account'
@@ -772,11 +772,20 @@ export default {
           }
         }
       },
-      'elements': {
+      'accounts': {
         'roles': {
           'owner': 'Owner',
           'admin': 'Full control',
-          'user': 'Add transactions',
+          'user': 'Manage transactions',
+          'guest': 'View only',
+          'no_access': 'No access'
+        }
+      },
+      'budgets': {
+        'roles': {
+          'owner': 'Owner',
+          'admin': 'Full control',
+          'user': 'Manage budget',
           'guest': 'View only',
           'no_access': 'No access'
         }
@@ -797,6 +806,13 @@ export default {
           'budgets': 'Shared budgets',
           'budgets_empty': 'No shared budgets',
           'accounts_empty': 'No shared accounts',
+          'shared_with_you': 'Shared with you',
+          'your_account': 'Your account',
+          'your_budget': 'Your budget',
+          'tap_to_manage': 'Click to manage access',
+        },
+        'decline_access': {
+          'decline_access': 'Decline access',
         },
         'share_access': {
           'level': {
@@ -809,6 +825,8 @@ export default {
           'not_accepted': 'not accepted',
           'revoke_access': 'Revoke access',
           'list_empty': 'No connections found',
+          'tap_to_share': 'Click on a user to share access',
+          'choose_access_level': 'Choose what access level to grant',
           'select_user': 'Select user {name}'
         },
       },

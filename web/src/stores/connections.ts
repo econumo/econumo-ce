@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia';
 import ConnectionAPIv1 from '../modules/api/v1/connection';
+import BudgetAPIv1 from '../modules/api/v1/budget';
 import { METRICS, trackEvent } from '../modules/metrics';
 import _ from 'lodash';
 import { date } from 'quasar';
@@ -16,6 +17,7 @@ import { useSyncStore } from './sync';
 import { BudgetMetaDto } from 'modules/api/v1/dto/budget.dto';
 import { AccountDto } from 'modules/api/v1/dto/account.dto';
 import { useUsersStore } from './users';
+import { AccessRole } from '@shared/dto/access.dto';
 
 export interface User {
   id: Id;
@@ -120,6 +122,30 @@ export const useConnectionsStore = defineStore('connections', () => {
     })
   }
 
+  async function setBudgetAccess(params: { userId: Id, budgetId: Id, role: AccessRole }) {
+    trackEvent(METRICS.CONNECTION_UPDATE_BUDGET_ACCESS);
+    const budgetsStore = useBudgetsStore();
+    return BudgetAPIv1.grantAccess(params, async (response: any) => {
+      // Fetch budget list to update the access information
+      await budgetsStore.fetchBudgets();
+      return !!response.data;
+    }, (error = {}) => {
+      return error
+    })
+  }
+
+  async function revokeBudgetAccess(params: { userId: Id, budgetId: Id }) {
+    trackEvent(METRICS.CONNECTION_REVOKE_BUDGET_ACCESS);
+    const budgetsStore = useBudgetsStore();
+    return BudgetAPIv1.revokeAccess(params, async (response: any) => {
+      // Fetch budget list to update the access information
+      await budgetsStore.fetchBudgets();
+      return !!response.data;
+    }, (error = {}) => {
+      return error
+    })
+  }
+
   function CONNECTIONS_INIT(items: ConnectionDto[]) {
     connections.value = items;
     connectionsLoadedAt.value = date.formatDate(new Date(), DATE_TIME_FORMAT);
@@ -139,40 +165,48 @@ export const useConnectionsStore = defineStore('connections', () => {
     const currentUserId = usersStore.userId;
     const budgetsStore = useBudgetsStore();
     const budgets: SharedBudget[] = [];
+
     _.forEach(budgetsStore.budgets, (budget: BudgetMetaDto) => {
-      let access = budget.access.find(access => access.user.id === connectedUserId);
-      if (!access) {
-        return;
-      }
-      if (access.role !== 'owner') {
-        budgets.push({
-          id: budget.id,
-          name: budget.name,
-          user: {
-            id: access.user.id,
-            name: access.user.name,
-            avatar: access.user.avatar
-          },
-          role: access.role
-        });
-        return;
-      }
-      access = budget.access.find(access => access.user.id === currentUserId);
-      if (!access) {
+      const isCurrentUserOwner = budget.ownerUserId === currentUserId;
+      const isConnectedUserOwner = budget.ownerUserId === connectedUserId;
+
+      // Case 1: I own the budget and it's shared with the connected user
+      if (isCurrentUserOwner) {
+        const connectedUserAccess = budget.access.find(access => access.user.id === connectedUserId);
+        if (connectedUserAccess) {
+          budgets.push({
+            id: budget.id,
+            name: budget.name,
+            user: {
+              id: connectedUserAccess.user.id,
+              name: connectedUserAccess.user.name,
+              avatar: connectedUserAccess.user.avatar
+            },
+            role: connectedUserAccess.role
+          });
+        }
         return;
       }
 
-      budgets.push({
-        id: budget.id,
-        name: budget.name,
-        user: {
-          id: access.user.id,
-          name: access.user.name,
-          avatar: access.user.avatar
-        },
-        role: access.role
-      });
+      // Case 2: Connected user owns the budget and it's shared with me
+      if (isConnectedUserOwner) {
+        const currentUserAccess = budget.access.find(access => access.user.id === currentUserId);
+        if (currentUserAccess) {
+          budgets.push({
+            id: budget.id,
+            name: budget.name,
+            user: {
+              id: currentUserAccess.user.id,
+              name: currentUserAccess.user.name,
+              avatar: currentUserAccess.user.avatar
+            },
+            role: currentUserAccess.role
+          });
+        }
+        return;
+      }
     });
+
     return budgets;
   }
 
@@ -181,39 +215,50 @@ export const useConnectionsStore = defineStore('connections', () => {
     const currentUserId = usersStore.userId;
     const accountsStore = useAccountsStore();
     const accounts: SharedAccount[] = [];
+
     _.forEach(accountsStore.accounts, (account: AccountDto) => {
-      let access = account.sharedAccess.find(access => access.user.id === connectedUserId);
-      if (!access) {
-        access = account.sharedAccess.find(access => access.user.id === currentUserId);
-        if (!access) {
-          return;
+      const isCurrentUserOwner = account.owner.id === currentUserId;
+      const isConnectedUserOwner = account.owner.id === connectedUserId;
+
+      // Case 1: I own the account and it's shared with the connected user
+      if (isCurrentUserOwner) {
+        const connectedUserAccess = account.sharedAccess.find(access => access.user.id === connectedUserId);
+        if (connectedUserAccess) {
+          accounts.push({
+            id: account.id,
+            name: account.name,
+            icon: account.icon,
+            user: {
+              id: connectedUserAccess.user.id,
+              name: connectedUserAccess.user.name,
+              avatar: connectedUserAccess.user.avatar
+            },
+            role: connectedUserAccess.role
+          });
         }
-        accounts.push({
-          id: account.id,
-          name: account.name,
-          icon: account.icon,
-          user: {
-            id: access.user.id,
-            name: access.user.name,
-            avatar: access.user.avatar
-          },
-          role: access.role
-        });
         return;
       }
 
-      accounts.push({
-        id: account.id,
-        name: account.name,
-        icon: account.icon,
-        user: {
-          id: access.user.id,
-          name: access.user.name,
-          avatar: access.user.avatar
-        },
-        role: access.role
-      });
+      // Case 2: Connected user owns the account and it's shared with me
+      if (isConnectedUserOwner) {
+        const currentUserAccess = account.sharedAccess.find(access => access.user.id === currentUserId);
+        if (currentUserAccess) {
+          accounts.push({
+            id: account.id,
+            name: account.name,
+            icon: account.icon,
+            user: {
+              id: currentUserAccess.user.id,
+              name: currentUserAccess.user.name,
+              avatar: currentUserAccess.user.avatar
+            },
+            role: currentUserAccess.role
+          });
+        }
+        return;
+      }
     });
+
     return accounts;
   }
 
@@ -228,6 +273,8 @@ export const useConnectionsStore = defineStore('connections', () => {
     deleteConnection,
     setAccountAccess,
     revokeAccountAccess,
+    setBudgetAccess,
+    revokeBudgetAccess,
     getSharedBudgets,
     getSharedAccounts
   }

@@ -1,5 +1,5 @@
 <template>
-  <q-dialog class="settings-classification-modal" v-model="isCreateModalOpened" @hide="closeCreateModal">
+  <q-dialog class="settings-classification-modal" v-model="isCreateModalOpened" @hide="closeCreateModal" no-backdrop-dismiss>
     <q-card class="settings-classification-modal-card">
       <q-form
         ref="createCategoryForm"

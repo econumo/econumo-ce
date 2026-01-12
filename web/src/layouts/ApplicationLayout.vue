@@ -157,7 +157,7 @@
       <account-modal v-if="isFullyLoaded && !accountsTree.length"></account-modal>
       <loading-modal v-if="!isFullyLoaded" :header-label="$t('modules.app.modal.loading.data_loading')" />
 
-      <q-dialog :model-value="!!transactionModalSwitchAccount" seamless position="bottom" class="switch-account-modal">
+      <q-dialog :model-value="!!transactionModalSwitchAccount" seamless position="bottom" class="switch-account-modal" no-backdrop-dismiss>
         <q-card>
           <q-card-section class="row items-center no-wrap">
             <div class="switch-account-modal-text" @click="transactionModalSwitchAccount && selectAccount(transactionModalSwitchAccount)">

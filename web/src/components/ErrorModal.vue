@@ -1,5 +1,5 @@
 <template>
-  <q-dialog :model-value="true" persistent minimized>
+  <q-dialog :model-value="true" minimized no-backdrop-dismiss>
     <div class="econumo-modal form-fail-modal">
       <div class="form-fail-modal-title">
         {{ header }}

@@ -1,5 +1,5 @@
 <template>
-  <q-dialog class="settings-classification-replace-modal" v-model="isReplaceModalOpened" @hide="closeReplaceModal" :position="$q.screen.gt.md ? 'standard' : 'bottom'">
+  <q-dialog class="settings-classification-replace-modal" v-model="isReplaceModalOpened" @hide="closeReplaceModal" :position="$q.screen.gt.md ? 'standard' : 'bottom'" no-backdrop-dismiss>
     <q-card class="settings-classification-replace-modal-card">
       <q-card-section>
         <div class="settings-classification-replace-modal-card-header">{{ $t('modules.classifications.categories.modals.replace.header') }}</div>
