@@ -101,72 +101,62 @@
                   @click="handleTransactionClick(item)">
             <q-item-section class="account-transactions-item-section">
               <div class="account-transactions-item-container">
-                <div class="account-transactions-item-info">
-                  <div class="account-transactions-item-info-avatar">
-                    <q-icon class="account-transactions-item-info-avatar-icon"
-                            :name="(item.type === 'transfer' ? 'sync_alt' : (item.category?.icon || 'question_mark'))" />
-                    <q-avatar class="account-transactions-item-info-avatar-shared"
-                              v-if="account.sharedAccess.length  > 0">
-                      <img :src="item.author.avatar + '?s=30'" :title="item.author.name" :alt="item.author.name" />
-                    </q-avatar>
-                  </div>
-                  <div class="account-transactions-item-info-description">
-                    <div class="account-transactions-item-info-description-category" v-if="item.type !== 'transfer'">
+                <div class="account-transactions-item-info-avatar">
+                  <q-icon class="account-transactions-item-info-avatar-icon"
+                          :name="(item.type === 'transfer' ? 'sync_alt' : (item.category?.icon || 'question_mark'))" />
+                  <q-avatar class="account-transactions-item-info-avatar-shared"
+                            v-if="account.sharedAccess.length  > 0">
+                    <img :src="item.author.avatar + '?s=30'" :title="item.author.name" :alt="item.author.name" />
+                  </q-avatar>
+                </div>
+                <div class="account-transactions-item-info-description">
+                  <div class="account-transactions-item-info-row">
+                    <div class="account-transactions-item-info-description-category econumo-truncate" v-if="item.type !== 'transfer'" :title="item.category?.name || ''">
                       {{ item.category?.name || '' }}
                     </div>
-                    <div class="account-transactions-item-info-description-category" v-if="item.type === 'transfer'">
+                    <div class="account-transactions-item-info-description-category econumo-truncate" v-if="item.type === 'transfer'" :title="item.type === 'transfer' ? (item.accountId !== selectedAccountId ? $t('pages.account.transaction_list.item.transfer_from') + ' ' + (item.account?.name || $t('elements.account.name_hidden')) : $t('pages.account.transaction_list.item.transfer_to') + ' ' + (item.accountRecipient?.name || $t('elements.account.name_hidden'))) : ''">
                       {{
                         (item.accountId !== selectedAccountId ? $t('pages.account.transaction_list.item.transfer_from') + ' ' + (item.account?.name || $t('elements.account.name_hidden')) : $t('pages.account.transaction_list.item.transfer_to') + ' ' + (item.accountRecipient?.name || $t('elements.account.name_hidden')))
                       }}
                     </div>
-                    <div class="account-transactions-item-info-description-note">{{ item.description }}</div>
-                  </div>
-                </div>
-                <div class="account-transactions-item-wrapper">
-                  <div class="account-transactions-item-tags -desktop">
-                    <div class="account-transactions-item-tags-block">
-                      <div class="account-transactions-item-tags-payee" v-if="item.payee">{{ item.payee?.name || '' }}
-                      </div>
+                    <div class="account-transactions-item-check-amount">
+                      <span
+                        :class="'account-transactions-item-check-income ' + (isIncome(item) ? 'income-color' : 'expense-color')">{{ transactionDisplayAmount(item)
+                        }}</span>
+                      <span class="account-transactions-item-check-currency">{{ account.currency.symbol }}</span>
                     </div>
-                    <div>
-                      <q-badge class="account-transactions-item-tags-tag" v-if="item.tag">{{ item.tag?.name || '' }}
+                    <div class="account-transactions-item-check-menu">
+                      <q-btn square flat icon="more_vert" class="account-transactions-item-check-button" @click.stop
+                             v-if="canChangeTransaction && (item.type !== 'transfer' || (item.type === 'transfer' && item.account && item.accountRecipient))">
+                        <q-menu cover auto-close class="account-transactions-item-check-button-menu" :ref="(el) => setMenuRef(el, item.id)">
+                          <q-list class="account-transactions-item-check-button-list">
+                            <q-item clickable @click="openUpdateTransactionModal(item.id)"
+                                    class="account-transactions-item-check-button-item">
+                              <q-item-section class="account-transactions-item-check-button-section">
+                                {{ $t('elements.button.edit.label') }}
+                              </q-item-section>
+                            </q-item>
+                            <q-item clickable @click="openDeleteTransactionModal(item.id)"
+                                    class="account-transactions-item-check-button-item">
+                              <q-item-section class="account-transactions-item-check-button-section -delete">
+                                {{ $t('elements.button.delete.label') }}
+                              </q-item-section>
+                            </q-item>
+                          </q-list>
+                        </q-menu>
+                      </q-btn>
+                    </div>
+                  </div>
+                  <div class="account-transactions-item-info-description-note">{{ item.description }}</div>
+                  <div class="account-transactions-item-tags">
+                    <div class="account-transactions-item-tags-tag-wrapper">
+                      <q-badge class="account-transactions-item-tags-tag econumo-truncate" v-if="item.tag" :title="item.tag?.name || ''">{{ item.tag?.name || '' }}
                       </q-badge>
                     </div>
+                    <div class="account-transactions-item-tags-block">
+                      <div class="account-transactions-item-tags-payee econumo-truncate" v-if="item.payee" :title="item.payee?.name || ''">{{ item.payee?.name || '' }}</div>
+                    </div>
                   </div>
-                  <div class="account-transactions-item-check">
-                    <span
-                      :class="'account-transactions-item-check-income ' + (isIncome(item) ? 'income-color' : 'expense-color')">{{ transactionDisplayAmount(item)
-                      }}</span>
-                    <span class="account-transactions-item-check-currency">{{ account.currency.symbol }}</span>
-                    <q-btn square flat icon="more_vert" class="account-transactions-item-check-button" @click.stop
-                           v-if="canChangeTransaction && (item.type !== 'transfer' || (item.type === 'transfer' && item.account && item.accountRecipient))">
-                      <q-menu cover auto-close class="account-transactions-item-check-button-menu" :ref="(el) => setMenuRef(el, item.id)">
-                        <q-list class="account-transactions-item-check-button-list">
-                          <q-item clickable @click="openUpdateTransactionModal(item.id)"
-                                  class="account-transactions-item-check-button-item">
-                            <q-item-section class="account-transactions-item-check-button-section">
-                              {{ $t('elements.button.edit.label') }}
-                            </q-item-section>
-                          </q-item>
-                          <q-item clickable @click="openDeleteTransactionModal(item.id)"
-                                  class="account-transactions-item-check-button-item">
-                            <q-item-section class="account-transactions-item-check-button-section -delete">
-                              {{ $t('elements.button.delete.label') }}
-                            </q-item-section>
-                          </q-item>
-                        </q-list>
-                      </q-menu>
-                    </q-btn>
-                  </div>
-                </div>
-              </div>
-              <div class="account-transactions-item-tags -mobile">
-                <div>
-                  <q-badge class="account-transactions-item-tags-tag" v-if="item.tag">{{ item.tag?.name || '' }}
-                  </q-badge>
-                </div>
-                <div class="account-transactions-item-tags-block">
-                  <div class="account-transactions-item-tags-payee" v-if="item.payee">{{ item.payee?.name || '' }}</div>
                 </div>
               </div>
             </q-item-section>
