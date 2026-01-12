@@ -3,6 +3,11 @@ on:
   push:
     branches:
       - '*'
+
+concurrency:
+  group: 'build-econumo'
+  cancel-in-progress: true
+
 jobs:
   build-econumo:
     name: Build Econumo
