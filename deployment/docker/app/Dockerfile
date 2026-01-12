@@ -1,5 +1,5 @@
 # Backend development stage
-FROM php:8.2-fpm-alpine AS dev
+FROM php:8.5-fpm-alpine AS dev
 
 EXPOSE 80 9000
 
