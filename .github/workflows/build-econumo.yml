@@ -29,6 +29,11 @@ jobs:
         run: |
           touch src/EconumoCloudBundle/.disabled
 
+      - name: Set Frontend Environment
+        run: |
+          rm -f web/.env
+          cp "web/.env.cloud" web/.env
+
       - name: Build Econumo image for testing
         if: success()
         run: |
