@@ -111,14 +111,9 @@
                 </div>
                 <div class="account-transactions-item-info-description">
                   <div class="account-transactions-item-info-row">
-                    <div class="account-transactions-item-info-description-category econumo-truncate" v-if="item.type !== 'transfer'" :title="item.category?.name || ''">
-                      {{ item.category?.name || '' }}
-                    </div>
-                    <div class="account-transactions-item-info-description-category econumo-truncate" v-if="item.type === 'transfer'" :title="item.type === 'transfer' ? (item.accountId !== selectedAccountId ? $t('pages.account.transaction_list.item.transfer_from') + ' ' + (item.account?.name || $t('elements.account.name_hidden')) : $t('pages.account.transaction_list.item.transfer_to') + ' ' + (item.accountRecipient?.name || $t('elements.account.name_hidden'))) : ''">
-                      {{
-                        (item.accountId !== selectedAccountId ? $t('pages.account.transaction_list.item.transfer_from') + ' ' + (item.account?.name || $t('elements.account.name_hidden')) : $t('pages.account.transaction_list.item.transfer_to') + ' ' + (item.accountRecipient?.name || $t('elements.account.name_hidden')))
-                      }}
-                    </div>
+                  <div class="account-transactions-item-info-description-category econumo-truncate" v-if="transactionTitleInfo(item).text" :title="transactionTitleInfo(item).text">
+                    {{ transactionTitleInfo(item).text }}
+                  </div>
                     <div class="account-transactions-item-check-amount">
                       <span
                         :class="'account-transactions-item-check-income ' + (isIncome(item) ? 'income-color' : 'expense-color')">{{ transactionDisplayAmount(item)
@@ -147,14 +142,14 @@
                       </q-btn>
                     </div>
                   </div>
-                  <div class="account-transactions-item-info-description-note" v-if="item.description">{{ item.description }}</div>
+                  <div class="account-transactions-item-info-description-note" v-if="item.description && transactionTitleInfo(item).source !== 'description'">{{ item.description }}</div>
                   <div class="account-transactions-item-tags">
                     <div class="account-transactions-item-tags-tag-wrapper" v-if="item.tag">
-                      <q-badge class="account-transactions-item-tags-tag econumo-truncate" :title="item.tag?.name || ''">{{ item.tag?.name || '' }}
+                      <q-badge class="account-transactions-item-tags-tag econumo-truncate" v-if="transactionTitleInfo(item).source !== 'tag'" :title="item.tag?.name || ''">{{ item.tag?.name || '' }}
                       </q-badge>
                     </div>
                     <div class="account-transactions-item-tags-block" v-if="item.payee">
-                      <div class="account-transactions-item-tags-payee econumo-truncate" :title="item.payee?.name || ''">{{ item.payee?.name || '' }}</div>
+                      <div class="account-transactions-item-tags-payee econumo-truncate" v-if="transactionTitleInfo(item).source !== 'payee'" :title="item.payee?.name || ''">{{ item.payee?.name || '' }}</div>
                     </div>
                   </div>
                 </div>
@@ -389,6 +384,38 @@ export default defineComponent({
     },
     isTransfer: function(transaction) {
       return transaction.type === 'transfer';
+    },
+    transactionTitleInfo: function(transaction) {
+      if (transaction.type === 'transfer') {
+        return {
+          text: transaction.accountId !== this.selectedAccountId
+            ? this.$t('pages.account.transaction_list.item.transfer_from') + ' ' + (transaction.account?.name || this.$t('elements.account.name_hidden'))
+            : this.$t('pages.account.transaction_list.item.transfer_to') + ' ' + (transaction.accountRecipient?.name || this.$t('elements.account.name_hidden')),
+          source: 'transfer'
+        };
+      }
+
+      const categoryName = transaction.category?.name || '';
+      if (categoryName) {
+        return { text: categoryName, source: 'category' };
+      }
+
+      const description = transaction.description || '';
+      if (description) {
+        return { text: description, source: 'description' };
+      }
+
+      const tagName = transaction.tag?.name || '';
+      if (tagName) {
+        return { text: tagName, source: 'tag' };
+      }
+
+      const payeeName = transaction.payee?.name || '';
+      if (payeeName) {
+        return { text: payeeName, source: 'payee' };
+      }
+
+      return { text: '', source: 'none' };
     },
     openDeleteTransactionModal: function(transactionId) {
       this.closeModal();
