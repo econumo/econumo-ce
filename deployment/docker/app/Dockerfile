@@ -46,8 +46,7 @@ FROM node:25-alpine AS frontend-builder
 
 WORKDIR /build/web
 
-# Install pnpm
-RUN corepack enable && corepack prepare pnpm@10 --activate
+RUN npm install -g pnpm@10
 
 # Copy frontend files
 COPY web/package.json web/pnpm-lock.yaml* ./
