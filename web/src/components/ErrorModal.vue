@@ -1,5 +1,5 @@
 <template>
-  <q-dialog :model-value="true" minimized no-backdrop-dismiss>
+  <q-dialog :model-value="true" minimized :no-backdrop-dismiss="$q.screen.gt.md">
     <div class="econumo-modal form-fail-modal">
       <div class="form-fail-modal-title">
         {{ header }}
@@ -21,6 +21,9 @@
 </template>
 
 <script setup lang="ts">
+import { useQuasar } from 'quasar';
+
+const $q = useQuasar();
 
 defineOptions({
   name: 'ErrorModal'

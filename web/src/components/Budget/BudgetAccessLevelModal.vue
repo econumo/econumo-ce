@@ -1,5 +1,5 @@
 <template>
-  <q-dialog class="account-access-dialog-modal" :model-value="true" @hide="$emit('cancel')" no-backdrop-dismiss>
+  <q-dialog class="account-access-dialog-modal" :model-value="true" @hide="$emit('cancel')" :no-backdrop-dismiss="$q.screen.gt.md">
     <q-card class="account-access-dialog-modal-card" v-if="user">
       <q-card-section class="account-access-dialog-modal-section -padding">
         <div class="account-access-dialog-modal-user">
@@ -42,10 +42,13 @@
 </template>
 
 <script setup lang="ts">
+import { useQuasar } from 'quasar';
 import { Id } from '@shared/types';
 import { AccessRole } from '@shared/dto/access.dto';
 import { UserDto } from '@shared/dto/user.dto';
 import { useAvatar } from '../../composables/useAvatar';
+
+const $q = useQuasar();
 
 defineOptions({
   name: 'BudgetAccessLevelModal'

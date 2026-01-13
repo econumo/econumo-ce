@@ -1,6 +1,6 @@
 <template>
   <q-dialog class="responsive-modal" :model-value="true" @hide="cancel"
-            :position="$q.screen.gt.sm ? 'standard' : 'bottom'" no-backdrop-dismiss>
+            :position="$q.screen.gt.sm ? 'standard' : 'bottom'" :no-backdrop-dismiss="$q.screen.gt.md">
     <q-card class="budget-transaction-list">
       <q-card-section class="budget-transaction-list-header">
         <div class="budget-transaction-list-header-name">{{ selectedElement.name }}</div>

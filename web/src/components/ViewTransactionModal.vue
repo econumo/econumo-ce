@@ -1,5 +1,5 @@
 <template>
-  <q-dialog class="account-preview-modal" :model-value="true" :position="position" @hide="cancel" no-backdrop-dismiss>
+  <q-dialog class="account-preview-modal" :model-value="true" :position="position" @hide="cancel" :no-backdrop-dismiss="$q.screen.gt.md">
     <q-card class="account-preview-modal-card">
       <q-card-section class="account-preview-modal-section">
         <div class="account-preview-modal-head">
@@ -91,6 +91,7 @@
 </template>
 
 <script setup lang="ts">
+import { useQuasar } from 'quasar';
 import { AccountDto } from '@shared/dto/account.dto';
 import { useAvatar } from '../composables/useAvatar';
 import { useMoney } from '../composables/useMoney';
@@ -99,6 +100,8 @@ import { TransactionDto } from '@shared/dto/transaction.dto';
 import { CategoryDto } from '@shared/dto/category.dto';
 import { PayeeDto } from '@shared/dto/payee.dto';
 import { TagDto } from '@shared/dto/tag.dto';
+
+const $q = useQuasar();
 
 interface Transaction extends TransactionDto {
   category: CategoryDto;

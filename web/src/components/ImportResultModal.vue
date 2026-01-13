@@ -1,5 +1,5 @@
 <template>
-  <q-dialog :model-value="true" no-backdrop-dismiss>
+  <q-dialog :model-value="true" :no-backdrop-dismiss="$q.screen.gt.md">
     <div class="econumo-modal import-result-modal">
       <div class="import-result-modal-icon">
         <q-icon
@@ -59,6 +59,9 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { useQuasar } from 'quasar'
+
+const $q = useQuasar()
 
 defineOptions({
   name: 'ImportResultModal'

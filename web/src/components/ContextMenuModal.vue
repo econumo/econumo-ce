@@ -1,5 +1,5 @@
 <template>
-  <q-dialog :model-value="true" @hide="$emit('cancel')" class="context-menu-modal" no-backdrop-dismiss>
+  <q-dialog :model-value="true" @hide="$emit('cancel')" class="context-menu-modal" :no-backdrop-dismiss="$q.screen.gt.md">
     <q-card class="context-menu-modal-card">
       <div class="context-menu-modal-card-label">{{ headerLabel }}</div>
       <ul class="context-menu-modal-card-list">
@@ -15,6 +15,9 @@
 </template>
 
 <script setup lang="ts">
+import { useQuasar } from 'quasar';
+
+const $q = useQuasar();
 
 interface ActionItem {
   value: string;
