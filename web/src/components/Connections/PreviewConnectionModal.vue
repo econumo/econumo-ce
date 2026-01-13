@@ -1,5 +1,5 @@
 <template>
-  <q-dialog class="settings-connections-modal" :model-value="isOpened" @update:model-value="$emit('update:isOpened', $event)" @hide="onHide" :position="$q.screen.gt.md ? 'standard' : 'bottom'" no-backdrop-dismiss>
+  <q-dialog class="settings-connections-modal" :model-value="isOpened" @update:model-value="$emit('update:isOpened', $event)" @hide="onHide" :position="$q.screen.gt.md ? 'standard' : 'bottom'" :no-backdrop-dismiss="$q.screen.gt.md">
     <q-card class="settings-connections-modal-card" v-if="connection">
         <q-card-section class="settings-connections-modal-section">
         <div class="settings-connections-modal-card-container">

@@ -1,5 +1,5 @@
 <template>
-  <q-dialog class="account-access-dialog-modal" :model-value="true" @hide="$emit('cancel')" no-backdrop-dismiss>
+  <q-dialog class="account-access-dialog-modal" :model-value="true" @hide="$emit('cancel')" :no-backdrop-dismiss="$q.screen.gt.md">
     <q-card class="account-access-dialog-modal-card">
       <q-card-section class="account-access-dialog-modal-section -padding">
         <div class="account-access-dialog-modal-user">
@@ -43,13 +43,15 @@
 
 <script>
 import { defineComponent } from 'vue'
+import { useQuasar } from 'quasar';
 import { useAvatar } from '../composables/useAvatar';
 
 export default defineComponent({
   props: ['user', 'itemId', 'role'],
   setup() {
+    const $q = useQuasar();
     const { avatarUrl } = useAvatar();
-    return { avatarUrl };
+    return { $q, avatarUrl };
   }
 })
 </script>
