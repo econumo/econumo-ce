@@ -185,8 +185,10 @@
         v-if="previewTransactionModal.isOpened"
         :position="$q.screen.gt.md ? 'standard' : 'bottom'"
         :transaction="previewTransactionModal.transaction"
-        :account="previewTransactionModal.account"
-        :account-recipient="previewTransactionModal.accountRecipient"
+        v-bind="{
+          ...(previewTransactionModal.account ? { account: previewTransactionModal.account } : {}),
+          ...(previewTransactionModal.accountRecipient ? { accountRecipient: previewTransactionModal.accountRecipient } : {})
+        }"
         :can-change-transaction="canChangeTransaction"
         v-on:cancel="closeModal"
         v-on:update="openUpdateTransactionModal"

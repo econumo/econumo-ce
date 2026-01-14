@@ -22,7 +22,7 @@ export default {
   'elements': {
     'econumo': { 'label': 'Econumo' },
     'folders': { 'default_folder': 'All accounts' },
-    'account': { 'name_hidden': '[hidden]' },
+    'account': { 'name_hidden': '[Hidden Account]' },
     'switch_to_account': 'Switch to',
     'form': {
       'account': {
@@ -119,8 +119,8 @@ export default {
         'today': 'Today',
         'yesterday': 'Yesterday',
         'item': {
-          'transfer_from': 'Transfer from account',
-          'transfer_to': 'Transfer to account'
+          'transfer_from': 'Transfer from ',
+          'transfer_to': 'Transfer to '
         },
         'action': { 'add_transaction': 'Add transaction' }
       },

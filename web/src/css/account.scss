@@ -692,6 +692,8 @@
         padding: 8px 12px;
         background: $color-grey;
         border-radius: 8px;
+        display: flex;
+        align-items: center;
 
         &-avatar {
           min-width: 24px;
@@ -702,6 +704,9 @@
         &-box {
           display: flex;
           flex-direction: column;
+          min-width: 0;
+          flex: 1 1 auto;
+          width: 100%;
 
           &-name {
             font-weight: 400;
@@ -709,6 +714,8 @@
             line-height: 16px;
             color: $color-text-black;
             margin-bottom: 4px;
+            max-width: 100%;
+            width: 100%;
           }
 
           &-balance {
@@ -718,6 +725,9 @@
             line-height: 16px;
             color: $color-input-grey;
             padding-left: 0 !important;
+            margin-left: 0 !important;
+            width: 100%;
+            text-align: left;
           }
         }
       }
@@ -749,11 +759,21 @@
 
             &.-tags {
               padding: 4px 8px;
-              width: fit-content;
+              width: auto;
+              max-width: 100%;
               background: $color-grey;
               border-radius: 4px;
               text-transform: uppercase;
             }
+          }
+
+          &-content.econumo-truncate {
+            display: block;
+            max-width: 100%;
+          }
+
+          &-content.-tags.econumo-truncate {
+            display: inline-block;
           }
         }
       }
