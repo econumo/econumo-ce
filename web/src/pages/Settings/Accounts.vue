@@ -198,7 +198,7 @@
                              v-on:submit="renameFolder"
         />
 
-        <q-dialog class="preview-modal" v-model="previewAccountModal.isOpened" :position="$q.screen.gt.md ? 'standard' : 'bottom'" :no-backdrop-dismiss="$q.screen.gt.md">
+        <q-dialog class="preview-modal" v-model="previewAccountModal.isOpened" :position="$q.screen.gt.md ? 'standard' : 'bottom'">
           <q-card class="preview-modal-card">
 
 <!--            Плашка "Доступ"-->
