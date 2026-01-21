@@ -1348,56 +1348,85 @@ $budget-table-column-width: 150px;
             }
           }
 
-          &-category {
+          &-details {
             display: flex;
             flex-direction: column;
             margin-left: 5px;
+            flex: 1;
+            min-width: 0;
+            overflow: hidden;
 
-            &-name {
+            &-category {
               color: $color-text-black;
-              margin: 2px 0 3px 0;
-              flex-direction: row;
+              margin: 2px 0;
+              min-width: 0;
+              overflow: hidden;
             }
 
             &-description {
               color: $color-text-grey;
               font-size: 14px;
               line-height: 16px;
-              flex-direction: row;
-              margin-top: 4px;
+              margin-top: 2px;
+              min-width: 0;
+              overflow: hidden;
             }
 
-            &-author {
+            &-tag {
+              padding: 2px 4px;
+              background: $color-light-grey;
+              border-radius: 4px;
+              font-style: normal;
+              font-weight: 400;
+              font-size: 11px;
+              line-height: 13px;
+              text-transform: uppercase;
+              color: $color-input-grey;
+              margin-top: 4px;
+              display: inline-flex;
+              align-self: flex-start;
+              align-items: center;
+              max-width: 100%;
+              min-width: 0;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              white-space: nowrap;
+            }
+
+            &-payee {
               color: $color-text-grey;
               font-size: 14px;
               line-height: 16px;
-              flex-direction: row;
               margin-top: 2px;
+              min-width: 0;
+              overflow: hidden;
+            }
+
+            &-author {
+              display: flex;
+              align-items: center;
+              color: $color-text-grey;
+              font-size: 14px;
+              line-height: 16px;
+              margin-top: 2px;
+              min-width: 0;
+              overflow: hidden;
 
               &-avatar {
                 width: 22px;
                 height: 22px;
                 border-radius: 32px;
-                margin-right: 1px;
+                margin-right: 4px;
+                flex-shrink: 0;
                 & img {
                   border: 2px solid $color-grey;
                 }
               }
-            }
-          }
 
-          &-payee {
-            display: flex;
-            flex-direction: column;
-            width: fit-content;
-            align-content: center;
-            text-align: center;
-            //align-items: center;
-
-            &-name {
-              color: $color-text-grey;
-              font-size: 14px;
-              align-self: center;
+              &-name {
+                min-width: 0;
+                overflow: hidden;
+              }
             }
           }
 
