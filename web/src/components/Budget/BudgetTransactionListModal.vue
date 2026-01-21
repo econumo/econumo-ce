@@ -3,7 +3,7 @@
             :position="$q.screen.gt.sm ? 'standard' : 'bottom'">
     <q-card class="budget-transaction-list">
       <q-card-section class="budget-transaction-list-header">
-        <div class="budget-transaction-list-header-name">{{ selectedElement.name }}</div>
+        <div class="budget-transaction-list-header-name econumo-truncate" :title="selectedElement.name">{{ selectedElement.name }}</div>
         <div class="budget-transaction-list-header-amount"
              v-html="moneyHTML(selectedElement.spent, currencyId, true, true)">
         </div>

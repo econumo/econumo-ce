@@ -1249,6 +1249,8 @@ $budget-table-column-width: 150px;
         flex-grow: 1;
         margin-top: auto;
         margin-bottom: auto;
+        min-width: 0;
+        overflow: hidden;
       }
 
       &-amount {
