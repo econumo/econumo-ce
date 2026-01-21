@@ -151,6 +151,7 @@
         line-height: 19px;
         color: $color-text-black;
         min-width: 0;
+        overflow: hidden;
 
         &.-archived {
           display: flex;
@@ -161,6 +162,10 @@
 
       &-name {
         display: block;
+        max-width: calc(100% - 60px);
+        @include responsive(desktop) {
+          max-width: calc(100% - 80px);
+        }
       }
 
       & .q-toggle__thumb:before {
