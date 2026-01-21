@@ -465,7 +465,9 @@ $budget-table-column-width: 150px;
 
         &-item-wrapper {
           display: flex;
-          width: 100%;
+          flex: 1;
+          min-width: 0;
+          overflow: hidden;
           border-radius: 8px;
           padding: 8px 12px;
         }
@@ -504,13 +506,16 @@ $budget-table-column-width: 150px;
 
           &-avatar {
             min-width: 24px;
+            flex-shrink: 0;
             color: $color-input-grey;
             padding-right: 0;
             margin-right: 16px;
           }
 
           &-info {
-            width: 100%;
+            flex: 1;
+            min-width: 0;
+            overflow: hidden;
 
             &-container {
               display: flex;
@@ -561,6 +566,14 @@ $budget-table-column-width: 150px;
             display: flex;
             flex-direction: row;
             justify-content: flex-start;
+            min-width: 0;
+            overflow: hidden;
+          }
+
+          &-name-text {
+            display: block;
+            min-width: 0;
+            max-width: 100%;
           }
 
           &-currency {
