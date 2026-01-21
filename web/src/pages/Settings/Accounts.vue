@@ -104,7 +104,6 @@
                         <div class="settings-accounts-account-list-item-info">
                           <q-item-section class="settings-accounts-account-list-item-name">
                             <span class="settings-accounts-account-list-item-name-text econumo-truncate" :title="element.name">{{ element.name }}</span>
-                            <q-icon v-if="element.sharedAccess.length > 0 && econumoPackage.includesSharedAccess" class="settings-accounts-account-list-item-shared-icon" name="link"/>
                           </q-item-section>
                           <div class="settings-accounts-account-list-item-info-container">
                             <q-item-section class="settings-accounts-account-list-item-balance">{{ moneyFormat(element.balance, element.currency.id, true, false) }}</q-item-section>
