@@ -50,7 +50,7 @@
                 @filter-abort="filterCategoriesAbort">
         <template v-slot:selected-item="scope">
           <span v-if="scope.index === 0 && !isCategoriesPopupOpen" class="budget-envelope-categories-count">
-            {{ selectedCategories.length }} selected
+            {{ $t('modules.budget.form.budget_envelope.categories.selected', { count: selectedCategories.length }) }}
           </span>
           <span v-else-if="scope.index > 0 && !isCategoriesPopupOpen"></span>
         </template>

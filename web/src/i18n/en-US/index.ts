@@ -554,6 +554,7 @@ export default {
           },
           'categories': {
             'label': 'Categories',
+            'selected': '{count} selected',
           },
           'icon': {
             'label': 'Icon',
