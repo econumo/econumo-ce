@@ -361,9 +361,10 @@
           overflow: hidden;
           text-overflow: ellipsis;
           white-space: nowrap;
-          display: block;
           height: 20px;
           line-height: 20px;
+          flex: 0 1 auto;
+          min-width: 0;
         }
 
         & .q-field__control-container {
@@ -373,6 +374,7 @@
         & .q-field__input {
           height: 20px;
           line-height: 20px;
+          flex: 1 0 auto;
         }
       }
     }
