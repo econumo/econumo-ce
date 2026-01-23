@@ -119,8 +119,8 @@ export default {
         'today': 'Today',
         'yesterday': 'Yesterday',
         'item': {
-          'transfer_from': 'Transfer from ',
-          'transfer_to': 'Transfer to '
+          'transfer_from': 'Transfer from {account}',
+          'transfer_to': 'Transfer to {account}'
         },
         'action': { 'add_transaction': 'Add transaction' }
       },

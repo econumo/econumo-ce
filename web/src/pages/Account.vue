@@ -389,10 +389,14 @@ export default defineComponent({
     },
     transactionTitleInfo: function(transaction) {
       if (transaction.type === 'transfer') {
+        const accountName = transaction.accountId !== this.selectedAccountId
+          ? (transaction.account?.name || this.$t('elements.account.name_hidden'))
+          : (transaction.accountRecipient?.name || this.$t('elements.account.name_hidden'));
+        const translationKey = transaction.accountId !== this.selectedAccountId
+          ? 'pages.account.transaction_list.item.transfer_from'
+          : 'pages.account.transaction_list.item.transfer_to';
         return {
-          text: transaction.accountId !== this.selectedAccountId
-            ? this.$t('pages.account.transaction_list.item.transfer_from') + ' ' + (transaction.account?.name || this.$t('elements.account.name_hidden'))
-            : this.$t('pages.account.transaction_list.item.transfer_to') + ' ' + (transaction.accountRecipient?.name || this.$t('elements.account.name_hidden')),
+          text: this.$t(translationKey, { account: accountName }),
           source: 'transfer'
         };
       }
