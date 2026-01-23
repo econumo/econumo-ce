@@ -13,7 +13,7 @@
                   val => isNotEmpty(val) || $t('modules.budget.form.budget_envelope.name.validation.required_field'),
                   val => isValidBudgetEnvelopeName(val) || $t('modules.budget.form.budget_envelope.name.validation.invalid_name')
                 ]"
-        maxlength="18">
+        maxlength="64">
         <template v-slot:before>
           <div class="responsive-modal-control-icon">
             <q-icon class="responsive-modal-control-icon-img" :name="icon"/>
@@ -34,6 +34,7 @@
     <div class="responsive-modal-control">
       <q-select class="form-select budget-envelope-categories"
                 outlined
+                ref="categoriesSelect"
                 v-model="selectedCategories"
                 use-input
                 multiple
@@ -41,8 +42,18 @@
                 map-options
                 :options="categoriesOptions"
                 :label="$t('modules.budget.form.budget_envelope.categories.label')"
+                popup-content-class="modal-popup budget-envelope-categories-popup"
+                :popup-content-style="categoriesPopupStyle"
+                @popup-show="onCategoriesPopupShow"
+                @popup-hide="onCategoriesPopupHide"
                 @filter="filterCategories"
                 @filter-abort="filterCategoriesAbort">
+        <template v-slot:selected-item="scope">
+          <span v-if="scope.index === 0 && !isCategoriesPopupOpen" class="budget-envelope-categories-count">
+            {{ $t('modules.budget.form.budget_envelope.categories.selected', { count: selectedCategories.length }) }}
+          </span>
+          <span v-else-if="scope.index > 0 && !isCategoriesPopupOpen"></span>
+        </template>
         <template v-slot:option="scope">
           <q-item v-bind="scope.itemProps" clickable @click="handleSelection(!scope.selected, scope.opt)">
             <q-item-section avatar class="budget-envelope-modal-control-avatar">
@@ -52,7 +63,7 @@
               <q-avatar size="30px" :icon="scope.opt.icon" v-else />
             </q-item-section>
             <q-item-section>
-              <q-item-label>{{ scope.opt.label }}</q-item-label>
+              <q-item-label class="econumo-truncate" :title="scope.opt.label">{{ scope.opt.label }}</q-item-label>
             </q-item-section>
             <q-item-section side>
               <q-toggle class="budget-envelope-categories-toggle" :model-value="scope.selected"
@@ -67,7 +78,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue';
+import { computed, ref, nextTick } from 'vue';
 import { navigationMixin } from '../../mixins/navigationMixin';
 import { Id } from '../../modules/types';
 import { BudgetElementDto } from '../../modules/api/v1/dto/budget.dto';
@@ -139,6 +150,9 @@ const currency = computed({
 
 const categoriesStore = useCategoriesStore();
 const categorySearchFilter = ref('');
+const categoriesSelect = ref<InstanceType<typeof import('quasar').QSelect> | null>(null);
+const categoriesPopupStyle = ref('');
+const isCategoriesPopupOpen = ref(false);
 
 function filterCategories(val: string, update: (fn: () => void) => void): void {
   update(() => {
@@ -148,6 +162,35 @@ function filterCategories(val: string, update: (fn: () => void) => void): void {
 
 function filterCategoriesAbort(): void {
   categorySearchFilter.value = '';
+}
+
+function setCategoriesPopupWidth(): void {
+  const selectEl = categoriesSelect.value?.$el;
+  if (!selectEl) {
+    return;
+  }
+  const widthSource = selectEl.querySelector('.q-field__control') || selectEl;
+  const popupEl = document.querySelector('.budget-envelope-categories-popup');
+  const dialogEl = popupEl?.closest('.q-select__dialog');
+  if (dialogEl) {
+    categoriesPopupStyle.value = 'width: 100% !important; max-width: 100% !important;';
+    return;
+  }
+  const width = Math.max(0, Math.round(widthSource.getBoundingClientRect().width));
+  categoriesPopupStyle.value = `width: ${width}px; max-width: ${width}px;`;
+}
+
+function onCategoriesPopupShow(): void {
+  isCategoriesPopupOpen.value = true;
+  setCategoriesPopupWidth();
+}
+
+function onCategoriesPopupHide(): void {
+  isCategoriesPopupOpen.value = false;
+  categorySearchFilter.value = '';
+  nextTick(() => {
+    categoriesSelect.value?.updateInputValue('', true);
+  });
 }
 
 const categoriesOptions = computed(() => {

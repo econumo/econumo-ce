@@ -60,6 +60,16 @@
         font-size: 16px;
         line-height: 16px;
         color: $color-text-black;
+        min-width: 0;
+      }
+
+      &-name {
+        display: flex;
+        align-items: center;
+        min-width: 0;
+        gap: 4px;
+        max-width: calc(100% - 80px);
+        overflow: hidden;
       }
 
       &-controls {
@@ -98,7 +108,9 @@
 
       &-item-wrapper {
         display: flex;
-        width: 100%;
+        flex: 1;
+        min-width: 0;
+        overflow: hidden;
         background: $color-grey;
         border-radius: 8px;
         padding: 8px 12px;
@@ -141,13 +153,20 @@
 
         &-avatar {
           min-width: 24px;
+          flex-shrink: 0;
           color: $color-input-grey;
           padding-right: 0;
           margin-right: 16px;
         }
 
         &-info {
-          width: 100%;
+          flex: 1;
+          min-width: 0;
+          overflow: hidden;
+          padding-right: 70px;
+          @include responsive(desktop) {
+            padding-right: 90px;
+          }
 
           &-container {
             display: flex;
@@ -173,6 +192,15 @@
           display: flex;
           flex-direction: row;
           justify-content: flex-start;
+          min-width: 0;
+          align-items: center;
+          overflow: hidden;
+        }
+
+        &-name-text {
+          display: block;
+          min-width: 0;
+          max-width: 100%;
         }
 
         &-currency {

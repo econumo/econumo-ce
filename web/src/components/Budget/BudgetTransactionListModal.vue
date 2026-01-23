@@ -3,7 +3,7 @@
             :position="$q.screen.gt.sm ? 'standard' : 'bottom'">
     <q-card class="budget-transaction-list">
       <q-card-section class="budget-transaction-list-header">
-        <div class="budget-transaction-list-header-name">{{ selectedElement.name }}</div>
+        <div class="budget-transaction-list-header-name econumo-truncate" :title="selectedElement.name">{{ selectedElement.name }}</div>
         <div class="budget-transaction-list-header-amount"
              v-html="moneyHTML(selectedElement.spent, currencyId, true, true)">
         </div>
@@ -30,23 +30,24 @@
 
             <q-item class="budget-transaction-list-body-transactions-item" v-if="!item.isSeparator" :key="item.id"
                     :clickable="$q.screen.lt.lg">
-              <div class="budget-transaction-list-body-transactions-item-category">
-                <div class="budget-transaction-list-body-transactions-item-category-name">
+              <div class="budget-transaction-list-body-transactions-item-details">
+                <div class="budget-transaction-list-body-transactions-item-details-category econumo-truncate" :title="item.category?.name || ''">
                   {{ item.category?.name || '' }}
                 </div>
-                <div class="budget-transaction-list-body-transactions-item-category-description">
+                <div class="budget-transaction-list-body-transactions-item-details-description econumo-truncate" v-if="item.description" :title="item.description">
                   {{ item.description }}
                 </div>
-                <div class="budget-transaction-list-body-transactions-item-category-author" v-if="item.author?.id && access.length > 1">
-                  <q-avatar class="budget-transaction-list-body-transactions-item-category-author-avatar">
+                <q-badge class="budget-transaction-list-body-transactions-item-details-tag econumo-truncate" v-if="item.tag" :title="item.tag.name">
+                  {{ item.tag.name }}
+                </q-badge>
+                <div class="budget-transaction-list-body-transactions-item-details-payee econumo-truncate" v-if="item.payee" :title="item.payee.name || ''">
+                  {{ item.payee.name || '' }}
+                </div>
+                <div class="budget-transaction-list-body-transactions-item-details-author" v-if="item.author?.id && access.length > 1">
+                  <q-avatar class="budget-transaction-list-body-transactions-item-details-author-avatar">
                     <img :src="avatarUrl(item.author.avatar, 30)" :title="item.author.name" :alt="item.author.name" width="30" height="30" />
                   </q-avatar>
-                  {{ item.author.name }}
-                </div>
-              </div>
-              <div class="budget-transaction-list-body-transactions-item-payee">
-                <div class="budget-transaction-list-body-transactions-item-payee-name" v-if="item.payee">
-                  {{ item.payee.name || '' }}
+                  <span class="budget-transaction-list-body-transactions-item-details-author-name econumo-truncate">{{ item.author.name }}</span>
                 </div>
               </div>
               <div class="budget-transaction-list-body-transactions-item-amount">

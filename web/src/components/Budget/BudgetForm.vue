@@ -14,7 +14,7 @@
           val => isNotEmpty(val.toString()) || $t('modules.budget.form.budget.name.validation.required_field'),
           val => isValidBudgetName(val.toString()) || $t('modules.budget.form.budget.name.validation.invalid_name')
         ]"
-        maxlength="18">
+        maxlength="64">
       </q-input>
     </div>
 
@@ -36,7 +36,7 @@
         </q-item-section>
         <div class="budget-form-wrapper-accounts-item-info">
           <q-item-section class="budget-form-wrapper-accounts-item-name">
-            {{ account.name }}
+            <span class="budget-form-wrapper-accounts-item-name-text econumo-truncate" :title="account.name">{{ account.name }}</span>
           </q-item-section>
           <div class="budget-form-wrapper-accounts-item-info-container">
             <q-item-section class="budget-form-wrapper-accounts-item-balance">

@@ -150,11 +150,21 @@
         font-size: 16px;
         line-height: 19px;
         color: $color-text-black;
+        min-width: 0;
+        overflow: hidden;
 
         &.-archived {
           display: flex;
           flex-direction: column;
           flex-wrap: nowrap;
+        }
+      }
+
+      &-name {
+        display: block;
+        max-width: calc(100% - 60px);
+        @include responsive(desktop) {
+          max-width: calc(100% - 80px);
         }
       }
 

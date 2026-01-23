@@ -34,7 +34,10 @@
           <div class="settings-accounts-account" v-for="(tree, index) in accountsTree" v-bind:key="tree.id">
             <q-item class="settings-accounts-account-head cursor-pointer">
               <q-item-section class="settings-accounts-account-head-title">
-                <span><q-icon name="visibility_off" v-if="!tree.folder.isVisible" left @click="showFolder(tree.folder.id)"/> {{ tree.folder.name }}</span>
+                <span class="settings-accounts-account-head-name">
+                  <q-icon name="visibility_off" v-if="!tree.folder.isVisible" left @click="showFolder(tree.folder.id)"/>
+                  <span class="econumo-truncate" :title="tree.folder.name">{{ tree.folder.name }}</span>
+                </span>
               </q-item-section>
               <div class="settings-accounts-account-head-controls">
                 <q-item-section class="settings-accounts-account-head-control">
@@ -100,8 +103,7 @@
                         </q-item-section>
                         <div class="settings-accounts-account-list-item-info">
                           <q-item-section class="settings-accounts-account-list-item-name">
-                            {{ element.name }}
-                            <q-icon v-if="element.sharedAccess.length > 0 && econumoPackage.includesSharedAccess" class="settings-accounts-account-list-item-shared-icon" name="link"/>
+                            <span class="settings-accounts-account-list-item-name-text econumo-truncate" :title="element.name">{{ element.name }}</span>
                           </q-item-section>
                           <div class="settings-accounts-account-list-item-info-container">
                             <q-item-section class="settings-accounts-account-list-item-balance">{{ moneyFormat(element.balance, element.currency.id, true, false) }}</q-item-section>
@@ -685,4 +687,3 @@ export default defineComponent({
   }
 })
 </script>
-

@@ -130,6 +130,10 @@ $budget-table-column-width: 150px;
           color: $color-text-black;
           text-transform: uppercase;
           margin: 0;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          min-width: 0;
 
           & .q-field__native span {
             font-style: normal;
@@ -139,6 +143,10 @@ $budget-table-column-width: 150px;
             color: $color-text-black;
             text-transform: uppercase;
           }
+        }
+
+        &-name {
+          max-width: clamp(140px, 60vw, 320px);
         }
       }
     }
@@ -166,6 +174,10 @@ $budget-table-column-width: 150px;
           color: $color-text-black;
           margin: 0;
           align-self: center;
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          min-width: 0;
 
           & .q-field__native span {
             font-style: normal;
@@ -175,6 +187,10 @@ $budget-table-column-width: 150px;
             text-transform: uppercase;
             color: $color-text-black;
           }
+        }
+
+        &-name {
+          max-width: clamp(200px, 40vw, 520px);
         }
 
         &-icon {
@@ -187,6 +203,7 @@ $budget-table-column-width: 150px;
           font-size: 12px;
           font-weight: 500;
           cursor: pointer;
+          flex: 0 0 auto;
 
           &-active {
             background-color: $color-background-grey;
@@ -448,7 +465,9 @@ $budget-table-column-width: 150px;
 
         &-item-wrapper {
           display: flex;
-          width: 100%;
+          flex: 1;
+          min-width: 0;
+          overflow: hidden;
           border-radius: 8px;
           padding: 8px 12px;
         }
@@ -487,13 +506,16 @@ $budget-table-column-width: 150px;
 
           &-avatar {
             min-width: 24px;
+            flex-shrink: 0;
             color: $color-input-grey;
             padding-right: 0;
             margin-right: 16px;
           }
 
           &-info {
-            width: 100%;
+            flex: 1;
+            min-width: 0;
+            overflow: hidden;
 
             &-container {
               display: flex;
@@ -544,6 +566,14 @@ $budget-table-column-width: 150px;
             display: flex;
             flex-direction: row;
             justify-content: flex-start;
+            min-width: 0;
+            overflow: hidden;
+          }
+
+          &-name-text {
+            display: block;
+            min-width: 0;
+            max-width: 100%;
           }
 
           &-currency {
@@ -1219,6 +1249,8 @@ $budget-table-column-width: 150px;
         flex-grow: 1;
         margin-top: auto;
         margin-bottom: auto;
+        min-width: 0;
+        overflow: hidden;
       }
 
       &-amount {
@@ -1316,56 +1348,85 @@ $budget-table-column-width: 150px;
             }
           }
 
-          &-category {
+          &-details {
             display: flex;
             flex-direction: column;
             margin-left: 5px;
+            flex: 1;
+            min-width: 0;
+            overflow: hidden;
 
-            &-name {
+            &-category {
               color: $color-text-black;
-              margin: 2px 0 3px 0;
-              flex-direction: row;
+              margin: 2px 0;
+              min-width: 0;
+              overflow: hidden;
             }
 
             &-description {
               color: $color-text-grey;
               font-size: 14px;
               line-height: 16px;
-              flex-direction: row;
-              margin-top: 4px;
+              margin-top: 2px;
+              min-width: 0;
+              overflow: hidden;
             }
 
-            &-author {
+            &-tag {
+              padding: 2px 4px;
+              background: $color-light-grey;
+              border-radius: 4px;
+              font-style: normal;
+              font-weight: 400;
+              font-size: 11px;
+              line-height: 13px;
+              text-transform: uppercase;
+              color: $color-input-grey;
+              margin-top: 4px;
+              display: inline-flex;
+              align-self: flex-start;
+              align-items: center;
+              max-width: 100%;
+              min-width: 0;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              white-space: nowrap;
+            }
+
+            &-payee {
               color: $color-text-grey;
               font-size: 14px;
               line-height: 16px;
-              flex-direction: row;
               margin-top: 2px;
+              min-width: 0;
+              overflow: hidden;
+            }
+
+            &-author {
+              display: flex;
+              align-items: center;
+              color: $color-text-grey;
+              font-size: 14px;
+              line-height: 16px;
+              margin-top: 2px;
+              min-width: 0;
+              overflow: hidden;
 
               &-avatar {
                 width: 22px;
                 height: 22px;
                 border-radius: 32px;
-                margin-right: 1px;
+                margin-right: 4px;
+                flex-shrink: 0;
                 & img {
                   border: 2px solid $color-grey;
                 }
               }
-            }
-          }
 
-          &-payee {
-            display: flex;
-            flex-direction: column;
-            width: fit-content;
-            align-content: center;
-            text-align: center;
-            //align-items: center;
-
-            &-name {
-              color: $color-text-grey;
-              font-size: 14px;
-              align-self: center;
+              &-name {
+                min-width: 0;
+                overflow: hidden;
+              }
             }
           }
 
