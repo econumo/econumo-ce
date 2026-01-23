@@ -327,7 +327,7 @@
       &-container {
         display: flex;
         align-items: flex-start;
-        column-gap: 12px;
+        column-gap: 20px;
         min-width: 0;
         overflow: hidden;
         width: 100%;
@@ -500,7 +500,7 @@
       }
 
       &-tags {
-        margin-top: 6px;
+        margin-top: 2px;
         display: flex;
         flex-direction: column;
         align-items: flex-start;
