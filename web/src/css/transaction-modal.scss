@@ -375,6 +375,14 @@
           height: 20px;
           line-height: 20px;
           flex: 1 0 auto;
+          color: inherit;
+        }
+
+        // Hide and collapse selected value when focused
+        &.q-field--focused .q-field__native > span {
+          visibility: hidden;
+          width: 0;
+          display: inline-block;
         }
       }
     }
