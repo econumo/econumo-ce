@@ -257,8 +257,12 @@
     background-color: $color-white;
     min-width: 0;
     overflow-x: hidden;
-    will-change: scroll-position;
+    overflow-y: auto;
     -webkit-overflow-scrolling: touch;
+    padding-bottom: 80px;
+    @include responsive(desktop) {
+      padding-bottom: 0;
+    }
 
     &-date {
       width: 100%;

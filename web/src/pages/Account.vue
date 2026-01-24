@@ -84,24 +84,16 @@
       </div>
 
       <!-- transactions list -->
-      <q-virtual-scroll
-        class="account-transactions"
-        :items="accountTransactionsDailyList"
-        ref="transactionList"
-        :virtual-scroll-item-size="60"
-        :virtual-scroll-slice-size="60"
-        :virtual-scroll-slice-ratio-before="2"
-        :virtual-scroll-slice-ratio-after="2"
-      >
-        <template v-slot="{ item }">
-          <q-item-label class="account-transactions-date" header v-if="item.isSeparator" :key="'separator-' + item.id">
-              <span class="account-transactions-date-content" v-show="item.alias !== 'none'" :key="'alias-' + item.id">{{
+      <div class="account-transactions">
+        <template v-for="item in accountTransactionsDailyList" :key="item.id">
+          <q-item-label class="account-transactions-date" header v-if="item.isSeparator">
+              <span class="account-transactions-date-content" v-show="item.alias !== 'none'">{{
                   $t('pages.account.transaction_list.' + (item.alias))
                 }}</span>
-            <span class="account-transactions-date-content" v-show="item.alias === 'none'" :key="'date-' + item.id">{{ item.date }}</span>
+            <span class="account-transactions-date-content" v-show="item.alias === 'none'">{{ item.date }}</span>
           </q-item-label>
 
-          <q-item :class="'account-transactions-item ' + (item.isInFuture ? 'account-transactions-item-future' : '')" v-else :key="item.id" clickable
+          <q-item :class="'account-transactions-item ' + (item.isInFuture ? 'account-transactions-item-future' : '')" v-else clickable
                   @click="handleTransactionClick(item)">
             <q-item-section class="account-transactions-item-section">
               <div class="account-transactions-item-container">
@@ -161,7 +153,7 @@
             </q-item-section>
           </q-item>
         </template>
-      </q-virtual-scroll>
+      </div>
 
       <div class="account-transactions-add-mobile" v-if="canChangeTransaction">
         <q-btn class="account-transactions-add-mobile-btn econumo-btn -medium -magenta" flat
@@ -278,11 +270,6 @@ export default defineComponent({
       if (to.name === 'account' && (from.name !== to.name || from.params.id !== to.params.id)) {
         useAccountsStore().selectAccount(to.params.id);
         this.search = '';
-      }
-    },
-    accountTransactionsDailyList() {
-      if (this.$refs.transactionList) {
-        this.$refs.transactionList.refresh();
       }
     }
   },
