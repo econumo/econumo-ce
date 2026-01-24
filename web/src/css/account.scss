@@ -257,6 +257,8 @@
     background-color: $color-white;
     min-width: 0;
     overflow-x: hidden;
+    will-change: scroll-position;
+    -webkit-overflow-scrolling: touch;
 
     &-date {
       width: 100%;
@@ -264,6 +266,7 @@
       position: relative;
       text-align: center;
       margin: 8px 0;
+      contain: layout style;
       @include responsive(desktop) {
         padding: 8px 16px 0 16px;
         margin: 16px 0;
@@ -288,6 +291,7 @@
       width: 100%;
       min-width: 0;
       box-sizing: border-box;
+      contain: layout style;
 
       @include responsive(desktop) {
         padding: 9px 8px;

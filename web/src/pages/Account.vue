@@ -88,6 +88,8 @@
         class="account-transactions"
         :items="accountTransactionsDailyList"
         ref="transactionList"
+        :virtual-scroll-item-size="60"
+        :virtual-scroll-slice-size="30"
       >
         <template v-slot="{ item }">
           <q-item-label class="account-transactions-date" header v-if="item.isSeparator" :key="'separator-' + item.id">
