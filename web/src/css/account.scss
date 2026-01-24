@@ -265,11 +265,13 @@
       padding: 4px;
       position: relative;
       text-align: center;
-      margin: 8px 0;
+      margin: 0;
+      padding-top: 16px;
+      padding-bottom: 8px;
       contain: layout style;
       @include responsive(desktop) {
-        padding: 8px 16px 0 16px;
-        margin: 16px 0;
+        padding: 24px 16px 8px 16px;
+        margin: 0;
         text-align: unset;
       }
 
@@ -286,7 +288,8 @@
       background: $color-grey;
       border-radius: 16px;
       padding: 8px;
-      margin-bottom: 4px;
+      padding-bottom: 12px;
+      margin: 0 0 4px 0;
       max-width: 100%;
       width: 100%;
       min-width: 0;
@@ -294,7 +297,8 @@
       contain: layout style;
 
       @include responsive(desktop) {
-        padding: 9px 8px;
+        padding: 9px 8px 13px 8px;
+        margin: 0;
         background: $color-white;
         height: unset !important;
       }
