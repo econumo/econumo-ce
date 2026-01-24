@@ -711,25 +711,24 @@ export default defineComponent({
         }
       });
     },
-    setPopupWidth(selectRef, styleKey, popupClass = '') {
+    setPopupWidth(selectRef, styleKey) {
       const selectEl = this.$refs[selectRef]?.$el;
       if (!selectEl) {
         return;
       }
-      let widthSource = selectEl.querySelector('.q-field__control') || selectEl;
-      if (popupClass) {
-        const popupEl = document.querySelector(`.${popupClass}`);
-        const dialogEl = popupEl?.closest('.q-select__dialog');
-        if (dialogEl) {
-          this[styleKey] = 'width: 100% !important; max-width: 100% !important;';
-          return;
-        }
+      // On mobile/tablet (< 600px), Quasar opens selects in full-screen dialog mode
+      // Use screen width detection as it's more reliable than checking for dialog element
+      if (window.innerWidth < 600) {
+        this[styleKey] = 'width: 100% !important; max-width: 100% !important;';
+        return;
       }
+      // For desktop popup mode, match the width of the select
+      let widthSource = selectEl.querySelector('.q-field__control') || selectEl;
       const width = Math.max(0, Math.round(widthSource.getBoundingClientRect().width));
       this[styleKey] = `width: ${width}px; max-width: ${width}px;`;
     },
     setCategoryPopupWidth() {
-      this.setPopupWidth('categorySelect', 'categoryPopupStyle', 'transaction-modal-category-popup');
+      this.setPopupWidth('categorySelect', 'categoryPopupStyle');
     },
     onCategoryKeydown(event) {
       if (!this.category || this.categoryTypingStarted) {
@@ -779,7 +778,7 @@ export default defineComponent({
       }
     },
     setPayeePopupWidth() {
-      this.setPopupWidth('payeeSelect', 'payeePopupStyle', 'transaction-modal-payee-popup');
+      this.setPopupWidth('payeeSelect', 'payeePopupStyle');
     },
     onPayeeInputValueUpdate(value) {
       if (this.payee && value !== this.payee.label) {
