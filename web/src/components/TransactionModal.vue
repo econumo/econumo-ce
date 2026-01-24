@@ -131,7 +131,7 @@
                         :popup-content-style="categoryPopupStyle"
                         options-selected-class="modal-popup-selected"
                         options-cover
-                        @focus="onCategoryFocus"
+                        @keydown="onCategoryKeydown"
                         @blur="restoreCategoryIfEmpty"
                         @popup-show="setCategoryPopupWidth"
                         @popup-hide="syncCategoryInputValue"
@@ -414,6 +414,7 @@ export default defineComponent({
       isPayeeCleared: false,
       skipPayeeRestoreOnce: false,
       payeeTypingStarted: false,
+      categoryTypingStarted: false,
       isAddTag: false,
       tag: '',
       customTags: null,
@@ -482,6 +483,7 @@ export default defineComponent({
         useTransactionModalStore().changeTransactionModalCategory(null);
         this.categoryInputValue = '';
         this.categorySearchFilter = '';
+        this.categoryTypingStarted = false;
         this.lastSelectedCategory = null;
         this.calculateAmountRecipient(this.amount);
         this.focusAmountInput();
@@ -559,6 +561,7 @@ export default defineComponent({
       set(item) {
         useTransactionModalStore().changeTransactionModalCategory(item ? item.value : null);
         this.categoryInputValue = item?.label || '';
+        this.categoryTypingStarted = false;
         this.lastSelectedCategory = item ? {label: item.label, value: item.value} : this.lastSelectedCategory;
       },
     },
@@ -728,14 +731,30 @@ export default defineComponent({
     setCategoryPopupWidth() {
       this.setPopupWidth('categorySelect', 'categoryPopupStyle', 'transaction-modal-category-popup');
     },
-    onCategoryFocus() {
-      if (!this.canChangeAccountData || !this.category?.label) {
+    onCategoryKeydown(event) {
+      if (!this.category || this.categoryTypingStarted) {
         return;
       }
+      const isInputKey = event.key.length === 1 || event.key === 'Backspace' || event.key === 'Delete';
+      if (!isInputKey) {
+        return;
+      }
+      this.categoryTypingStarted = true;
       this.categoryInputValue = '';
+      this.categorySearchFilter = '';
       useTransactionModalStore().changeTransactionModalCategory(null);
+      this.$nextTick(() => {
+        const input = this.$refs.categorySelect?.$el?.querySelector('input');
+        if (input && typeof input.setSelectionRange === 'function') {
+          input.value = '';
+          input.setSelectionRange(0, 0);
+        }
+      });
     },
     onCategoryInputValueUpdate(value) {
+      if (this.category && value !== this.category.label) {
+        this.categoryTypingStarted = true;
+      }
       this.categoryInputValue = value;
       this.categorySearchFilter = value.toLowerCase();
       if (this.category && value && value !== this.category.label) {
@@ -1023,6 +1042,7 @@ export default defineComponent({
         this.$refs.transactionForm.resetValidation();
       }
       this.categorySearchFilter = '';
+      this.categoryTypingStarted = false;
       this.tagSearchFilter = '';
       this.payeeSearchFilter = '';
       this.tag = '';
