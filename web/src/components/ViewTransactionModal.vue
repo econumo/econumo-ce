@@ -7,7 +7,7 @@
           <div class="account-preview-modal-head-badge">
             <q-badge
               class="account-preview-modal-head-badge-label"
-              :class="(isTransfer(transaction) ? '-transfer' : '')"
+              :class="{ '-transfer': transaction.type === 'transfer', '-expense': transaction.type === 'expense' }"
             >
               {{ $t('pages.account.preview_transaction_modal.type.' + transaction.type) }}
             </q-badge>
