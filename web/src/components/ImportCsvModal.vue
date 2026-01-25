@@ -82,19 +82,44 @@
               <div class="import-csv-account-row">
                 <div class="responsive-modal-control import-csv-account-field">
                   <q-select
+                    ref="accountSelect"
                     v-model="fieldMapping.account"
                     :options="accountSelectOptions"
                     :label="$t('modals.import_csv.fields.account') + ' *'"
                     outlined
                     emit-value
                     map-options
+                    :use-input="accountMode === 'existing_account'"
+                    input-debounce="0"
                     class="form-select full-width"
+                    popup-content-class="modal-popup"
+                    :popup-content-style="selectPopupStyles['account']"
+                    @popup-show="
+                      setSelectPopupWidth($refs.accountSelect, 'account')
+                    "
+                    @filter="filterAccounts"
+                    @filter-abort="filterAccountsAbort"
+                    @update:model-value="blurSelect(accountSelect)"
                     :rules="[
                       (val: string) => !!val || $t('elements.validation.required_field')
                     ]"
                   >
                     <template v-slot:prepend>
                       <q-icon name="account_balance" />
+                    </template>
+                    <template v-slot:selected-item="scope">
+                      <span class="econumo-truncate">{{
+                        scope.opt.label
+                      }}</span>
+                    </template>
+                    <template v-slot:option="scope">
+                      <q-item v-bind="scope.itemProps">
+                        <q-item-section>
+                          <q-item-label class="econumo-truncate">
+                            {{ scope.opt.label }}
+                          </q-item-label>
+                        </q-item-section>
+                      </q-item>
                     </template>
                   </q-select>
                 </div>
@@ -130,6 +155,7 @@
                 <div class="responsive-modal-control import-csv-field-control">
                   <q-select
                     v-if="dateMode === 'csv_column'"
+                    ref="dateSelect"
                     v-model="fieldMapping.date"
                     :options="csvColumnOptions"
                     :label="$t('modals.import_csv.fields.date') + ' *'"
@@ -137,6 +163,9 @@
                     emit-value
                     map-options
                     class="form-select full-width"
+                    popup-content-class="modal-popup"
+                    :popup-content-style="selectPopupStyles['date']"
+                    @popup-show="setSelectPopupWidth($refs.dateSelect, 'date')"
                     :rules="[
                       (val: string) => !!val || $t('elements.validation.required_field')
                     ]"
@@ -192,6 +221,7 @@
               <div v-if="amountMode === 'single'" class="import-csv-amount-row">
                 <div class="responsive-modal-control import-csv-amount-field">
                   <q-select
+                    ref="amountSelect"
                     v-model="fieldMapping.amount"
                     :options="csvColumnOptionsWithNone"
                     :label="$t('modals.import_csv.fields.amount') + ' *'"
@@ -199,6 +229,11 @@
                     emit-value
                     map-options
                     class="form-select full-width"
+                    popup-content-class="modal-popup"
+                    :popup-content-style="selectPopupStyles['amount']"
+                    @popup-show="
+                      setSelectPopupWidth($refs.amountSelect, 'amount')
+                    "
                     :rules="[
                       (val: string) => !!val || $t('elements.validation.required_field')
                     ]"
@@ -231,6 +266,7 @@
                 <div class="import-csv-amount-row">
                   <div class="responsive-modal-control import-csv-amount-field">
                     <q-select
+                      ref="amountInflowSelect"
                       v-model="fieldMapping.amountInflow"
                       :options="csvColumnOptionsWithNone"
                       :label="
@@ -240,6 +276,14 @@
                       emit-value
                       map-options
                       class="form-select full-width"
+                      popup-content-class="modal-popup"
+                      :popup-content-style="selectPopupStyles['amountInflow']"
+                      @popup-show="
+                        setSelectPopupWidth(
+                          $refs.amountInflowSelect,
+                          'amountInflow'
+                        )
+                      "
                       :rules="[
                         (val: string) => !!val || $t('elements.validation.required_field')
                       ]"
@@ -269,6 +313,7 @@
 
                 <div class="responsive-modal-control import-csv-outflow-field">
                   <q-select
+                    ref="amountOutflowSelect"
                     v-model="fieldMapping.amountOutflow"
                     :options="csvColumnOptionsWithNone"
                     :label="
@@ -278,6 +323,14 @@
                     emit-value
                     map-options
                     class="form-select full-width"
+                    popup-content-class="modal-popup"
+                    :popup-content-style="selectPopupStyles['amountOutflow']"
+                    @popup-show="
+                      setSelectPopupWidth(
+                        $refs.amountOutflowSelect,
+                        'amountOutflow'
+                      )
+                    "
                     :rules="[
                       (val: string) => !!val || $t('elements.validation.required_field')
                     ]"
@@ -295,16 +348,41 @@
               <div class="import-csv-field-row">
                 <div class="responsive-modal-control import-csv-field-control">
                   <q-select
+                    ref="categorySelect"
                     v-model="fieldMapping.category"
                     :options="categorySelectOptions"
                     :label="$t('modals.import_csv.fields.category')"
                     outlined
                     emit-value
                     map-options
+                    :use-input="categoryMode === 'existing_entity'"
+                    input-debounce="0"
                     class="form-select full-width"
+                    popup-content-class="modal-popup"
+                    :popup-content-style="selectPopupStyles['category']"
+                    @popup-show="
+                      setSelectPopupWidth($refs.categorySelect, 'category')
+                    "
+                    @filter="filterCategories"
+                    @filter-abort="filterCategoriesAbort"
+                    @update:model-value="blurSelect(categorySelect)"
                   >
                     <template v-slot:prepend>
                       <q-icon name="category" />
+                    </template>
+                    <template v-slot:selected-item="scope">
+                      <span class="econumo-truncate">{{
+                        scope.opt.label
+                      }}</span>
+                    </template>
+                    <template v-slot:option="scope">
+                      <q-item v-bind="scope.itemProps">
+                        <q-item-section>
+                          <q-item-label class="econumo-truncate">
+                            {{ scope.opt.label }}
+                          </q-item-label>
+                        </q-item-section>
+                      </q-item>
                     </template>
                   </q-select>
                 </div>
@@ -340,6 +418,7 @@
                 <div class="responsive-modal-control import-csv-field-control">
                   <q-select
                     v-if="descriptionMode === 'csv_column'"
+                    ref="descriptionSelect"
                     v-model="fieldMapping.description"
                     :options="csvColumnOptionsWithNone"
                     :label="$t('modals.import_csv.fields.description')"
@@ -347,6 +426,14 @@
                     emit-value
                     map-options
                     class="form-select full-width"
+                    popup-content-class="modal-popup"
+                    :popup-content-style="selectPopupStyles['description']"
+                    @popup-show="
+                      setSelectPopupWidth(
+                        $refs.descriptionSelect,
+                        'description'
+                      )
+                    "
                   >
                     <template v-slot:prepend>
                       <q-icon name="description" />
@@ -394,16 +481,41 @@
               <div class="import-csv-field-row">
                 <div class="responsive-modal-control import-csv-field-control">
                   <q-select
+                    ref="payeeSelect"
                     v-model="fieldMapping.payee"
                     :options="payeeSelectOptions"
                     :label="$t('modals.import_csv.fields.payee')"
                     outlined
                     emit-value
                     map-options
+                    :use-input="payeeMode === 'existing_entity'"
+                    input-debounce="0"
                     class="form-select full-width"
+                    popup-content-class="modal-popup"
+                    :popup-content-style="selectPopupStyles['payee']"
+                    @popup-show="
+                      setSelectPopupWidth($refs.payeeSelect, 'payee')
+                    "
+                    @filter="filterPayees"
+                    @filter-abort="filterPayeesAbort"
+                    @update:model-value="blurSelect(payeeSelect)"
                   >
                     <template v-slot:prepend>
                       <q-icon name="person" />
+                    </template>
+                    <template v-slot:selected-item="scope">
+                      <span class="econumo-truncate">{{
+                        scope.opt.label
+                      }}</span>
+                    </template>
+                    <template v-slot:option="scope">
+                      <q-item v-bind="scope.itemProps">
+                        <q-item-section>
+                          <q-item-label class="econumo-truncate">
+                            {{ scope.opt.label }}
+                          </q-item-label>
+                        </q-item-section>
+                      </q-item>
                     </template>
                   </q-select>
                 </div>
@@ -438,16 +550,39 @@
               <div class="import-csv-field-row">
                 <div class="responsive-modal-control import-csv-field-control">
                   <q-select
+                    ref="tagSelect"
                     v-model="fieldMapping.tag"
                     :options="tagSelectOptions"
                     :label="$t('modals.import_csv.fields.tag')"
                     outlined
                     emit-value
                     map-options
+                    :use-input="tagMode === 'existing_entity'"
+                    input-debounce="0"
                     class="form-select full-width"
+                    popup-content-class="modal-popup"
+                    :popup-content-style="selectPopupStyles['tag']"
+                    @popup-show="setSelectPopupWidth($refs.tagSelect, 'tag')"
+                    @filter="filterTags"
+                    @filter-abort="filterTagsAbort"
+                    @update:model-value="blurSelect(tagSelect)"
                   >
                     <template v-slot:prepend>
                       <q-icon name="label" />
+                    </template>
+                    <template v-slot:selected-item="scope">
+                      <span class="econumo-truncate">{{
+                        scope.opt.label
+                      }}</span>
+                    </template>
+                    <template v-slot:option="scope">
+                      <q-item v-bind="scope.itemProps">
+                        <q-item-section>
+                          <q-item-label class="econumo-truncate">
+                            {{ scope.opt.label }}
+                          </q-item-label>
+                        </q-item-section>
+                      </q-item>
                     </template>
                   </q-select>
                 </div>
@@ -527,7 +662,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, watch } from 'vue';
+import { ref, computed, onMounted, watch, nextTick } from 'vue';
 import { useI18n } from 'vue-i18n';
 import transaction from '../modules/api/v1/transaction';
 import ImportResultModal from './ImportResultModal.vue';
@@ -621,6 +756,88 @@ const fieldMapping = ref({
   tag: null as string | null,
 });
 
+// Popup width styles for constraining dropdowns
+const selectPopupStyles = ref<Record<string, string>>({});
+
+// Search filters for dropdowns
+const accountSearchFilter = ref('');
+const categorySearchFilter = ref('');
+const payeeSearchFilter = ref('');
+const tagSearchFilter = ref('');
+
+function setSelectPopupWidth(selectRef: any, key: string) {
+  const selectEl = selectRef?.$el;
+  if (!selectEl) {
+    return;
+  }
+  // On mobile/tablet (< 600px), Quasar opens selects in full-screen dialog mode
+  if (window.innerWidth < 600) {
+    selectPopupStyles.value[key] =
+      'width: 100% !important; max-width: 100% !important;';
+    return;
+  }
+  // For desktop popup mode, match the width of the select
+  const widthSource = selectEl.querySelector('.q-field__control') || selectEl;
+  const width = Math.max(
+    0,
+    Math.round(widthSource.getBoundingClientRect().width)
+  );
+  selectPopupStyles.value[key] = `width: ${width}px; max-width: ${width}px;`;
+}
+
+// Filter handlers for dropdowns
+function filterAccounts(val: string, update: (fn: () => void) => void) {
+  update(() => {
+    accountSearchFilter.value = val;
+  });
+}
+
+function filterAccountsAbort() {
+  accountSearchFilter.value = '';
+}
+
+function filterCategories(val: string, update: (fn: () => void) => void) {
+  update(() => {
+    categorySearchFilter.value = val;
+  });
+}
+
+function filterCategoriesAbort() {
+  categorySearchFilter.value = '';
+}
+
+function filterPayees(val: string, update: (fn: () => void) => void) {
+  update(() => {
+    payeeSearchFilter.value = val;
+  });
+}
+
+function filterPayeesAbort() {
+  payeeSearchFilter.value = '';
+}
+
+function filterTags(val: string, update: (fn: () => void) => void) {
+  update(() => {
+    tagSearchFilter.value = val;
+  });
+}
+
+function filterTagsAbort() {
+  tagSearchFilter.value = '';
+}
+
+// Template refs for select components
+const accountSelect = ref();
+const categorySelect = ref();
+const payeeSelect = ref();
+const tagSelect = ref();
+
+function blurSelect(selectRef: any) {
+  nextTick(() => {
+    selectRef?.blur?.();
+  });
+}
+
 /**
  * Check if a string looks like a date
  */
@@ -692,6 +909,7 @@ const csvColumnOptionsWithNone = computed(() => {
 
 const existingAccountOptions = computed(() => {
   const currentUserId = usersStore.userId;
+  const filter = accountSearchFilter.value.toLowerCase();
 
   return accountsStore.accountsOrdered
     .filter((account) => {
@@ -709,6 +927,11 @@ const existingAccountOptions = computed(() => {
       }
 
       return false;
+    })
+    .filter((account) => {
+      // Apply search filter
+      if (!filter) return true;
+      return account.name.toLowerCase().includes(filter);
     })
     .map((account) => {
       const balance = account.balance.toFixed(2);
@@ -737,8 +960,13 @@ const targetUserId = computed(() => {
 
 const existingCategoryOptions = computed(() => {
   const ownerId = targetUserId.value;
+  const filter = categorySearchFilter.value.toLowerCase();
   return categoriesStore.categoriesOrdered
     .filter((category) => category.ownerUserId === ownerId)
+    .filter((category) => {
+      if (!filter) return true;
+      return category.name.toLowerCase().includes(filter);
+    })
     .map((category) => ({
       label: category.name,
       value: category.id,
@@ -747,8 +975,13 @@ const existingCategoryOptions = computed(() => {
 
 const existingPayeeOptions = computed(() => {
   const ownerId = targetUserId.value;
+  const filter = payeeSearchFilter.value.toLowerCase();
   return payeesStore.payeesOrdered
     .filter((payee) => payee.ownerUserId === ownerId)
+    .filter((payee) => {
+      if (!filter) return true;
+      return payee.name.toLowerCase().includes(filter);
+    })
     .map((payee) => ({
       label: payee.name,
       value: payee.id,
@@ -757,8 +990,13 @@ const existingPayeeOptions = computed(() => {
 
 const existingTagOptions = computed(() => {
   const ownerId = targetUserId.value;
+  const filter = tagSearchFilter.value.toLowerCase();
   return tagsStore.tagsOrdered
     .filter((tag) => tag.ownerUserId === ownerId)
+    .filter((tag) => {
+      if (!filter) return true;
+      return tag.name.toLowerCase().includes(filter);
+    })
     .map((tag) => ({
       label: tag.name,
       value: tag.id,
@@ -1576,7 +1814,24 @@ async function handleSubmit() {
 
 .import-csv-amount-field {
   flex: 1;
+  min-width: 0;
   margin-bottom: 0 !important;
+
+  :deep(.q-field__native) {
+    min-width: 0;
+    flex-wrap: nowrap;
+
+    > span {
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+
+  :deep(.q-field__control) {
+    min-width: 0;
+  }
 }
 
 .import-csv-amount-switch {
@@ -1599,7 +1854,24 @@ async function handleSubmit() {
 .import-csv-account-field,
 .import-csv-field-control {
   flex: 1;
+  min-width: 0;
   margin-bottom: 0 !important;
+
+  :deep(.q-field__native) {
+    min-width: 0;
+    flex-wrap: nowrap;
+
+    > span {
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+
+  :deep(.q-field__control) {
+    min-width: 0;
+  }
 }
 
 .import-csv-account-switch,
