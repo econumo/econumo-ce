@@ -4,7 +4,6 @@
     :model-value="isOpened"
     @update:model-value="$emit('update:isOpened', $event)"
     @hide="$emit('cancel')"
-    :no-backdrop-dismiss="$q.screen.gt.md"
   >
     <q-card class="decline-shared-access-modal-card">
       <q-card-section class="decline-shared-access-modal-section -padding">

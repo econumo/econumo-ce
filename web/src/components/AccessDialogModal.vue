@@ -1,10 +1,5 @@
 <template>
-  <q-dialog
-    class="access-modal"
-    :model-value="true"
-    @hide="$emit('cancel')"
-    :no-backdrop-dismiss="$q.screen.gt.md"
-  >
+  <q-dialog class="access-modal" :model-value="true" @hide="$emit('cancel')">
     <q-card class="access-modal-card">
       <q-card-section class="access-modal-section -toolbar">
         <div class="settings-toolbar-mobile access-modal-toolbar">
