@@ -4,7 +4,7 @@ on:
       REGISTRY:
         required: true
         type: string
-        default: 'docker.io'
+        default: "docker.io"
       IMAGE_NAME:
         required: true
         type: string
@@ -15,18 +15,23 @@ on:
       ECONUMO_EDITION:
         required: false
         type: string
-        default: 'ce'
-        description: 'Econumo edition (ce or cloud)'
+        default: "ce"
+        description: "Econumo edition (ce or cloud)"
       RUNS_ON:
         required: false
         type: string
-        default: 'ubuntu-latest'
-        description: 'Runner to use for the build'
+        default: "ubuntu-latest"
+        description: "Runner to use for the build"
       PLATFORMS:
         required: false
         type: string
-        default: 'linux/amd64,linux/arm64'
-        description: 'Comma-separated list of platforms to build for'
+        default: "linux/amd64,linux/arm64"
+        description: "Comma-separated list of platforms to build for"
+      VERSION:
+        required: false
+        type: string
+        default: ""
+        description: "Version label to inject into the build (e.g., v1.2.3 or beta)"
     secrets:
       DOCKER_USERNAME:
         required: true
@@ -59,6 +64,11 @@ jobs:
         run: |
           rm -f web/.env
           cp "web/.env.${{ inputs.ECONUMO_EDITION }}" web/.env
+
+      - name: Inject Version Label
+        if: inputs.VERSION != ''
+        run: |
+          sed -i 's/^ECONUMO_EDITION_LABEL=.*/ECONUMO_EDITION_LABEL="${{ inputs.VERSION }}"/' web/.env
 
       - name: Set Up QEMU
         uses: docker/setup-qemu-action@v2
