@@ -66,9 +66,8 @@ jobs:
           cp "web/.env.${{ inputs.ECONUMO_EDITION }}" web/.env
 
       - name: Inject Version Label
-        if: inputs.VERSION != ''
         run: |
-          sed -i 's/^ECONUMO_EDITION_LABEL=.*/ECONUMO_EDITION_LABEL="${{ inputs.VERSION }}"/' web/.env
+          sed -i 's/__VERSION__/${{ inputs.VERSION }}/' web/.env
 
       - name: Set Up QEMU
         uses: docker/setup-qemu-action@v2
