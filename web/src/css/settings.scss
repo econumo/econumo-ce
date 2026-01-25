@@ -152,8 +152,11 @@
       margin-top: 8px;
 
       &-field {
+        pointer-events: none;
 
         &-currency {
+          pointer-events: auto;
+
           &.q-field--highlighted {
             .settings-main-item-field-control {
               display: none;
