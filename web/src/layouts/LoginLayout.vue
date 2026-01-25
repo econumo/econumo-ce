@@ -1,28 +1,49 @@
 <template>
   <q-layout class="fullscreen login">
-    <q-page-container class="login-layout full-width column wrap justify-center items-center content-center">
+    <q-page-container
+      class="login-layout full-width column wrap justify-center items-center content-center"
+    >
       <div class="login-layout-lang" @click="openLanguageModal">
         <span class="login-layout-lang-link">{{ shortLanguageLabel() }}</span>
       </div>
       <div class="login-layout-head">
         <div class="row login-layout-head-logo justify-center">
           <div>
-            <img src="~assets/econumo.svg" width="194" height="20" :alt="$t('elements.econumo.label')" />
-            <div class="login-layout-head-logo-edition" v-if="econumoEdition">{{ econumoEdition }}</div>
+            <img
+              src="~assets/econumo.svg"
+              width="194"
+              height="20"
+              :alt="$t('elements.econumo.label')"
+            />
           </div>
         </div>
         <div class="login-layout-head-tabs flex no-wrap justify-between">
           <div class="login-layout-head-tabs-item col flex justify-center">
-            <router-link :to="{ name: 'login'}" class="login-layout-head-tabs-link">{{ $t('modules.user.page.sign_in.header') }}</router-link>
+            <router-link
+              :to="{ name: 'login' }"
+              class="login-layout-head-tabs-link"
+              >{{ $t('modules.user.page.sign_in.header') }}</router-link
+            >
           </div>
           <div class="login-layout-head-tabs-item col flex justify-center">
-            <a href="#" class="login-layout-head-tabs-link" disabled v-if="!isPaywallEnabled && !isRegistrationAllowed">{{ $t('modules.user.page.sign_up.header') }}</a>
-            <router-link :to="{ name: 'register'}" class="login-layout-head-tabs-link" v-else>{{ $t('modules.user.page.sign_up.header') }}</router-link>
+            <a
+              href="#"
+              class="login-layout-head-tabs-link"
+              disabled
+              v-if="!isPaywallEnabled && !isRegistrationAllowed"
+              >{{ $t('modules.user.page.sign_up.header') }}</a
+            >
+            <router-link
+              :to="{ name: 'register' }"
+              class="login-layout-head-tabs-link"
+              v-else
+              >{{ $t('modules.user.page.sign_up.header') }}</router-link
+            >
           </div>
         </div>
       </div>
-      <div class=" login-layout-body">
-        <router-view/>
+      <div class="login-layout-body">
+        <router-view />
       </div>
       <div class="login-layout-social">
         <a
@@ -47,42 +68,44 @@
           class="login-layout-help-link"
           rel="nofollow"
           :aria-label="$t('blocks.help.label')"
-        >{{ $t('blocks.help.label') }}</a>
+          >{{ $t('blocks.help.label') }}</a
+        >
       </div>
 
       <teleport to="body">
-        <change-language-modal v-if="isLanguageModalOpened" v-on:cancel="closeLanguageModal()" />
+        <change-language-modal
+          v-if="isLanguageModalOpened"
+          v-on:cancel="closeLanguageModal()"
+        />
       </teleport>
     </q-page-container>
   </q-layout>
 </template>
 
 <script>
-
-import {defineComponent} from 'vue';
+import { defineComponent } from 'vue';
 import ChangeLanguageModal from '../components/ChangeLanguageModal.vue';
-import {languageModalMixin} from '../mixins/languageModalMixin';
+import { languageModalMixin } from '../mixins/languageModalMixin';
 import { econumoPackage } from '../modules/package';
 import { isRegistrationAllowed } from '../modules/config';
 
 export default defineComponent({
   name: 'LoginLayout',
-  components: {ChangeLanguageModal},
+  components: { ChangeLanguageModal },
   mixins: [languageModalMixin],
   data() {
-    return {
-    }
+    return {};
   },
   computed: {
-    econumoEdition: function() {
+    econumoEdition: function () {
       return econumoPackage.label;
     },
-    isRegistrationAllowed: function() {
+    isRegistrationAllowed: function () {
       return isRegistrationAllowed();
     },
-    isPaywallEnabled: function() {
+    isPaywallEnabled: function () {
       return econumoPackage.isPaywallEnabled;
-    }
-  }
-})
+    },
+  },
+});
 </script>
