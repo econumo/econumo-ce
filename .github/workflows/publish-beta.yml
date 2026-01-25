@@ -4,21 +4,21 @@ on:
   workflow_dispatch:
     inputs:
       edition:
-        description: 'Which edition to build'
+        description: "Which edition to build"
         required: true
         type: choice
         options:
           - all
           - ce
           - cloud
-        default: 'all'
+        default: "all"
   workflow_call:
     inputs:
       edition:
-        description: 'Which edition to build (all, ce, or cloud)'
+        description: "Which edition to build (all, ce, or cloud)"
         required: false
         type: string
-        default: 'all'
+        default: "all"
     secrets:
       BUILD_USER_TOKEN:
         required: true
@@ -26,7 +26,7 @@ on:
     types: [distribute-beta]
 
 concurrency:
-  group: 'docker-publish-beta'
+  group: "docker-publish-beta"
   cancel-in-progress: true
 
 jobs:
@@ -34,12 +34,13 @@ jobs:
     if: ${{ inputs.edition == 'all' || inputs.edition == 'ce' || inputs.edition == '' || inputs.edition == null }}
     uses: ./.github/workflows/embedded-build-package.yml
     with:
-      REGISTRY: 'docker.io'
-      IMAGE_NAME: 'econumo/econumo-ce'
-      IMAGE_TAGS: 'beta'
-      ECONUMO_EDITION: 'ce'
-      RUNS_ON: 'blacksmith-4vcpu-ubuntu-2404'
-      PLATFORMS: 'linux/amd64,linux/arm64'
+      REGISTRY: "docker.io"
+      IMAGE_NAME: "econumo/econumo-ce"
+      IMAGE_TAGS: "beta"
+      ECONUMO_EDITION: "ce"
+      RUNS_ON: "blacksmith-4vcpu-ubuntu-2404"
+      PLATFORMS: "linux/amd64,linux/arm64"
+      VERSION: "beta"
     secrets:
       DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
       DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
@@ -49,12 +50,13 @@ jobs:
     if: ${{ inputs.edition == 'all' || inputs.edition == 'cloud' || inputs.edition == '' || inputs.edition == null }}
     uses: ./.github/workflows/embedded-build-package.yml
     with:
-      REGISTRY: 'ghcr.io'
-      IMAGE_NAME: 'econumo/econumo-cloud'
-      IMAGE_TAGS: 'beta'
-      ECONUMO_EDITION: 'cloud'
-      RUNS_ON: 'blacksmith-4vcpu-ubuntu-2404'
-      PLATFORMS: 'linux/arm64'
+      REGISTRY: "ghcr.io"
+      IMAGE_NAME: "econumo/econumo-cloud"
+      IMAGE_TAGS: "beta"
+      ECONUMO_EDITION: "cloud"
+      RUNS_ON: "blacksmith-4vcpu-ubuntu-2404"
+      PLATFORMS: "linux/arm64"
+      VERSION: "beta"
     secrets:
       DOCKER_USERNAME: ${{ github.actor }}
       DOCKER_PASSWORD: ${{ secrets.BUILD_USER_TOKEN }}

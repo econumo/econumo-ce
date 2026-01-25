@@ -4,11 +4,11 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: 'Tag to publish (e.g., v1.2.3 or beta)'
+        description: "Tag to publish (e.g., v1.2.3 or beta)"
         required: true
 
 concurrency:
-  group: 'docker-publish-release'
+  group: "docker-publish-release"
   cancel-in-progress: true
 
 jobs:
@@ -54,11 +54,12 @@ jobs:
     needs: create-tag
     uses: ./.github/workflows/embedded-build-package.yml
     with:
-      REGISTRY: 'docker.io'
-      IMAGE_NAME: 'econumo/econumo-ce'
+      REGISTRY: "docker.io"
+      IMAGE_NAME: "econumo/econumo-ce"
       IMAGE_TAGS: "${{ needs.create-tag.outputs.version }},latest,beta"
-      RUNS_ON: 'blacksmith-4vcpu-ubuntu-2404'
-      PLATFORMS: 'linux/amd64,linux/arm64'
+      RUNS_ON: "blacksmith-4vcpu-ubuntu-2404"
+      PLATFORMS: "linux/amd64,linux/arm64"
+      VERSION: "${{ needs.create-tag.outputs.version }}"
     secrets:
       DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
       DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
@@ -69,12 +70,13 @@ jobs:
     needs: create-tag
     uses: ./.github/workflows/embedded-build-package.yml
     with:
-      REGISTRY: 'ghcr.io'
-      IMAGE_NAME: 'econumo/econumo-cloud'
+      REGISTRY: "ghcr.io"
+      IMAGE_NAME: "econumo/econumo-cloud"
       IMAGE_TAGS: "${{ needs.create-tag.outputs.version }},latest,beta"
-      ECONUMO_EDITION: 'cloud'
-      RUNS_ON: 'blacksmith-4vcpu-ubuntu-2404'
-      PLATFORMS: 'linux/arm64'
+      ECONUMO_EDITION: "cloud"
+      RUNS_ON: "blacksmith-4vcpu-ubuntu-2404"
+      PLATFORMS: "linux/arm64"
+      VERSION: "${{ needs.create-tag.outputs.version }}"
     secrets:
       DOCKER_USERNAME: ${{ github.actor }}
       DOCKER_PASSWORD: ${{ secrets.BUILD_USER_TOKEN }}
