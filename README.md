@@ -5,7 +5,7 @@
 </p>
 
 <p align="center">
-    A getting started guide to self-hosting <a href="https://econumo.com/docs/edition" target="_blank">Econumo CE</a>
+    A getting started guide to self-hosting <a href="https://econumo.com/docs/edition" target="_blank">Econumo</a>
 </p>
 
 ---
@@ -76,6 +76,6 @@ For more information please see our [documentation](https://econumo.com/docs/).
 
 ---
 > [!NOTE]
-> Econumo CE is funded by our `GitHub Sponsors` and `Econumo` (cloud) subscribers.
+> Econumo is funded by our `GitHub Sponsors` and `Econumo` (cloud) subscribers.
 >
 > If you know someone who might [find Econumo useful](https://econumo.com/), we'd appreciate if you'd let them know.
