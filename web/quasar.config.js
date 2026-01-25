@@ -94,7 +94,7 @@ module.exports = configure(function (ctx) {
         cfg.resolve.alias = {
           ...cfg.resolve.alias, // This adds the existing alias
           // Add your own alias like this
-          "@shared": path.resolve(__dirname, 'src/shared/'),
+          '@shared': path.resolve(__dirname, 'src/shared/'),
         }
       }
     },
