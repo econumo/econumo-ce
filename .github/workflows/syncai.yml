@@ -54,7 +54,7 @@ jobs:
           result-encoding: string
           script: |
             const latest = await github.rest.repos.getLatestRelease({
-              owner: 'flowmitry',
+              owner: 'dmtrkzntsv',
               repo: 'syncai'
             });
             return latest.data.tag_name;
@@ -87,7 +87,7 @@ jobs:
           TAG="${{ steps.get_latest.outputs.result }}"
           echo "Looking for asset: $NAME (tag: $TAG)"
           # Fetch download URL matching exact asset name
-          ASSET_URL=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" https://api.github.com/repos/flowmitry/syncai/releases/tags/$TAG | jq -r ".assets[] | select(.name==\"$NAME\") | .browser_download_url")
+          ASSET_URL=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" https://api.github.com/repos/dmtrkzntsv/syncai/releases/tags/$TAG | jq -r ".assets[] | select(.name==\"$NAME\") | .browser_download_url")
           if [ -z "$ASSET_URL" ] || [ "$ASSET_URL" = "null" ]; then
             echo "Error: Could not find asset $NAME in latest release"
             exit 1
